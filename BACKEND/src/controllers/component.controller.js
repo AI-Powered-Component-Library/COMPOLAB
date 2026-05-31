@@ -1,9 +1,9 @@
-import userValidationSchema from "../validators/user.validator.js";
+import componentValidationSchema from "../validators/component.validator.js";
 
-const registerUser = async (req, res) => {
+const component = async (req, res) => {
     try {
-        // Validate Request Body
-        const { error } = userValidationSchema.validate(req.body);
+        // Validate request body
+        const { error } = componentValidationSchema.validate(req.body);
 
         if (error) {
             return res.status(400).json({
@@ -12,10 +12,9 @@ const registerUser = async (req, res) => {
             });
         }
 
-
         res.status(201).json({
             success: true,
-            message: "User validated successfully",
+            message: "Component validated successfully",
         });
 
     } catch (error) {
@@ -26,5 +25,6 @@ const registerUser = async (req, res) => {
     }
 };
 
-export default registerUser;
+export default component;
+
 
