@@ -1,30 +1,43 @@
+import { AppError, asyncHandler } from "../utils/asyncHandler.utils.js";
 import componentValidationSchema from "../validators/component.validator.js";
 
-const component = async (req, res) => {
-    try {
-        // Validate request body
-        const { error } = componentValidationSchema.validate(req.body);
+class ComponentController {
 
-        if (error) {
-            return res.status(400).json({
-                success: false,
-                message: error.details[0].message,
-            });
-        }
+    createComponent = asyncHandler(async (req, res) => {
 
-        res.status(201).json({
-            success: true,
-            message: "Component validated successfully",
-        });
+        const role = req.user.role;
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message,
-        });
-    }
-};
+        if (role !== "admin") throw new AppError(403, "Forbidden: insufficient permission");
 
-export default component;
+        const { error, value } = componentValidationSchema.validate(req.body);
+        if (error) throw new AppError(400, "Validation Error", error.details[0].message)
+
+        res.status(201).json({ message: "Component created successfully", component: value });
+    })
+
+    getAllComponents = asyncHandler(async (req, res) => {
+        res.json({ message: "All components retrieved successfully", components: [] });
+    })
+
+    getComponentById = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        res.json({ message: `Component with ID ${id} retrieved successfully`, component: {} });
+    })
+
+    updateComponent = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const { error, value } = componentValidationSchema.validate(req.body);
+        if (error) throw new AppError(400, "Validation Error", error.details[0].message)
+
+        res.json({ message: `Component with ID ${id} updated successfully`, component: value });
+    })
+
+    deleteComponent = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        res.json({ message: `Component with ID ${id} deleted successfully` });
+    });
+
+}
 
 
+export default new ComponentController();
