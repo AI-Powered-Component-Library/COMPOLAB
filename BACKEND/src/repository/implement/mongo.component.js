@@ -8,7 +8,24 @@ class MongoComponentRepository extends IComponentRepository {
     }
 
     async createComponent(component) {
-        // Implement the logic to create a component in MongoDB
+        const newComponent = new this.ComponentModel(component);
+        return await newComponent.save();
+    }
+
+    async getAllComponents() {
+        return await this.ComponentModel.find();
+    }
+
+    async getComponentById(id) {
+        return await this.ComponentModel.findById(id);
+    }
+
+    async updateComponent(id, component) {
+        return await this.ComponentModel.findByIdAndUpdate(id, component, { new: true });
+    }
+
+    async deleteComponent(id) {
+        return await this.ComponentModel.findByIdAndDelete(id);
     }
 
 }

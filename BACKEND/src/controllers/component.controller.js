@@ -1,39 +1,40 @@
 import { AppError, asyncHandler } from "../utils/asyncHandler.utils.js";
 import componentValidationSchema from "../validators/component.validator.js";
+import componentService from "../services/component.service.js";
 
 class ComponentController {
 
     createComponent = asyncHandler(async (req, res) => {
-
-        const role = req.user.role;
-
-        if (role !== "admin") throw new AppError(403, "Forbidden: insufficient permission");
-
         const { error, value } = componentValidationSchema.validate(req.body);
-        if (error) throw new AppError(400, "Validation Error", error.details[0].message)
+        if (error) throw new AppError(400, "Validation Error", error.details[0].message);
 
-        res.status(201).json({ message: "Component created successfully", component: value });
+        const component = await componentService.createComponent({ ...value, userId: req.user._id });
+        res.status(201).json({ message: "Component created successfully", component });
     })
 
     getAllComponents = asyncHandler(async (req, res) => {
-        res.json({ message: "All components retrieved successfully", components: [] });
+        const components = await componentService.getAllComponents();
+        res.json({ message: "All components retrieved successfully", components });
     })
 
     getComponentById = asyncHandler(async (req, res) => {
         const { id } = req.params;
-        res.json({ message: `Component with ID ${id} retrieved successfully`, component: {} });
+        const component = await componentService.getComponentById(id);
+        res.json({ message: `Component with ID ${id} retrieved successfully`, component });
     })
 
     updateComponent = asyncHandler(async (req, res) => {
         const { id } = req.params;
         const { error, value } = componentValidationSchema.validate(req.body);
-        if (error) throw new AppError(400, "Validation Error", error.details[0].message)
+        if (error) throw new AppError(400, "Validation Error", error.details[0].message);
 
-        res.json({ message: `Component with ID ${id} updated successfully`, component: value });
+        const component = await componentService.updateComponent(id, value);
+        res.json({ message: `Component with ID ${id} updated successfully`, component });
     })
 
     deleteComponent = asyncHandler(async (req, res) => {
         const { id } = req.params;
+        await componentService.deleteComponent(id);
         res.json({ message: `Component with ID ${id} deleted successfully` });
     });
 
