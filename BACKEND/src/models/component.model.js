@@ -33,11 +33,19 @@ const componentSchema = new mongoose.Schema(
             enum: ["light", "dark", "custom"],
             default: "light",
         },
+
+        isActive: {
+            type: Boolean,
+            default: true,
+        },
     },
     {
         timestamps: true,
     }
 );
+
+componentSchema.index({ userId: 1, isActive: 1, createdAt: -1 });
+componentSchema.index({ componentName: "text", prompt: "text" });
 
 const ComponentModel = mongoose.model("Component", componentSchema);
 

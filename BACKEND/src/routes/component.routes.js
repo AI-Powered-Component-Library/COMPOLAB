@@ -1,23 +1,27 @@
 import { Router } from "express";
-import componentController from "../controllers/component.controller.js";
+import ComponentController from "../controllers/component.controller.js";
+import ComponentService from "../services/component.service.js";
+import MongoComponentRepository from "../repository/implement/mongo.component.js";
+import { asyncHandler } from "../utils/asyncHandler.utils.js";
 import authMiddleware from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
+const componentRepository = new MongoComponentRepository();
+const componentService = new ComponentService(componentRepository);
+const componentController = new ComponentController(componentService);
 
-router.post("/", componentController.createComponent);
+router.use(authMiddleware.protect);
 
+router
+  .route("/")
+  .post(asyncHandler(componentController.createComponent))
+  .get(asyncHandler(componentController.getComponents));
 
-router.get("/", componentController.getAllComponents);
-
-
-router.get("/:id", componentController.getComponentById);
-
-
-router.put("/:id", componentController.updateComponent);
-
-router.delete("/:id", componentController.deleteComponent);
-
-
+router
+  .route("/:id")
+  .get(asyncHandler(componentController.getComponentById))
+  .patch(asyncHandler(componentController.updateComponent))
+  .delete(asyncHandler(componentController.softDeleteComponent));
 
 export default router;
