@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(responseMiddleware)
-app.use("/api/auth/v1", authRouter);
+app.use("/api/auth/v1", authRouter)
 app.use("/api/components/v1", componentRouter)
 
 

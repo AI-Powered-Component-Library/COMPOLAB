@@ -1,104 +1,46 @@
-import mongoose from "mongoose";
+import MongoComponentRepository from "../repository/implement/mongo.component.js";
 import { AppError } from "../utils/asyncHandler.utils.js";
 
+const componentRepository = new MongoComponentRepository();
+
 class ComponentService {
-  constructor(componentRepository) {
-    this.componentRepository = componentRepository;
+  async createComponent(data) {
+    return await componentRepository.createComponent(data);
   }
 
-  validateObjectId(id, fieldName = "Component id") {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      throw new AppError(400, `${fieldName} is invalid`);
+  async getComponentById(id) {
+    const component = await componentRepository.findComponentById(id);
+    if (!component) {
+      throw new AppError(404, "Component not found");
     }
+    return component;
   }
 
-  sanitizeComponent(component) {
-    if (!component) return null;
-
-    return {
-      id: component._id,
-      userId: component.userId,
-      prompt: component.prompt,
-      generatedCode: component.generatedCode,
-      componentName: component.componentName,
-      theme: component.theme,
-      isActive: component.isActive,
-      createdAt: component.createdAt,
-      updatedAt: component.updatedAt,
-    };
+  async getComponentsByUserId(userId) {
+    return await componentRepository.findComponentsByUserId(userId);
   }
 
-  async createComponent(userId, payload) {
-    const component = await this.componentRepository.createComponent({
-      userId,
-      prompt: payload.prompt,
-      generatedCode: payload.generatedCode,
-      componentName: payload.componentName,
-      theme: payload.theme || "light",
-    });
-
-    return this.sanitizeComponent(component);
+  async getAllComponents() {
+    return await componentRepository.findAllComponents();
   }
 
-  async getComponents(userId, filters) {
-    const page = Number(filters.page) > 0 ? Number(filters.page) : 1;
-    const limit = Number(filters.limit) > 0 ? Number(filters.limit) : 10;
-
-    const [components, total] = await Promise.all([
-      this.componentRepository.findComponentsByUser(userId, { ...filters, page, limit }),
-      this.componentRepository.countComponentsByUser(userId, filters),
-    ]);
-
-    return {
-      components: components.map((component) => this.sanitizeComponent(component)),
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit) || 1,
-      },
-    };
-  }
-
-  async getComponentById(userId, componentId) {
-    this.validateObjectId(componentId);
-
-    const component = await this.componentRepository.findComponentById(componentId, userId);
-
+  async updateComponent(id, data) {
+    const component = await componentRepository.findComponentById(id);
     if (!component) {
       throw new AppError(404, "Component not found");
     }
 
-    return this.sanitizeComponent(component);
+    return await componentRepository.updateComponent(id, data);
   }
 
-  async updateComponent(userId, componentId, payload) {
-    this.validateObjectId(componentId);
-
-    const component = await this.componentRepository.updateComponent(
-      componentId,
-      userId,
-      payload
-    );
-
+  async deleteComponent(id) {
+    const component = await componentRepository.findComponentById(id);
     if (!component) {
       throw new AppError(404, "Component not found");
     }
 
-    return this.sanitizeComponent(component);
-  }
-
-  async softDeleteComponent(userId, componentId) {
-    this.validateObjectId(componentId);
-
-    const component = await this.componentRepository.softDeleteComponent(componentId, userId);
-
-    if (!component) {
-      throw new AppError(404, "Component not found");
-    }
-
-    return true;
+    return await componentRepository.deleteComponent(id);
   }
 }
 
-export default ComponentService;
+export default new ComponentService();
