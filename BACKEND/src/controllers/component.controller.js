@@ -1,46 +1,44 @@
-import { createComponentValidationSchema, updateComponentValidationSchema } from "../validators/component.validator.js";
+import { AppError, asyncHandler } from "../utils/asyncHandler.utils.js";
+import componentValidationSchema from "../validators/component.validator.js";
 import componentService from "../services/component.service.js";
-import { asyncHandler, AppError } from "../utils/asyncHandler.utils.js";
 
-export const createComponent = asyncHandler(async (req, res) => {
-  const { error } = createComponentValidationSchema.validate(req.body);
+class ComponentController {
 
-  if (error) {
-    throw new AppError(400, error.details[0].message);
-  }
+    createComponent = asyncHandler(async (req, res) => {
+        const { error, value } = componentValidationSchema.validate(req.body);
+        if (error) throw new AppError(400, "Validation Error", error.details[0].message);
 
-  const component = await componentService.createComponent(req.body);
-  
-  res.success(201, "Component created successfully", component);
-});
+        const component = await componentService.createComponent({ ...value, userId: req.user._id });
+        res.status(201).json({ message: "Component created successfully", component });
+    })
 
-export const getComponentById = asyncHandler(async (req, res) => { 
-  const component = await componentService.getComponentById(req.params.id);
-  res.success(200, "Component retrieved successfully", component);
-});
+    getAllComponents = asyncHandler(async (req, res) => {
+        const components = await componentService.getAllComponents();
+        res.json({ message: "All components retrieved successfully", components });
+    })
 
-export const getComponentsByUserId = asyncHandler(async (req, res) => {
-  const components = await componentService.getComponentsByUserId(req.params.userId);
-  res.success(200, "Components retrieved successfully", components);
-});
+    getComponentById = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const component = await componentService.getComponentById(id);
+        res.json({ message: `Component with ID ${id} retrieved successfully`, component });
+    })
 
-export const getAllComponents = asyncHandler(async (req, res) => {
-  const components = await componentService.getAllComponents();
-  res.success(200, "All components retrieved successfully", components);
-});
+    updateComponent = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const { error, value } = componentValidationSchema.validate(req.body);
+        if (error) throw new AppError(400, "Validation Error", error.details[0].message);
 
-export const updateComponent = asyncHandler(async (req, res) => {
-  const { error } = updateComponentValidationSchema.validate(req.body);
+        const component = await componentService.updateComponent(id, value);
+        res.json({ message: `Component with ID ${id} updated successfully`, component });
+    })
 
-  if (error) {
-    throw new AppError(400, error.details[0].message);
-  }
+    deleteComponent = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        await componentService.deleteComponent(id);
+        res.json({ message: `Component with ID ${id} deleted successfully` });
+    });
 
-  const updatedComponent = await componentService.updateComponent(req.params.id, req.body);
-  res.success(200, "Component updated successfully", updatedComponent);
-});
+}
 
-export const deleteComponent = asyncHandler(async (req, res) => {
-  await componentService.deleteComponent(req.params.id);
-  res.success(200, "Component deleted successfully");
-});
+
+export default new ComponentController();

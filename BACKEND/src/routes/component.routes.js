@@ -10,11 +10,6 @@ import {
 
 const router = Router();
 
-router.post("/", createComponent);
-router.get("/", getAllComponents);
-router.get("/:id", getComponentById);
-router.get("/user/:userId", getComponentsByUserId);
-router.put("/:id", updateComponent);
-router.delete("/:id", deleteComponent);
+router.use(authMiddleware);
 
 export default router;

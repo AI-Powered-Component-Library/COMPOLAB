@@ -1,46 +1,43 @@
 import MongoComponentRepository from "../repository/implement/mongo.component.js";
+import ComponentModel from "../models/component.model.js";
 import { AppError } from "../utils/asyncHandler.utils.js";
 
-const componentRepository = new MongoComponentRepository();
-
 class ComponentService {
-  async createComponent(data) {
-    return await componentRepository.createComponent(data);
-  }
-
-  async getComponentById(id) {
-    const component = await componentRepository.findComponentById(id);
-    if (!component) {
-      throw new AppError(404, "Component not found");
-    }
-    return component;
-  }
-
-  async getComponentsByUserId(userId) {
-    return await componentRepository.findComponentsByUserId(userId);
-  }
-
-  async getAllComponents() {
-    return await componentRepository.findAllComponents();
-  }
-
-  async updateComponent(id, data) {
-    const component = await componentRepository.findComponentById(id);
-    if (!component) {
-      throw new AppError(404, "Component not found");
+    constructor() {
+        this.componentRepository = new MongoComponentRepository(ComponentModel);
     }
 
-    return await componentRepository.updateComponent(id, data);
-  }
-
-  async deleteComponent(id) {
-    const component = await componentRepository.findComponentById(id);
-    if (!component) {
-      throw new AppError(404, "Component not found");
+    async createComponent(componentData) {
+        return await this.componentRepository.createComponent(componentData);
     }
 
-    return await componentRepository.deleteComponent(id);
-  }
+    async getAllComponents() {
+        return await this.componentRepository.getAllComponents();
+    }
+
+    async getComponentById(id) {
+        const component = await this.componentRepository.getComponentById(id);
+        if (!component) {
+            throw new AppError(404, "Component not found");
+        }
+        return component;
+    }
+
+    async updateComponent(id, componentData) {
+        const component = await this.componentRepository.updateComponent(id, componentData);
+        if (!component) {
+            throw new AppError(404, "Component not found");
+        }
+        return component;
+    }
+
+    async deleteComponent(id) {
+        const component = await this.componentRepository.deleteComponent(id);
+        if (!component) {
+            throw new AppError(404, "Component not found");
+        }
+        return component;
+    }
 }
 
 export default new ComponentService();
