@@ -1,5 +1,6 @@
 import express from "express";
 import authRouter from "./routes/auth.routes.js"
+import componentRouter from "./routes/component.routes.js"
 import cookieParser from "cookie-parser";
 import morgan from "morgan"
 import errorMiddleware from "./middlewares/reject.middleware.js";
@@ -15,8 +16,9 @@ app.use(cookieParser());
 
 app.use(responseMiddleware)
 app.use("/api/auth/v1", authRouter)
+app.use("/api/components/v1", componentRouter)
 
 
 app.use(errorMiddleware)
 
-export default app
+export default app
