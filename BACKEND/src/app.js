@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 app.use(responseMiddleware)
 app.use("/api/auth/v1", authRouter)
-app.use("/api/component/v1", componentRouter)
+app.use("/api/components/v1", componentRouter)
 
 
 app.use(errorMiddleware)

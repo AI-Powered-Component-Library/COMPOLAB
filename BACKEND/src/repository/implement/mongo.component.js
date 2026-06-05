@@ -1,11 +1,14 @@
-import IComponentRepository from "../contract/componenet.contract.js";
+import ComponentModel from "../../models/component.model.js";
+import IComponentRepository from "../contract/component.contract.js";
 
 class MongoComponentRepository extends IComponentRepository {
+  async createComponent(data) {
+    return ComponentModel.create(data);
+  }
 
-    constructor(ComponentModel) {
-        super();
-        this.ComponentModel = ComponentModel;
-    }
+  async findComponentById(id) {
+    return ComponentModel.findById(id);
+  }
 
     async createComponent(component) {
         const newComponent = new this.ComponentModel(component);
@@ -28,4 +31,20 @@ class MongoComponentRepository extends IComponentRepository {
         return await this.ComponentModel.findByIdAndDelete(id);
     }
 
+  async findAllComponents() {
+    return ComponentModel.find();
+  }
+
+  async updateComponent(id, data) {
+    return ComponentModel.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true,
+    });
+  }
+
+  async deleteComponent(id) {
+    return ComponentModel.findByIdAndDelete(id);
+  }
 }
+
+export default MongoComponentRepository;

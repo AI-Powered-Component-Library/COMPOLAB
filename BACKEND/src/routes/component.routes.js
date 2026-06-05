@@ -1,24 +1,15 @@
 import { Router } from "express";
-import componentController from "../controllers/component.controller.js";
-import authMiddleware from "../middlewares/auth.middleware.js";
+import {
+  createComponent,
+  getComponentById,
+  getComponentsByUserId,
+  getAllComponents,
+  updateComponent,
+  deleteComponent
+} from "../controllers/component.controller.js";
 
 const router = Router();
 
 router.use(authMiddleware);
-
-router.post("/", componentController.createComponent);
-
-
-router.get("/", componentController.getAllComponents);
-
-
-router.get("/:id", componentController.getComponentById);
-
-
-router.put("/:id", componentController.updateComponent);
-
-router.delete("/:id", componentController.deleteComponent);
-
-
 
 export default router;
