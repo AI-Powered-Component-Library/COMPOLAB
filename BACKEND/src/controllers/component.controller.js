@@ -14,7 +14,7 @@ export const createComponent = asyncHandler(async (req, res) => {
   res.success(201, "Component created successfully", component);
 });
 
-export const getComponentById = asyncHandler(async (req, res) => {
+export const getComponentById = asyncHandler(async (req, res) => { 
   const component = await componentService.getComponentById(req.params.id);
   res.success(200, "Component retrieved successfully", component);
 });

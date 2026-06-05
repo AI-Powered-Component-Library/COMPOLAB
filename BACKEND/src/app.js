@@ -21,4 +21,4 @@ app.use("/api/components/v1", componentRouter)
 
 app.use(errorMiddleware)
 
-export default app
+export default app
