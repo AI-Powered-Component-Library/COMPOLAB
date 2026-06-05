@@ -1,69 +1,43 @@
-import ComponentValidator from "../validators/component.validator.js";
-import { AppError } from "../utils/asyncHandler.utils.js";
+import { AppError, asyncHandler } from "../utils/asyncHandler.utils.js";
+import componentValidationSchema from "../validators/component.validator.js";
 
 class ComponentController {
-  constructor(componentService) {
-    this.componentService = componentService;
-  }
 
-  formatValidationError(error) {
-    return error.details.map((detail) => detail.message).join(", ");
-  }
+    createComponent = asyncHandler(async (req, res) => {
 
-  createComponent = async (req, res) => {
-    const { error, value } = ComponentValidator.validateCreate(req.body);
+        const role = req.user.role;
 
-    if (error) {
-      throw new AppError(400, this.formatValidationError(error));
-    }
+        if (role !== "admin") throw new AppError(403, "Forbidden: insufficient permission");
 
-    const component = await this.componentService.createComponent(req.user.id, value);
+        const { error, value } = componentValidationSchema.validate(req.body);
+        if (error) throw new AppError(400, "Validation Error", error.details[0].message)
 
-    return res.success(201, "Component created successfully", { component });
-  };
+        res.status(201).json({ message: "Component created successfully", component: value });
+    })
 
-  getComponents = async (req, res) => {
-    const { error, value } = ComponentValidator.validateQuery(req.query);
+    getAllComponents = asyncHandler(async (req, res) => {
+        res.json({ message: "All components retrieved successfully", components: [] });
+    })
 
-    if (error) {
-      throw new AppError(400, this.formatValidationError(error));
-    }
+    getComponentById = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        res.json({ message: `Component with ID ${id} retrieved successfully`, component: {} });
+    })
 
-    const result = await this.componentService.getComponents(req.user.id, value);
+    updateComponent = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const { error, value } = componentValidationSchema.validate(req.body);
+        if (error) throw new AppError(400, "Validation Error", error.details[0].message)
 
-    return res.success(200, "Components fetched successfully", result);
-  };
+        res.json({ message: `Component with ID ${id} updated successfully`, component: value });
+    })
 
-  getComponentById = async (req, res) => {
-    const component = await this.componentService.getComponentById(
-      req.user.id,
-      req.params.id
-    );
+    deleteComponent = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        res.json({ message: `Component with ID ${id} deleted successfully` });
+    });
 
-    return res.success(200, "Component fetched successfully", { component });
-  };
-
-  updateComponent = async (req, res) => {
-    const { error, value } = ComponentValidator.validateUpdate(req.body);
-
-    if (error) {
-      throw new AppError(400, this.formatValidationError(error));
-    }
-
-    const component = await this.componentService.updateComponent(
-      req.user.id,
-      req.params.id,
-      value
-    );
-
-    return res.success(200, "Component updated successfully", { component });
-  };
-
-  softDeleteComponent = async (req, res) => {
-    await this.componentService.softDeleteComponent(req.user.id, req.params.id);
-
-    return res.success(200, "Component deleted successfully", null);
-  };
 }
 
-export default ComponentController;
+
+export default new ComponentController();

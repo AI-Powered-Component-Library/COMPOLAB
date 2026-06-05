@@ -1,5 +1,5 @@
 import express from "express";
-import authRouter from "./routes/auth.routes.js";
+import authRouter from "./routes/auth.routes.js"
 import componentRouter from "./routes/component.routes.js"
 import cookieParser from "cookie-parser";
 import morgan from "morgan"
