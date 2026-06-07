@@ -1,8 +1,11 @@
 import React from 'react'
+import { LoadingSpinner } from "compo-ui-library"
 
 const App = () => {
   return (
-    <div>App</div>
+    <div>
+      <LoadingSpinner  />
+    </div>
   )
 }
 
