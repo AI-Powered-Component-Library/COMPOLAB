@@ -16,7 +16,7 @@ app.use(responseMiddleware);
 app.use("/api/v1/auth", authRouter);
 
 //component routes
-app.use("/api/components", componentRoutes);
+app.use("/api/v1/components", componentRoutes);
 
 app.use(errorMiddleware);
 
