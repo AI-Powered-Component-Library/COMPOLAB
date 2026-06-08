@@ -9,15 +9,12 @@ const AuthLayout = ({ title, subtitle, children }) => {
               <h1 className="mt-6 text-4xl font-bold leading-tight text-white">
                 Secure frontend authentication with React
               </h1>
-              <p className="mt-5 text-base leading-7 text-blue-100">
-                Register, login, protected dashboard, persistent session and logout are connected with your class based backend API.
-              </p>
+    
             </div>
             <div className="rounded-2xl bg-white/15 p-5 text-sm leading-6 text-white/90">
-              Access token is persisted in localStorage and also sent through Authorization header. Backend cookies are supported with credentials enabled.
-            </div>
+              Register, login, protected dashboard, persistent session and logout are connected with your class based backend API.
           </div>
-
+        </div>
           <div className="p-6 sm:p-10">
             <div className="mx-auto max-w-md">
               <h2 className="text-3xl font-bold text-white">{title}</h2>
