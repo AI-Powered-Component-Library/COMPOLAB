@@ -1,10 +1,10 @@
 import React from 'react'
-import { LoadingSpinner } from "compo-ui-library"
+import Login from '../features/auth/pages/Login'
 
 const App = () => {
   return (
     <div>
-      <LoadingSpinner  />
+      Hello World!
     </div>
   )
 }
