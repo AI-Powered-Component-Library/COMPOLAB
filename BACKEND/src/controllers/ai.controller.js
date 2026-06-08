@@ -1,25 +1,27 @@
-import { aiPromptSchema } from "../validators/ai.validator.js";
-import { generateComponentCode } from "../services/ai.service.js";
-import { APIResponse } from "../middlewares/response.middleware.js";
+import { getStream } from "../services/ai.service.js";
 
+export async function handleMessage(req, res) {
+  const message = req.body.message;
 
-export const generateAIComponent = async (req, res) => {
-  const validation = aiPromptSchema.safeParse(req.body);
+  const messages = [
+    {
+      role: "user",
+      content: message,
+    },
+  ];
 
-  if (!validation.success) {
-    return res.status(400).json({
-      success: false,
-      errors: validation.error.errors,
-    });
+  const stream = await getStream(messages);
+
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+
+  for await (const chunk of stream) {
+    const aiChunk = chunk.content;
+    console.log("chunk", aiChunk);
+
+    res.write(`data: ${JSON.stringify({ chunk: aiChunk })}\n\n`);
   }
 
-  const { prompt } = validation.data;
-
-  const generatedCode = await generateComponentCode(prompt);
-
-  return res.status(200).json(
-    new APIResponse(true, "Component generated successfully", {
-      code: generatedCode,
-    })
-  );
-};
+  res.end();
+}
