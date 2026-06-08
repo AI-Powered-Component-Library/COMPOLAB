@@ -1,4 +1,5 @@
 import "dotenv/config"
+import { OpenAI } from "openai";
 
 export const {
     PORT,
@@ -7,8 +8,13 @@ export const {
     JWT_SECRET,
     JWT_REFRESH_SECRET,
     GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET
+    GOOGLE_CLIENT_SECRET,
+    OPENAI_API_KEY
 } = process.env
+
+export const openai = new OpenAI({
+    apiKey: OPENAI_API_KEY,
+});
 
 const checkVariables = {
     PORT,
@@ -17,7 +23,8 @@ const checkVariables = {
     JWT_SECRET,
     JWT_REFRESH_SECRET,
     GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET
+    GOOGLE_CLIENT_SECRET,
+    OPENAI_API_KEY
 }
 
 Object.entries(checkVariables).forEach(([key, value]) => {
