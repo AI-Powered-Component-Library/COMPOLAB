@@ -8,13 +8,7 @@ const componentSchema = new mongoose.Schema({
     index: true,
   },
 
-  prompt: {
-    type: String,
-    required: [true, "Prompt is required"],
-    trim: true,
-    minlength: [5, "Prompt must be at least 5 characters"],
-    maxlength: [2000, "Prompt cannot exceed 2000 characters"],
-  },
+
 
   componentName: {
     type: String,
@@ -24,10 +18,7 @@ const componentSchema = new mongoose.Schema({
     maxlength: [100, "Component name cannot exceed 100 characters"],
   },
 
-  generatedCode: {
-    type: String,
-    default: null,
-  },
+ 
 
   theme: {
     type: String,
@@ -35,17 +26,7 @@ const componentSchema = new mongoose.Schema({
     default: "light",
   },
 
-  framework: {
-    type: String,
-    enum: ["react", "vue", "angular", "svelte", "html"],
-    default: "react",
-  },
 
-  cssLibrary: {
-    type: String,
-    enum: ["tailwind", "css", "scss", "styled-components", "material-ui"],
-    default: "tailwind",
-  },
   tags: {
     type: [String],
     default: [],
@@ -56,7 +37,7 @@ const componentSchema = new mongoose.Schema({
   },
   isPublic: {
     type: Boolean,
-    default: false,
+    default: true,
   },
 }, { timestamps: true });
 
