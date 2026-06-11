@@ -8,6 +8,11 @@ import Register from '../features/auth/pages/Register'
 
 const getPath = () => window.location.pathname || '/login'
 
+import PromptForm from "../features/ai/components/PromptForm.jsx";
+import CodePreview from "../features/ai/components/CodePreview.jsx";
+import Loader from "../features/ai/components/Loader.jsx";
+
+import { generateComponent } from "../features/ai/services/ai.service";
 const App = () => {
   const { initializing, isAuthenticated } = useAuth()
   const [path, setPath] = useState(getPath())

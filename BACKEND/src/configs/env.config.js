@@ -1,5 +1,6 @@
 import "dotenv/config"
 
+
 export const {
     PORT,
     MONGO_URI,
@@ -7,8 +8,11 @@ export const {
     JWT_SECRET,
     JWT_REFRESH_SECRET,
     GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET
+    GOOGLE_CLIENT_SECRET,
+    MISTRAL_API_KEY
 } = process.env
+
+
 
 const checkVariables = {
     PORT,
@@ -17,7 +21,8 @@ const checkVariables = {
     JWT_SECRET,
     JWT_REFRESH_SECRET,
     GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET
+    GOOGLE_CLIENT_SECRET,
+    MISTRAL_API_KEY
 }
 
 Object.entries(checkVariables).forEach(([key, value]) => {
