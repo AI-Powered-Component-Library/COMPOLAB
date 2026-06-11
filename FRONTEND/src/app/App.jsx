@@ -1,6 +1,12 @@
-// import { LoadingSpinner } from "compo-ui-library";
-import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { useCallback, useEffect, useState } from 'react'
+import Dashboard from './components/Dashboard'
+import FullPageLoader from './components/FullPageLoader'
+import ProtectedRoute from './components/ProtectedRoute'
+import { useAuth } from '../features/auth/context/AuthContext'
+import Login from '../features/auth/pages/Login'
+import Register from '../features/auth/pages/Register'
+
+const getPath = () => window.location.pathname || '/login'
 
 import PromptForm from "../features/ai/components/PromptForm.jsx";
 import CodePreview from "../features/ai/components/CodePreview.jsx";
@@ -8,61 +14,46 @@ import Loader from "../features/ai/components/Loader.jsx";
 
 import { generateComponent } from "../features/ai/services/ai.service";
 const App = () => {
-  const [prompt, setPrompt] = useState("");
-  const [generatedCode, setGeneratedCode] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { initializing, isAuthenticated } = useAuth()
+  const [path, setPath] = useState(getPath())
 
-  const handleGenerate = async () => {
-    if (!prompt.trim()) {
-      return toast.error("Please enter a prompt");
+  const navigate = useCallback((nextPath, replace = false) => {
+    if (replace) window.history.replaceState({}, '', nextPath)
+    else window.history.pushState({}, '', nextPath)
+
+    setPath(nextPath)
+  }, [])
+
+  useEffect(() => {
+    const handlePopState = () => setPath(getPath())
+    window.addEventListener('popstate', handlePopState)
+
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  useEffect(() => {
+    if (initializing) return
+
+    if (path === '/') {
+      navigate(isAuthenticated ? '/dashboard' : '/login', true)
     }
-    try {
-      setLoading(true);
+  }, [initializing, isAuthenticated, navigate, path])
 
-      const response = await generateComponent(prompt);
+  if (initializing) return <FullPageLoader />
 
-      setGeneratedCode(response.data.code);
+  if (path === '/register') return <Register navigate={navigate} />
+  if (path === '/login') return <Login navigate={navigate} />
 
-      toast.success("Component generated successfully");
-    } catch (error) {
-      console.error(error);
+  if (path === '/dashboard') {
+    return (
+      <ProtectedRoute navigate={navigate}>
+        <Dashboard navigate={navigate} />
+      </ProtectedRoute>
+    )
+  }
 
-      toast.error(
-        error?.response?.data?.message || "Failed to generate component",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  navigate(isAuthenticated ? '/dashboard' : '/login', true)
+  return <FullPageLoader />
+}
 
-  return (
-    <div>
-      {/* <LoadingSpinner /> */}
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-10 text-center">
-          <h1 className="text-4xl font-bold mb-4"> AI Component Generator </h1>
-          <p className="text-zinc-400">
-            {" "}
-            Generate React + Tailwind components using AI{" "}
-          </p>
-        </div>
-        <PromptForm
-          prompt={prompt}
-          setPrompt={setPrompt}
-          handleGenerate={handleGenerate}
-          loading={loading}
-        />
-        <div className="mt-8">
-          {" "}
-          {loading ? (
-            <Loader />
-          ) : (
-            <CodePreview generatedCode={generatedCode} />
-          )}{" "}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default App;
+export default App

@@ -51,17 +51,6 @@ POST /api/auth/v1/signup
 POST /api/auth/v1/login
 GET  /api/auth/v1/profile
 
-AI Component Generator
-
-POST /api/aiv1/generate
-
-{
-  "prompt": "Create a responsive pricing card" // Request
-}
-
-{
-  "code": "<React + Tailwind Code>" // Response
-}
 
 // Component Storage
 
@@ -96,6 +85,16 @@ User Prompt ⇒ Frontend ⇒  POST /api/ai/generate ⇒  AI Service (OpenAI/Gemi
      v
 Frontend Preview
 ```
+
+POST /api/v1/component/ai
+
+{
+  "prompt": "Create a responsive pricing card" // Request
+}
+
+{
+  "code": "<React + Tailwind Code>" // Response
+}
 
 ---
 
