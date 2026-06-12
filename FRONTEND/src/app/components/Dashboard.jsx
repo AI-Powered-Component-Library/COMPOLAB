@@ -17,13 +17,21 @@ const Dashboard = ({ navigate }) => {
             <h1 className="mt-3 text-3xl font-bold text-white">Dashboard</h1>
             <p className="mt-2 text-slate-400">You can see this page only after login.</p>
           </div>
-          <button
-            onClick={handleLogout}
-            disabled={authLoading}
-            className="rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-400 disabled:cursor-not-allowed disabled:bg-red-500/60"
-          >
-            {authLoading ? 'Logging out...' : 'Logout'}
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => navigate('/components')}
+              className="rounded-xl bg-blue-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-400"
+            >
+              My Components →
+            </button>
+            <button
+              onClick={handleLogout}
+              disabled={authLoading}
+              className="rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-400 disabled:cursor-not-allowed disabled:bg-red-500/60"
+            >
+              {authLoading ? 'Logging out...' : 'Logout'}
+            </button>
+          </div>
         </header>
 
         <div className="mt-6 grid gap-5 md:grid-cols-2">

@@ -5,20 +5,23 @@ import FormInput from '../components/FormInput'
 import SubmitButton from '../components/SubmitButton'
 import { useAuth } from '../context/AuthContext'
 import { validateLoginForm } from '../utils/validation'
+import { useNavigate } from 'react-router-dom'
 
 const initialForm = {
   email: '',
   password: '',
 }
 
-const Login = ({ navigate }) => {
+const Login = () => {
   const { login, authLoading, isAuthenticated, initializing } = useAuth()
   const [form, setForm] = useState(initialForm)
   const [errors, setErrors] = useState({})
   const [apiError, setApiError] = useState('')
 
+  const navigate  = useNavigate()
+
   useEffect(() => {
-    if (!initializing && isAuthenticated) navigate('/dashboard', true)
+    if (!initializing && isAuthenticated) navigate('/', true)
   }, [initializing, isAuthenticated, navigate])
 
   const handleChange = (event) => {
