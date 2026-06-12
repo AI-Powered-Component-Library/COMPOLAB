@@ -1,14 +1,15 @@
-import { connect } from "mongoose";
-import { MONGO_URI } from "./env.config.js"
+import mongoose from "mongoose";
+import { MONGO_URI } from "./env.config.js";
 
-function connectDB() {
-
+async function connectDB() {
     try {
-        connect(MONGO_URI)
-        console.log("Database connected successfully")
+        await mongoose.connect("mongodb://localhost:27017/compolab");
+
+        console.log("✅ Database connected successfully");
     } catch (err) {
-        console.log("Mongo Error", err.message)
-        process.exit(1)
+        console.error("❌ Mongo Error:", err.message);
+        process.exit(1);
     }
 }
+
 export default connectDB;

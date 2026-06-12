@@ -19,3 +19,15 @@
 **component business logics.**
 
 **Issue: AI Component Generation Endpoint Integration**
+
+
+
+fields to be removed 
+
+
+css library from models validation
+framework remove
+
+
+generated code is written double  in schema 
+

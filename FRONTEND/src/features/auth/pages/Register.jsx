@@ -5,6 +5,7 @@ import FormInput from '../components/FormInput'
 import SubmitButton from '../components/SubmitButton'
 import { useAuth } from '../context/AuthContext'
 import { validateRegisterForm } from '../utils/validation'
+import { useNavigate } from 'react-router-dom'
 
 const initialForm = {
   name: '',
@@ -13,11 +14,13 @@ const initialForm = {
   confirmPassword: '',
 }
 
-const Register = ({ navigate }) => {
+const Register = () => {
   const { register, authLoading, isAuthenticated, initializing } = useAuth()
   const [form, setForm] = useState(initialForm)
   const [errors, setErrors] = useState({})
   const [apiError, setApiError] = useState('')
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!initializing && isAuthenticated) navigate('/dashboard', true)

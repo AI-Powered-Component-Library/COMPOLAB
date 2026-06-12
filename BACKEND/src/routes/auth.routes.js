@@ -11,7 +11,7 @@ const userRepository = new MongoUserRepository();
 const authService = new AuthService(userRepository);
 const authController = new AuthController(authService);
 
-router.post("/register", asyncHandler(authController.register));
+router.post("/register", authController.register);
 router.post("/login", asyncHandler(authController.login));
 router.post("/refresh-token", asyncHandler(authController.refreshToken));
 router.get("/profile", authMiddleware.protect, asyncHandler(authController.profile));
