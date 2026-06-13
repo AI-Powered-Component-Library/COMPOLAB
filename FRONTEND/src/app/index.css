@@ -6,12 +6,18 @@
   grid-template-rows: 50px 1fr 100px;
   grid-template-areas:
     "header header header"
-    "sidebar codepar leftchat"
+    "sidebar codepart leftchat"
     "sidebar promptinput leftchat";
 }
 
+.promptinput {
+  grid-area: promptinput;
+}
 .sidebar {
   grid-area: sidebar;
+}
+.codepart {
+  grid-area: codepart;
 }
 .leftchat {
   grid-area: leftchat;
