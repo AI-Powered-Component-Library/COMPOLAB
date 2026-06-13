@@ -1,9 +1,10 @@
-const handleForm = (event, callback) => {
-  event.preventDefault()
-  const formData = new FormData(event.target)
-  const values = Object.fromEntries(formData.entries())
+const handleForm = (callback) => (e) => {
+  e.preventDefault();
 
-  if (typeof callback === 'function') callback(values)
-}
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+
+  callback(data);
+};
 
 export default handleForm

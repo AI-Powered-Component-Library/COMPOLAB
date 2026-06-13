@@ -1,88 +1,74 @@
-import { useEffect, useState } from 'react'
-import AuthError from '../components/AuthError'
-import AuthLayout from '../components/AuthLayout'
-import FormInput from '../components/FormInput'
-import SubmitButton from '../components/SubmitButton'
-import { useAuth } from '../context/AuthContext'
-import { validateLoginForm } from '../utils/validation'
+import React from 'react'
+import useAuth from '../hooks/useAuth'
+import handleForm from "../../../utils/formHandler.utils"
+import { useNavigate } from "react-router-dom"
 
-const initialForm = {
-  email: '',
-  password: '',
-}
 
-const Login = ({ navigate }) => {
-  const { login, authLoading, isAuthenticated, initializing } = useAuth()
-  const [form, setForm] = useState(initialForm)
-  const [errors, setErrors] = useState({})
-  const [apiError, setApiError] = useState('')
+const Login = () => {
 
-  useEffect(() => {
-    if (!initializing && isAuthenticated) navigate('/dashboard', true)
-  }, [initializing, isAuthenticated, navigate])
-
-  const handleChange = (event) => {
-    const { name, value } = event.target
-    setForm((prev) => ({ ...prev, [name]: value }))
-    setErrors((prev) => ({ ...prev, [name]: '' }))
-    setApiError('')
-  }
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    const validationErrors = validateLoginForm(form)
-    setErrors(validationErrors)
-
-    if (Object.keys(validationErrors).length > 0) return
-
-    try {
-      await login({
-        email: form.email.trim().toLowerCase(),
-        password: form.password,
-      })
-      navigate('/dashboard', true)
-    } catch (error) {
-      setApiError(error.message || 'Login failed')
-    }
-  }
+  const { handleLogin } = useAuth()
+  const navigate = useNavigate()
 
   return (
-    <AuthLayout title="Welcome back" subtitle="Login with your registered email and password.">
-      <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-        <AuthError message={apiError} />
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md">
+        <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20">
+          <form onSubmit={handleForm(handleLogin)} className="space-y-6">
+            <div className="text-center mb-8">
+              <h2 className="text-4xl font-bold text-white mb-2">
+                Welcome Back
+              </h2>
+              <p className="text-gray-300 text-sm">Sign in to your account to continue</p>
+            </div>
 
-        <FormInput
-          label="Email"
-          name="email"
-          type="email"
-          placeholder="you@example.com"
-          value={form.email}
-          onChange={handleChange}
-          error={errors.email}
-          autoComplete="email"
-        />
+            <div>
+              <input
+                name='email'
+                type="email"
+                placeholder='Enter Your Email'
+                required
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 backdrop-blur-sm"
+              />
+            </div>
 
-        <FormInput
-          label="Password"
-          name="password"
-          type="password"
-          placeholder="Enter password"
-          value={form.password}
-          onChange={handleChange}
-          error={errors.password}
-          autoComplete="current-password"
-        />
+            <div>
+              <input
+                name='password'
+                type="password"
+                placeholder='Enter Your Password'
+                required
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 backdrop-blur-sm"
+              />
+            </div>
 
-        <SubmitButton loading={authLoading}>Login</SubmitButton>
-      </form>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-105 active:scale-95 shadow-lg"
+            >
+              Login
+            </button>
 
-      <p className="mt-6 text-center text-sm text-slate-400">
-        New user?{' '}
-        <button className="font-semibold text-blue-300 hover:text-blue-200" onClick={() => navigate('/register')}>
-          Create account
-        </button>
-      </p>
-    </AuthLayout>
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white/20"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-slate-900 text-gray-400">Don't have an account?</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => navigate('/register')}
+              className="w-full border-2 border-blue-500/50 hover:border-blue-500 text-blue-300 hover:text-blue-200 font-semibold py-3 px-4 rounded-lg transition duration-200 bg-transparent hover:bg-blue-500/10"
+            >
+              Sign Up
+            </button>
+
+          </form>
+        </div>
+      </div>
+    </div>
   )
 }
 

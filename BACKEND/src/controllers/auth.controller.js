@@ -11,12 +11,10 @@ class AuthController {
   }
 
   setAuthCookies(res, accessToken, refreshToken) {
-    res.cookie("accessToken", accessToken, accessTokenCookieOptions());
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions());
   }
 
   clearAuthCookies(res) {
-    res.clearCookie("accessToken", accessTokenCookieOptions());
     res.clearCookie("refreshToken", refreshTokenCookieOptions());
   }
 
@@ -29,10 +27,9 @@ class AuthController {
     }
 
     const result = await this.authService.register(value);
-    this.setAuthCookies(res, result.accessToken, result.refreshToken);
+    this.setAuthCookies(res, result.refreshToken);
 
     return res.success(201, "User registered successfully", {
-      user: result.user,
       accessToken: result.accessToken,
     });
   };
@@ -46,10 +43,9 @@ class AuthController {
     }
 
     const result = await this.authService.login(value);
-    this.setAuthCookies(res, result.accessToken, result.refreshToken);
+    this.setAuthCookies(res, result.refreshToken);
 
     return res.success(200, "User logged in successfully", {
-      user: result.user,
       accessToken: result.accessToken,
     });
   };
@@ -63,7 +59,7 @@ class AuthController {
     const token = req.cookies?.refreshToken || req.body?.refreshToken;
     const result = await this.authService.refreshAccessToken(token);
 
-    this.setAuthCookies(res, result.accessToken, result.refreshToken);
+    this.setAuthCookies(res, result.refreshToken);
 
     return res.success(200, "Token refreshed successfully", {
       accessToken: result.accessToken,
