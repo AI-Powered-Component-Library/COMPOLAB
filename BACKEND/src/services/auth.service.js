@@ -14,7 +14,7 @@ class AuthService {
   sanitizeUser(user) {
     return {
       id: user._id,
-      name: user.name,
+      fullName: user.fullName,
       email: user.email,
       role: user.role,
       isActive: user.isActive,
@@ -45,7 +45,7 @@ class AuthService {
     const hashedPassword = await bcrypt.hash(payload.password, 12);
 
     const user = await this.userRepository.createUser({
-      name: payload.name,
+      fullName: payload.fullName,
       email: payload.email,
       password: hashedPassword,
     });

@@ -2,11 +2,13 @@
 
 import { Zap, LogOut, User } from 'lucide-react';
 import { useSelector } from 'react-redux';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // import useAuth from '@/hooks/useAuth';
 
 const Navbar = () => {
+
     const { isAuthenticated, user } = useSelector((state) => state.auth);
+    console.log(isAuthenticated)
     // const { handleLogout } = useAuth();
 
     return (
@@ -21,11 +23,6 @@ const Navbar = () => {
 
             {/* Nav Items */}
             <div className="flex items-center gap-4">
-                <Link to="/generate">
-                    <button className="text-gray-300 hover:text-white transition px-4 py-2 text-sm font-medium border border-gray-700 rounded-lg hover:border-cyan-400">
-                        Studio
-                    </button>
-                </Link>
 
                 {isAuthenticated ? (
                     <div className="flex items-center gap-4">

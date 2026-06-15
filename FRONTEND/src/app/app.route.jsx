@@ -6,6 +6,10 @@ import Home from "./Home"
 import Generate from "../features/ai/Generate"
 import Pricing from "../features/payment/pages/Pricing"
 import Checkout from "../features/payment/pages/Checkout"
+// import CreateComponent from "../features/components/pages/Create"
+// import ComponentDetail from "../features/components/pages/ComponentDetail"
+// import ComponentList from "../features/components/pages/ComponentList"
+// import EditComponent from "../features/components/pages/EditComponent"
 
 
 export const router = createBrowserRouter([
@@ -29,13 +33,29 @@ export const router = createBrowserRouter([
                 element: <Generate />
             },
             {
-                path :"/pricing",
-                element: <Pricing/>
+                path: "/pricing",
+                element: <Pricing />
             },
             {
-                path : "/checkout",
-                element : <Checkout/>
-            }
+                path: "/checkout",
+                element: <Checkout />
+            },
+            // {
+            //     path: "/c/create",
+            //     element: <CreateComponent />
+            // },
+            // {
+            //     path: "/c/:cid",
+            //     element: <ComponentDetail />
+            // },
+            // {
+            //     path: "/c/list",
+            //     element: <ComponentList />
+            // },
+            // {
+            //     path: "/c/:cid/edit",
+            //     element: <EditComponent />
+            // },
         ]
     }
 ])

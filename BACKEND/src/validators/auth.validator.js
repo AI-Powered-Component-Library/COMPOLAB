@@ -2,10 +2,10 @@ import Joi from "joi";
 
 class AuthValidator {
   registerSchema = Joi.object({
-    name: Joi.string().min(3).max(50).trim().required().messages({
-      "string.empty": "Name is required",
-      "string.min": "Name must be at least 3 characters",
-      "string.max": "Name cannot exceed 50 characters",
+    fullName: Joi.string().min(3).max(50).trim().required().messages({
+      "string.empty": "fullName is required",
+      "string.min": "fullName must be at least 3 characters",
+      "string.max": "fullName cannot exceed 50 characters",
     }),
 
     email: Joi.string().email().trim().lowercase().required().messages({
