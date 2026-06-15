@@ -10,7 +10,7 @@ class AuthController {
     this.authService = authService;
   }
 
-  setAuthCookies(res, accessToken, refreshToken) {
+  setAuthCookies(res, refreshToken) {
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions());
   }
 

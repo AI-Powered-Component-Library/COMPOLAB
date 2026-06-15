@@ -1,7 +1,7 @@
 import React from 'react'
 import { getUserService, loginService, logoutService, refreshTokenService, registerService } from '../services/auth.service'
 import { useDispatch } from "react-redux"
-import { setAccessToken } from '../auth.slice'
+import { setAccessToken, setUser } from '../auth.slice'
 
 const useAuth = () => {
 
@@ -27,10 +27,10 @@ const useAuth = () => {
     dispatch(setAccessToken(token))
   }
 
-  const handleGetUser = async () => {
-    let res = await getUserService()
+  const handleGetUser = async (token) => {
+    let res = await getUserService(token)
 
-    console.log(res.data)
+    dispatch(setUser(res.data.data.user))
   }
 
   const handleLogout = async () => {
@@ -41,7 +41,7 @@ const useAuth = () => {
   const handleRefreshToken = async () => {
     let res = await refreshTokenService()
 
-    console.log(res.data)
+   return res.data.data.accessToken
   }
 
 
