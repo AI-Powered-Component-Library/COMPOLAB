@@ -1,33 +1,17 @@
-# KHALID
+# khalid
 
-**auth api testing and fixing. - khalid**
+UI IMProve.
+FOLDER STRUCTURE UI
+PRICING CARD
 
-**Authentication Frontend (Register, Login & Logout)**
+# Devansh
 
+Ai Backend Controller + Service using Mistral Agent
 
+CREATE A AGENT
+AGENT.INVOKE/STREAM
+SYSTEM INSTRUCTION
 
-# DEVANSH
+# Subham
 
-**component schema and validation**
-
-**Issue: Component CRUD Frontend**
-
-
-
-# SUNNY
-
-**component business logics.**
-
-**Issue: AI Component Generation Endpoint Integration**
-
-
-
-fields to be removed 
-
-
-css library from models validation
-framework remove
-
-
-generated code is written double  in schema 
-
+Razorpay Payment Gateway

@@ -42,4 +42,4 @@ const componentService = {
   },
 }
 
-export default componentService
+export default componentService
