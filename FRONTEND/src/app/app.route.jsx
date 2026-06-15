@@ -4,6 +4,8 @@ import Register from "../features/auth/pages/Register"
 import App from "./App"
 import Home from "./Home"
 import Generate from "../features/ai/Generate"
+import Pricing from "../features/payment/pages/Pricing"
+import Checkout from "../features/payment/pages/Checkout"
 
 
 export const router = createBrowserRouter([
@@ -25,6 +27,14 @@ export const router = createBrowserRouter([
             {
                 path: "/generate",
                 element: <Generate />
+            },
+            {
+                path :"/pricing",
+                element: <Pricing/>
+            },
+            {
+                path : "/checkout",
+                element : <Checkout/>
             }
         ]
     }

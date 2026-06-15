@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import {Link} from "react-router-dom"
 
 const Header = () => {
     const [isWebBuilder, setIsWebBuilder] = useState(false)
@@ -39,7 +40,9 @@ const Header = () => {
                 </div>
             </div>
             <div id="right" className='flex-1 text-center'>
+                <Link to={"/pricing"} className='border w-fit mx-auto px-4 py-1 rounded-2xl hover:bg-white hover:text-purple-500 cursor-pointer '>
                 Token 999k+
+                </Link>
             </div>
         </div>
     )

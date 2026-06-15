@@ -14,7 +14,7 @@ const authController = new AuthController(authService);
 router.post("/register", authController.register);
 router.post("/login", asyncHandler(authController.login));
 router.post("/refresh-token", asyncHandler(authController.refreshToken));
-router.get("/profile", authMiddleware.protect, asyncHandler(authController.profile));
+router.get("/user", authMiddleware.protect, asyncHandler(authController.getUser));
 router.post("/logout", authMiddleware.protect, asyncHandler(authController.logout));
 
 export default router;

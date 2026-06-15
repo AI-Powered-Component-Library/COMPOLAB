@@ -50,7 +50,7 @@ class AuthController {
     });
   };
 
-  profile = async (req, res) => {
+  getUser = async (req, res) => {
     const user = await this.authService.getProfile(req.user.id);
     return res.success(200, "Profile fetched successfully", { user });
   };

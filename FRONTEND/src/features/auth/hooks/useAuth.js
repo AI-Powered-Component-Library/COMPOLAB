@@ -1,5 +1,5 @@
 import React from 'react'
-import { loginService, registerService } from '../services/auth.service'
+import { getUserService, loginService, logoutService, refreshTokenService, registerService } from '../services/auth.service'
 import { useDispatch } from "react-redux"
 import { setAccessToken } from '../auth.slice'
 
@@ -27,10 +27,25 @@ const useAuth = () => {
     dispatch(setAccessToken(token))
   }
 
-  
+  const handleGetUser = async () => {
+    let res = await getUserService()
+
+    console.log(res.data)
+  }
+
+  const handleLogout = async () => {
+    let res = await logoutService()
+    console.log(res.data)
+  }
+
+  const handleRefreshToken = async () => {
+    let res = await refreshTokenService()
+
+    console.log(res.data)
+  }
 
 
-  return { handleRegister, handleLogin }
+  return { handleRegister, handleLogin, handleGetUser, handleLogout, handleRefreshToken }
 }
 
 export default useAuth

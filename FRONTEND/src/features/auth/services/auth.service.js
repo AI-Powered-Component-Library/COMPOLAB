@@ -4,5 +4,11 @@ const registerService = (data) => api.post("/auth/register", data)
 
 const loginService = (data) => api.post("/auth/login", data)
 
+const getUserService = () => api.get("/auth/user")
 
-export { registerService,loginService }
+const logoutService = () => api.post('/auth/logout')
+
+const refreshTokenService = () => api.post("/auth/refresh-token")
+
+
+export { registerService, loginService, getUserService, logoutService, refreshTokenService }
