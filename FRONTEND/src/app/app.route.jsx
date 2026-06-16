@@ -6,6 +6,8 @@ import Home from "./Home"
 import Generate from "../features/ai/Generate"
 import Pricing from "../features/payment/pages/Pricing"
 import Checkout from "../features/payment/pages/Checkout"
+import ProtectedRoute from "../features/auth/pages/ProtectedRoute"
+import PublicRoute from "../features/auth/pages/PublicRoute"
 // import CreateComponent from "../features/components/pages/Create"
 // import ComponentDetail from "../features/components/pages/ComponentDetail"
 // import ComponentList from "../features/components/pages/ComponentList"
@@ -21,25 +23,36 @@ export const router = createBrowserRouter([
                 element: <Home />
             },
             {
-                path: "/login",
-                element: <Login />
+                element: <PublicRoute />,
+                children: [
+                    {
+                        path: "/login",
+                        element: <Login />
+                    },
+                    {
+                        path: "/register",
+                        element: <Register />
+                    },
+                ]
             },
             {
-                path: "/register",
-                element: <Register />
+                element: <ProtectedRoute />,
+                children: [
+                    {
+                        path: "/generate",
+                        element: <Generate />
+                    },
+                    {
+                        path: "/pricing",
+                        element: <Pricing />
+                    },
+                    {
+                        path: "/checkout",
+                        element: <Checkout />
+                    },
+                ]
             },
-            {
-                path: "/generate",
-                element: <Generate />
-            },
-            {
-                path: "/pricing",
-                element: <Pricing />
-            },
-            {
-                path: "/checkout",
-                element: <Checkout />
-            },
+
             // {
             //     path: "/c/create",
             //     element: <CreateComponent />

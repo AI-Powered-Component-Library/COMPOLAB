@@ -1,15 +1,12 @@
-"use client";
-
 import { Zap, LogOut, User } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-// import useAuth from '@/hooks/useAuth';
+import useAuth from '../features/auth/hooks/useAuth';
 
 const Navbar = () => {
 
-    const { isAuthenticated, user } = useSelector((state) => state.auth);
-    // console.log(isAuthenticated)
-    // const { handleLogout } = useAuth();
+    const user = useSelector((state) => state.auth.user);
+    const { handleLogout } = useAuth();
 
     return (
         <nav className="relative z-10 flex items-center justify-between px-6 sm:px-8 py-6">
@@ -24,7 +21,7 @@ const Navbar = () => {
             {/* Nav Items */}
             <div className="flex items-center gap-4">
 
-                {isAuthenticated ? (
+                {user ? (
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2 bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg">
                             <div className="w-6 h-6 rounded-full bg-cyan-400 flex items-center justify-center text-slate-950 font-bold text-xs">
@@ -34,10 +31,7 @@ const Navbar = () => {
                                 {user?.fullName}
                             </span>
                         </div>
-                        <button
-                            // onClick={handleLogout}
-                            className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2 text-sm"
-                        >
+                        <button onClick={handleLogout} className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2 text-sm" >
                             <LogOut className="w-4 h-4" />
                             <span className="hidden sm:inline">Logout</span>
                         </button>

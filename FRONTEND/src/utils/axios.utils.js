@@ -1,50 +1,90 @@
 import axios from "axios"
-import { store } from "../store/store.js"
-import { setAccessToken } from "../features/auth/auth.slice"
-
+import { store } from "../store/store"
+import { setAccessToken, setUser } from "../features/auth/auth.slice"
 
 export const api = axios.create({
     baseURL: "http://localhost:4000/api/v1",
     withCredentials: true,
-})
-
-
-// REQUEST interceptor — attach access token to headers
-api.interceptors.request.use((config) => {
-    const state = store.getState();
-    const token = state.auth.accessToken;
-
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    headers: {
+        "Content-Type": "application/json"
     }
-    return config;
 })
 
 
-// RESPONSE interceptor — silent refresh on 401
-api.interceptors.response.use((response) => {
-    return response
-}, async (error) => {
-    const original = error.config;
 
-    // If 401 and we haven't retried yet
-    if (error.response?.status === 401 && !original._retry) {
-        original._retry = true;
-        try {
+let isRefreshing = false;
+let failedQueue = [];
 
-            // Get a new access token silently
-            const { data } = await api.post("/auth/refresh-token")
-
-            // Update the global token reference
-            store.dispatch(setAccessToken(data.data.accessToken));
-
-            // Retry the original request with new token
-            original.headers.Authorization = `Bearer ${data.accessToken}`;
-            return api(original);
-        } catch (err) {
-            window.location.href = '/login';
+const processQueue = (error, token = null) => {
+    failedQueue.forEach((prom) => {
+        if (error) {
+            prom.reject(error);
+        } else {
+            prom.resolve(token);
         }
-    }
-    return Promise.reject(error);
-}
+    });
+
+    failedQueue = [];
+};
+
+
+api.interceptors.request.use(config => {
+
+    const token = store.getState().auth.accessToken;
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+
+    return config;
+
+}, (error) => Promise.reject(error)
 );
+
+
+
+api.interceptors.response.use(response => response, async (error) => {
+
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+
+        if (originalRequest.url?.includes("/auth/refresh-token")) {
+            return Promise.reject(error);
+        }
+
+
+        if (isRefreshing) {
+
+            return new Promise((resolve, reject) => {
+                failedQueue.push({ resolve, reject });
+            }).then((token) => {
+                originalRequest.headers.Authorization = `Bearer ${token}`;
+                return api(originalRequest);
+            }).catch((err) => {
+                return Promise.reject(err);
+            });
+        }
+
+
+        originalRequest._retry = true;
+        isRefreshing = true;
+
+
+        return new Promise((resolve, reject) => {
+            api.post("/auth/refresh-token").then((res) => {
+                const newAccessToken = res.data.data.accessToken;
+                store.dispatch(setAccessToken(newAccessToken));
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                processQueue(null, newAccessToken);
+                resolve(api(originalRequest));
+            }).catch((err) => {
+                store.dispatch(setAccessToken(null));
+                store.dispatch(setUser(null));
+                processQueue(err, null);
+                reject(err);
+            }).finally(() => {
+                isRefreshing = false;
+            });
+        });
+    }
+
+    return Promise.reject(error);
+});

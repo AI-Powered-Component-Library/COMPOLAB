@@ -70,7 +70,7 @@ class AuthController {
     await this.authService.logout(req.user.id);
     this.clearAuthCookies(res);
 
-    return res.success(200, "User logged out successfully", null);
+    return res.success(200, "User logged out successfully");
   };
 }
 

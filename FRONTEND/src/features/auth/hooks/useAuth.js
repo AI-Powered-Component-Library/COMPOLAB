@@ -17,7 +17,6 @@ const useAuth = () => {
     dispatch(setAccessToken(token))
   }
 
-
   const handleLogin = async (data) => {
 
     const res = await loginService(data)
@@ -28,15 +27,21 @@ const useAuth = () => {
   }
 
   const handleGetUser = async () => {
-    let res = await getUserService()
+    let { data } = await getUserService()
 
-    dispatch(setUser(res.data.data.user))
-    console.log(res.data)
+    dispatch(setUser(data.data.user))
   }
 
   const handleLogout = async () => {
-    let res = await logoutService()
-    console.log(res.data)
+    try {
+      let { data } = await logoutService()
+      console.log(data)
+    } catch (error) {
+      console.error("Logout failed on server:", error)
+    } finally {
+      dispatch(setUser(null))
+      dispatch(setAccessToken(null))
+    }
   }
 
   const handleRefreshToken = async () => {
