@@ -7,7 +7,7 @@ const App = () => {
   const { handleGetUser } = useAuth()
 
   useEffect(() => {
-    handleGetUser()
+   handleGetUser()
   }, [])
 
 

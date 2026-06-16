@@ -24,6 +24,7 @@ const useAuth = () => {
     let token = res.data.data.accessToken
 
     dispatch(setAccessToken(token))
+    handleGetUser()
   }
 
   const handleGetUser = async () => {
