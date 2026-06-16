@@ -1,9 +1,8 @@
 import express from "express";
-import { handleMessage } from "../controllers/ai.controller.js";
-import { asyncHandler } from "../utils/asyncHandler.utils.js";
 
+import { streamComponentController } from "../controllers/ai.controller.js";
 const router = express.Router();
 
-router.post("/ai", asyncHandler(handleMessage));
+router.post("/",(streamComponentController));
 
 export default router;

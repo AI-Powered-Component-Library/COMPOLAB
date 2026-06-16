@@ -46,8 +46,8 @@ app.use("/api/v1/auth", authRouter);
 // component routes
 app.use("/api/v1/components", componentRoutes);
 
-//opnai routes
-app.use("/api/v1/components", aiRoutes);
+//mistralai routes
+app.use("/api/v1/ai", aiRoutes);
 
 app.use(errorMiddleware);
 
