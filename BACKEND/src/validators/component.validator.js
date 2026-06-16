@@ -10,6 +10,8 @@ class ComponentValidator {
       "string.max": "Component name cannot exceed 100 characters",
     }),
 
+    code: Joi.string().required().messages({ "string.empty": "Code is required." }),
+
     theme: Joi.string()
       .valid("light", "dark", "system")
       .default("light")

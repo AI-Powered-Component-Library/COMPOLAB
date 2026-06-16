@@ -9,7 +9,6 @@ const componentSchema = new mongoose.Schema({
   },
 
 
-
   componentName: {
     type: String,
     required: [true, "Component name is required"],
@@ -18,11 +17,11 @@ const componentSchema = new mongoose.Schema({
     maxlength: [100, "Component name cannot exceed 100 characters"],
   },
 
- code:{
-  type:String,
-  required:true,
-  trim:true,
- },
+  code: {
+    type: String,
+    required: true,
+    trim: true,
+  },
 
   theme: {
     type: String,

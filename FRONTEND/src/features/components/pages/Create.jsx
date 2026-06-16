@@ -27,7 +27,7 @@ const CreateComponent = () => {
       }
 
       // success → go to list
-      navigate('/components', true)
+      navigate('/c/list', true)
     } finally {
       setLoading(false)
     }

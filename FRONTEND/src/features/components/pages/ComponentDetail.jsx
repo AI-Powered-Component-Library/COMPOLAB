@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { deleteComponent } from '../component.slice'
 import componentService from '../service/component.service'
 import { useParams, useNavigate } from "react-router-dom"
+import Preview from './Preview'
 
 const themeDisplay = { light: '☀️ Light', dark: '🌙 Dark', system: '💻 System' }
 
@@ -235,6 +236,15 @@ const componentId = cid
           ) : null}
         </div>
       </section>
+
+      {component && component.code && (
+        <section className="mx-auto max-w-2xl mt-6">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-xl sm:p-8">
+            <h3 className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-300 mb-4">Live Preview</h3>
+            <Preview  />
+          </div>
+        </section>
+      )}
 
       {/* Confirm dialog */}
       {showConfirm && (

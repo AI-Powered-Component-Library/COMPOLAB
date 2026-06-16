@@ -71,7 +71,7 @@ const Hero = () => {
             {/* Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center w-full max-w-lg mb-4">
                 <button 
-                    onClick={() => router("/generate")} 
+                    onClick={() => router("/c/list")} 
                     className="w-full sm:w-auto bg-linear-to-r from-cyan-400 to-teal-400 hover:from-cyan-300 hover:to-teal-300 text-slate-950 px-8 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 group shadow-[0_0_20px_rgba(34,211,238,0.15)] hover:shadow-[0_0_30px_rgba(34,211,238,0.35)] transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                 >
                     Get Started

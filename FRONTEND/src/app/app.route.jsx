@@ -8,10 +8,10 @@ import Pricing from "../features/payment/pages/Pricing"
 import Checkout from "../features/payment/pages/Checkout"
 import ProtectedRoute from "../features/auth/pages/ProtectedRoute"
 import PublicRoute from "../features/auth/pages/PublicRoute"
-// import CreateComponent from "../features/components/pages/Create"
-// import ComponentDetail from "../features/components/pages/ComponentDetail"
-// import ComponentList from "../features/components/pages/ComponentList"
-// import EditComponent from "../features/components/pages/EditComponent"
+import CreateComponent from "../features/components/pages/Create"
+import ComponentDetail from "../features/components/pages/ComponentDetail"
+import ComponentList from "../features/components/pages/ComponentList"
+import EditComponent from "../features/components/pages/EditComponent"
 
 
 export const router = createBrowserRouter([
@@ -50,25 +50,26 @@ export const router = createBrowserRouter([
                         path: "/checkout",
                         element: <Checkout />
                     },
+                    {
+                        path: "/c/create",
+                        element: <CreateComponent />
+                    },
+                    {
+                        path: "/c/:cid",
+                        element: <ComponentDetail />
+                    },
+                    {
+                        path: "/c/list",
+                        element: <ComponentList />
+                    },
+                    {
+                        path: "/c/:cid/edit",
+                        element: <EditComponent />
+                    },
                 ]
             },
 
-            // {
-            //     path: "/c/create",
-            //     element: <CreateComponent />
-            // },
-            // {
-            //     path: "/c/:cid",
-            //     element: <ComponentDetail />
-            // },
-            // {
-            //     path: "/c/list",
-            //     element: <ComponentList />
-            // },
-            // {
-            //     path: "/c/:cid/edit",
-            //     element: <EditComponent />
-            // },
+
         ]
     }
 ])
