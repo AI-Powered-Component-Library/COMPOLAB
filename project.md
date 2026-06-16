@@ -169,16 +169,13 @@ Export / Save
 
 ---
 
-### 10. Suggested MERN Tech Stack
+### IMPORTANT FEATURES
 
-| Module | Technology |
-| --- | --- |
-| Frontend | React, Tailwind CSS |
-| Backend | Node.js, Express.js |
-| Database | MongoDB |
-| Authentication | JWT |
-| AI Engine | OpenAI API / Gemini API |
-| Preview | Sandpack / React Live |
-| Code Editor | Monaco Editor |
-| File Export | JSZip |
-| State Management | Context API / Redux |
+
+CREATE WITH MONACO-FOLDERNAME,CODE,PROPS
+INTEGRATE AI --> CODE --> STORE IN S3  --> MONGODB 
+PUBLISH TO NPM
+RAZORPAY INTEGRATION
+MICROSERVICES
+
+| File Export | JSZip |❌
