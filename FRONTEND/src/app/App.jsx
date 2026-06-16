@@ -4,12 +4,10 @@ import useAuth from "../features/auth/hooks/useAuth"
 
 const App = () => {
 
-  const { handleGetUser, handleRefreshToken } = useAuth()
+  const { handleGetUser } = useAuth()
 
   useEffect(() => {
-
-    handleRefreshToken().then(res => handleGetUser(res))
-
+    handleGetUser()
   }, [])
 
 

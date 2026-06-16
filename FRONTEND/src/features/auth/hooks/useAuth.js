@@ -27,10 +27,11 @@ const useAuth = () => {
     dispatch(setAccessToken(token))
   }
 
-  const handleGetUser = async (token) => {
-    let res = await getUserService(token)
+  const handleGetUser = async () => {
+    let res = await getUserService()
 
     dispatch(setUser(res.data.data.user))
+    console.log(res.data)
   }
 
   const handleLogout = async () => {
@@ -40,8 +41,7 @@ const useAuth = () => {
 
   const handleRefreshToken = async () => {
     let res = await refreshTokenService()
-
-   return res.data.data.accessToken
+    return res.data.data.accessToken
   }
 
 

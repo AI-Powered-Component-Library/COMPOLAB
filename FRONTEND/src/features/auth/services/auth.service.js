@@ -4,7 +4,7 @@ const registerService = (data) => api.post("/auth/register", data)
 
 const loginService = (data) => api.post("/auth/login", data)
 
-const getUserService = (token) => api.get("/auth/user", { headers: { Authorization: `Bearer ${token}` } })
+const getUserService = () => api.get("/auth/user")
 
 const logoutService = () => api.post('/auth/logout')
 
