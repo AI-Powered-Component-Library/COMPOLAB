@@ -1,27 +1,16 @@
-import express from "express";
-import ComponentController from "../controllers/component.controller.js";
-import authMiddleware from "../middlewares/auth.middleware.js";
+import { Router } from "express";
+import { userAuth } from "../middlewares/auth.middleware.js";
+import componentController from "../controllers/component.controller.js";
+import { generateComponent } from "../controllers/ai.controller.js";
 
-const router = express.Router();
+const router = Router()
 
-// ── Instantiate controller (class → instance) ─────────────────────────────
-const ctrl = new ComponentController();
-
-// ── All component routes require a valid JWT ──────────────────────────────
-router.post("/", authMiddleware.protect, (req, res, next) =>
-  ctrl.create(req, res, next),
-);
-router.get("/", authMiddleware.protect, (req, res, next) =>
-  ctrl.getAll(req, res, next),
-);
-router.get("/:id", authMiddleware.protect, (req, res, next) =>
-  ctrl.getOne(req, res, next),
-);
-router.put("/:id", authMiddleware.protect, (req, res, next) =>
-  ctrl.update(req, res, next),
-);
-router.delete("/:id", authMiddleware.protect, (req, res, next) =>
-  ctrl.delete(req, res, next),
-);
+router.post("/generate", userAuth, generateComponent);
+router.post("/npm",userAuth,componentController.publishComponent)
+router.post("/", userAuth, componentController.createComponent)
+router.get("/", userAuth, componentController.getAllComponents)
+router.get("/:id", userAuth, componentController.getComponentById)
+router.delete("/:id", userAuth, componentController.deleteComponent)
+router.patch("/:id", userAuth, componentController.updateComponent)
 
 export default router;

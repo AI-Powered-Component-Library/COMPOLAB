@@ -1,77 +1,99 @@
-import AuthValidator from "../validators/auth.validator.js";
-import { AppError } from "../utils/asyncHandler.utils.js";
-import {
-  accessTokenCookieOptions,
-  refreshTokenCookieOptions,
-} from "../utils/token.utils.js";
+import authValidator from "../validator/auth.validator.js"
+import authService from "../services/auth.service.js";
+import { AppError, asyncHandler } from "../utils/error.utils.js"
+import { verifyRefreshToken } from "../utils/token.utils.js";
+
 
 class AuthController {
-  constructor(authService) {
-    this.authService = authService;
-  }
 
-  setAuthCookies(res, refreshToken) {
-    res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions());
-  }
 
-  clearAuthCookies(res) {
-    res.clearCookie("refreshToken", refreshTokenCookieOptions());
-  }
+    googleAuth = asyncHandler(async (req, res) => {
 
-  register = async (req, res) => {
-    const { error, value } = AuthValidator.validateRegister(req.body);
+        const { idToken } = req.body;
 
-    if (error) {
-      const message = error.details.map((detail) => detail.message).join(", ");
-      throw new AppError(400, message);
-    }
+        let { accessToken, refreshToken, httpOnly } = await authService.googleService(idToken)
+        res.cookie("refresh_token", refreshToken, httpOnly)
 
-    const result = await this.authService.register(value);
-    this.setAuthCookies(res, result.refreshToken);
+        res.success(200, "Authentication Successfully.", { token: accessToken })
+    })
 
-    return res.success(201, "User registered successfully", {
-      accessToken: result.accessToken,
+    register = asyncHandler(async (req, res) => {
+
+        const userData = req.body;
+        const { register: { error } } = authValidator(userData)
+
+        if (error) throw new AppError(400, error.details[0].message)
+
+        let { accessToken, refreshToken, httpOnly } = await authService.register(req.body)
+
+        res.cookie("refresh_token", refreshToken, httpOnly)
+
+        res.success(201, "Registered Successfully.", { token: accessToken })
+    })
+
+    login = asyncHandler(async (req, res) => {
+
+        const { email, password } = req.body;
+
+        if (!email || !password) throw new AppError(400, "Email and password are required.");
+
+        let { accessToken, refreshToken, httpOnly } = await authService.login(req.body)
+
+        res.cookie("refresh_token", refreshToken, httpOnly)
+        res.success(200, "LoggedIn Successfully.", { token: accessToken })
+    })
+
+    getUser = asyncHandler(async (req, res) => {
+
+        let user = await authService.getUser(req.user.id)
+
+        res.success(200, "User Fetched Successfully", user)
+    })
+
+    updateUser = asyncHandler(async (req, res) => {
+
+        const userId = req.user.id;
+        const updates = req.body;
+
+        let user = await authService.updateUser(userId, updates)
+
+        res.success(200, "Updated Successfully", user)
+    })
+
+    logout = asyncHandler(async (req, res) => {
+
+        const userId = req.user.id;
+        const refresh_token = req.cookies.refresh_token;
+
+
+        if (!userId) throw new AppError(400, "Bad Request.")
+        if (!refresh_token) throw new AppError(400, "No refresh token found.")
+
+        await authService.logout(refresh_token);
+
+        res.clearCookie("refresh_token", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict"
+        })
+
+        res.success(200, "Logged Out Successfully.")
     });
-  };
 
-  login = async (req, res) => {
-    const { error, value } = AuthValidator.validateLogin(req.body);
+    refreshAccessToken = asyncHandler(async (req, res) => {
 
-    if (error) {
-      const message = error.details.map((detail) => detail.message).join(", ");
-      throw new AppError(400, message);
-    }
+        const refresh_token = req.cookies.refresh_token
+        if (!refresh_token) throw new AppError(400, "Refresh Token Must be Provided.")
 
-    const result = await this.authService.login(value);
-    this.setAuthCookies(res, result.refreshToken);
+        const decoded = verifyRefreshToken(refresh_token)
 
-    return res.success(200, "User logged in successfully", {
-      accessToken: result.accessToken,
-    });
-  };
+        const { newAccessToken, newRefreshToken, httpOnly } = await authService.refresh_token(refresh_token, decoded.id)
 
-  getUser = async (req, res) => {
-    const user = await this.authService.getProfile(req.user.id);
-    return res.success(200, "Profile fetched successfully", { user });
-  };
+        res.cookie("refresh_token", newRefreshToken, httpOnly)
 
-  refreshToken = async (req, res) => {
-    const token = req.cookies?.refreshToken || req.body?.refreshToken;
-    const result = await this.authService.refreshAccessToken(token);
+        res.success(200, "Token Refreshed Successfully.", { token: newAccessToken })
+    })
 
-    this.setAuthCookies(res, result.refreshToken);
-
-    return res.success(200, "Token refreshed successfully", {
-      accessToken: result.accessToken,
-    });
-  };
-
-  logout = async (req, res) => {
-    await this.authService.logout(req.user.id);
-    this.clearAuthCookies(res);
-
-    return res.success(200, "User logged out successfully");
-  };
 }
 
-export default AuthController;
+export default new AuthController();

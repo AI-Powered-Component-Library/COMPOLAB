@@ -4,53 +4,42 @@ const userSchema = new mongoose.Schema(
   {
     fullName: {
       type: String,
-      required: [true, "fullName is required"],
+      minlength: [3, "Full name must be at least 3 characters long"],
+      required: [true, "Full name is required"],
       trim: true,
-      minlength: [3, "fullName must be at least 3 characters"],
-      maxlength: [50, "fullName cannot exceed 50 characters"],
     },
-
     email: {
       type: String,
       required: [true, "Email is required"],
       unique: true,
       lowercase: true,
-      trim: true,
-      match: [
-        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-        "Please enter a valid email",
-      ],
+      match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
     },
-
-    password: {
-      type: String,
-      required: [true, "Password is required"],
-      minlength: [6, "Password must be at least 6 characters"],
-      select: false,
-    },
-
     role: {
       type: String,
       enum: ["user", "admin"],
-      default: "user",
+      default: "user"
     },
-
-    refreshToken: {
+    aiCredits: {
+      type: Number,
+      default: 1000
+    },
+    googleId: {
       type: String,
-      default: null,
-      select: false,
-    },
-
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  {
-    timestamps: true,
-  }
+      unique: true,
+      required: true
+    }
+  }, { timestamps: true }
 );
 
-const UserModel = mongoose.model("User", userSchema);
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
-export default UserModel;
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+export default mongoose.model("User", userSchema); 

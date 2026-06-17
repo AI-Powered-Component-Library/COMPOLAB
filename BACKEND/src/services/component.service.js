@@ -1,56 +1,128 @@
-import componentRepository from "../repository/implement/mongo.component.js";
-import { AppError } from "../utils/asyncHandler.utils.js";
+import MongoComponent from "../repository/implemention/mongo.component.js";
+import MongoUserRepository from "../repository/implemention/mongo.user.js";
+import { AppError } from "../utils/error.utils.js";
+import path from "path"
+import fs from "fs"
+import { execSync } from "child_process";
+
+let userRepo = new MongoUserRepository()
+
 
 class ComponentService {
-  async createComponent(data) {
-    const existingComponents = await componentRepository.getAllComponents(
-      data.userId,
-    );
 
-    const duplicate = existingComponents.find(
-      (item) => item.componentName === data.componentName,
-    );
+    async createComponent(componentData, userId) {
 
-    if (duplicate) {
-      throw new AppError(409, "Component name already exists");
+        const user = await userRepo.findUserById(userId)
+        if (!user) throw new AppError(404, "User not found.")
+
+        if (user.role === "admin") {
+            const existing = await MongoComponent.findOne({ name: componentData.name, visibility: "public" })
+            if (existing) throw new AppError(400, "Component already exists");
+        } else {
+            const existing = await MongoComponent.findOne({ name: componentData.name, owner: userId })
+            if (existing) {
+                throw new AppError(400, "Component name already exist in your library")
+            }
+        }
+
+        let newComponent = await MongoComponent.createComponent(componentData)
+        if (!newComponent) throw new AppError(500, "Creation Failed.")
+
+        return newComponent;
     }
 
-    return await componentRepository.createComponent(data);
-  }
 
-  async getAllComponents(userId) {
-    return await componentRepository.getAllComponents(userId);
-  }
+    async publishComponent(componentId, userId) {
 
-  async getComponentById(id) {
-    const component = await componentRepository.getComponentById(id);
+        const user = await userRepo.findUserById(userId)
+        if (!user) throw new AppError(404, "User not found.")
 
-    if (!component) {
-      throw new AppError(404, "Component not found");
+        if (!user && user.role !== "admin") {
+            throw new AppError(403, "Only admin can publish")
+        }
+
+        const component = await MongoComponent.findComponentById(componentId);
+        if (!component) throw new AppError(404, "Component not found")
+
+        if (component.owner !== userId) throw new AppError(403, "You are not authorized to publish this component")
+
+        const libPath = path.join(process.cwd(), "../PACKAGE")
+        const componentDir = path.join(libPath, "src/components", component.name)
+        const componentFile = path.join(componentDir, `${component.name}.jsx`)
+        const indexJs = path.join(libPath, "/src/index.js")
+
+        if (!fs.existsSync(componentDir)) {
+            fs.mkdirSync(componentDir, { recursive: true })
+        }
+
+        fs.writeFileSync(componentFile, component.code)
+
+        let indexContent = fs.readFileSync(indexJs, "utf-8")
+        const exportLine = `export {${component.name} } from "./components/${component.name}/${component.name}.jsx" `
+
+        if (!indexContent.includes(exportLine)) {
+            fs.appendFileSync(indexJs, `\n${exportLine}`)
+        }
+
+        console.log("Cleaning Old Build")
+
+        const distPath = path.join(libPath, "dist")
+
+        if (fs.existsSync(distPath)) {
+            fs.rmSync(distPath, { recursive: true, force: true })
+        }
+
+        console.log("Building Library.")
+
+        execSync("npm run build",{
+            cwd : libPath,
+            stdio : "inherit"
+        })
+
+        console.log("Updating Version.")
+
+        execSync("npm version patch --no git-tag-version",{
+            cwd : libPath,
+            stdio : "inherit"
+        })
+
+        console.log("Publishing to NPM.")
+
+        execSync("npm publish --access public",{
+            cwd : libPath,
+            stdio : "inherit"
+        })
+
+        component.visibility = "public"
+        component.npmPackage = "compolab"
+
+        await component.save()
+        return true
     }
 
-    return component;
-  }
-
-  async updateComponent(id, data) {
-    const updated = await componentRepository.updateComponent(id, data);
-
-    if (!updated) {
-      throw new AppError(400, "Update failed");
+    async getAllComponents() {
+        const components = await MongoComponent.getAllComponents();
+        return components;
     }
 
-    return updated;
-  }
-
-  async deleteComponent(id) {
-    const deleted = await componentRepository.deleteComponent(id);
-
-    if (!deleted) {
-      throw new AppError(400, "Delete failed");
+    async getComponentById(id) {
+        const component = await MongoComponent.getComponentById(id);
+        if (!component) throw new AppError(404, "Component not found.");
+        return component;
     }
 
-    return deleted;
-  }
+    async deleteComponent(id) {
+        const component = await MongoComponent.deleteComponent(id);
+        if (!component) throw new AppError(404, "Component not found.");
+        return component;
+    }
+
+    async updateComponent(id, componentData) {
+        const component = await MongoComponent.updateComponent(id, componentData);
+        if (!component) throw new AppError(404, "Component not found.");
+        return component;
+    }
+
 }
 
-export default ComponentService;
+export default new ComponentService();

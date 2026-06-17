@@ -1,104 +1,54 @@
-import ComponentService from "../services/component.service.js";
-import ComponentValidator from "../validators/component.validator.js";
-import { AppError } from "../utils/asyncHandler.utils.js";
-
-const componentService = new ComponentService();
+import componentValidator from "../validator/component.validator.js";
+import { AppError, asyncHandler } from "../utils/error.utils.js"
+import componentService from "../services/component.service.js";
 
 class ComponentController {
-  // ── helper: flatten Joi errors into one readable string ──────────────────
-  #validationError(error) {
-    return error.details.map((d) => d.message).join(", ");
-  }
 
-  // ── POST /api/v1/components ───────────────────────────────────────────────
-  async create(req, res, next) {
-    try {
-      const { error, value } = ComponentValidator.validateCreate(req.body);
+    createComponent = asyncHandler(async (req, res) => {
 
-      if (error) {
-        throw new AppError(400, this.#validationError(error));
-      }
+        const userId = req.user.id;
 
-      const component = await componentService.createComponent({
-        ...value,
-        userId: req.user.id,
-      });
+        const { error } = componentValidator(req.body)
+        if (error) throw new AppError(400, error.details[0].message)
 
-      return res.status(201).json({
-        success: true,
-        message: "Component created",
-        data: component,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
+        const createdComponent = await componentService.createComponent(req.body, userId);
+        return res.success(201, "Component created successfully", createdComponent);
+    })
 
-  // ── GET /api/v1/components ────────────────────────────────────────────────
-  async getAll(req, res, next) {
-    try {
-      const components = await componentService.getAllComponents(req.user.id);
 
-      return res.status(200).json({
-        success: true,
-        data: components,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
+    publishComponent = asyncHandler(async (req, res) => {
 
-  // ── GET /api/v1/components/:id ────────────────────────────────────────────
-  async getOne(req, res, next) {
-    try {
-      const component = await componentService.getComponentById(req.params.id);
+        const userId = req.user.id;
 
-      return res.status(200).json({
-        success: true,
-        data: component,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
+        const response = await componentService.publishComponent(req.params.id, userId);
 
-  // ── PATCH /api/v1/components/:id ──────────────────────────────────────────
-  async update(req, res, next) {
-    try {
-      const { error, value } = ComponentValidator.validateUpdate(req.body);
+        return res.success(200, "Component published successfully", res);
+    })
 
-      if (error) {
-        throw new AppError(400, this.#validationError(error));
-      }
 
-      const updated = await componentService.updateComponent(
-        req.params.id,
-        value,
-      );
+    getAllComponents = asyncHandler(async (req, res) => {
 
-      return res.status(200).json({
-        success: true,
-        message: "Updated successfully",
-        data: updated,
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
+        const components = await componentService.getAllComponents();
+        return res.success(200, "Components fetched successfully", components);
 
-  // ── DELETE /api/v1/components/:id ─────────────────────────────────────────
-  async delete(req, res, next) {
-    try {
-      await componentService.deleteComponent(req.params.id);
+    })
 
-      return res.status(200).json({
-        success: true,
-        message: "Deleted successfully",
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
+    getComponentById = asyncHandler(async (req, res) => {
+        const component = await componentService.getComponentById(req.params.id);
+        return res.success(200, "Component fetched successfully", component);
+
+    })
+
+    deleteComponent = asyncHandler(async (req, res) => {
+        const component = await componentService.deleteComponent(req.params.id);
+        return res.success(200, "Component deleted successfully", component);
+    })
+
+    updateComponent = asyncHandler(async (req, res) => {
+        const component = await componentService.updateComponent(req.params.id, req.body);
+        return res.success(200, "Component updated successfully", component);
+    })
+
 }
 
-export default ComponentController;
+export default new ComponentController();

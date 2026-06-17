@@ -1,127 +1,114 @@
-import bcrypt from "bcrypt";
-import { AppError } from "../utils/asyncHandler.utils.js";
-import {
-  generateAccessToken,
-  generateRefreshToken,
-  verifyRefreshToken,
-} from "../utils/token.utils.js";
+import MongoUserRepository from "../repository/implemention/mongo.user.js";
+import { AppError } from "../utils/error.utils.js";
+import { createHttpOnlyTokenCookie, generateAccessToken, generateRefreshToken } from "../utils/token.utils.js"
+import { OAuth2Client } from "google-auth-library";
+import { GOOGLE_CLIENT_ID } from "../config/env.config.js";
+
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 class AuthService {
-  constructor(userRepository) {
-    this.userRepository = userRepository;
-  }
 
-  sanitizeUser(user) {
-    return {
-      id: user._id,
-      fullName: user.fullName,
-      email: user.email,
-      role: user.role,
-      isActive: user.isActive,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
-  }
-
-  createTokens(user) {
-    const payload = {
-      id: user._id.toString(),
-      role: user.role,
-    };
-
-    return {
-      accessToken: generateAccessToken(payload),
-      refreshToken: generateRefreshToken(payload),
-    };
-  }
-
-  async register(payload) {
-    const existingUser = await this.userRepository.findUserByEmail(payload.email);
-
-    if (existingUser) {
-      throw new AppError(409, "User already exists with this email");
+    constructor() {
+        this.userRepository = new MongoUserRepository();
     }
 
-    const hashedPassword = await bcrypt.hash(payload.password, 12);
+    async googleService(idToken) {
 
-    const user = await this.userRepository.createUser({
-      fullName: payload.fullName,
-      email: payload.email,
-      password: hashedPassword,
-    });
+        if (!idToken) throw new AppError(400, "Id Token Must be Provided.")
 
-    const { accessToken, refreshToken } = this.createTokens(user);
-    await this.userRepository.updateRefreshToken(user._id, refreshToken);
+        const ticket = await client.verifyIdToken({ idToken, audience: GOOGLE_CLIENT_ID });
 
-    return {
-      user: this.sanitizeUser(user),
-      accessToken,
-      refreshToken,
-    };
-  }
+        const payload = ticket.getPayload();
 
-  async login(payload) {
-    const user = await this.userRepository.findUserByEmailWithPassword(payload.email);
+        const { name: fullName, email, sub: googleId } = payload;
+        
+        let user = await this.userRepository.findUserByEmail(email);
+        
+        if (!user) {
+            user = await this.userRepository.createUser({ fullName, email, googleId });
+        }
 
-    if (!user) {
-      throw new AppError(401, "Invalid email or password");
+        const accessToken = generateAccessToken(user._id)
+        const refreshToken = generateRefreshToken(user._id)
+        const httpOnly = createHttpOnlyTokenCookie()
+
+        return { accessToken, refreshToken, httpOnly }
     }
 
-    const isPasswordValid = await bcrypt.compare(payload.password, user.password);
+    async register(userData) {
 
-    if (!isPasswordValid) {
-      throw new AppError(401, "Invalid email or password");
+        const existingUser = await this.userRepository.findUserByEmail(userData.email);
+        if (existingUser) throw new AppError(400, "Email already registered");
+
+        let newUser = await this.userRepository.createUser(userData)
+        if (!newUser) throw new AppError(500, "Registration Failed.")
+
+        const accessToken = generateAccessToken(newUser._id)
+        const refreshToken = generateRefreshToken(newUser._id)
+        const httpOnly = createHttpOnlyTokenCookie()
+
+        return { accessToken, refreshToken, httpOnly }
     }
 
-    const { accessToken, refreshToken } = this.createTokens(user);
-    await this.userRepository.updateRefreshToken(user._id, refreshToken);
+    async login(userData) {
 
-    return {
-      user: this.sanitizeUser(user),
-      accessToken,
-      refreshToken,
-    };
-  }
+        const user = await this.userRepository.findUser(userData.email)
+        if (!user) throw new AppError(400, "Invalid Credentials.");
 
-  async getProfile(userId) {
-    const user = await this.userRepository.findUserById(userId);
+        const isMatch = await user.comparePassword(userData.password);
+        if (!isMatch) throw new AppError(400, "Invalid Credentials.");
 
-    if (!user) {
-      throw new AppError(404, "User not found");
+        const accessToken = generateAccessToken(user._id)
+        const refreshToken = generateRefreshToken(user._id)
+        const httpOnly = createHttpOnlyTokenCookie()
+
+        return { accessToken, refreshToken, httpOnly }
     }
 
-    return this.sanitizeUser(user);
-  }
+    async getUser(userId) {
+        const user = await this.userRepository.findUserById(userId)
+        if (!user) throw new AppError(404, "user not found.")
 
-  async refreshAccessToken(refreshToken) {
-    if (!refreshToken) {
-      throw new AppError(401, "Refresh token is required");
+        return user;
     }
 
-    let decoded;
+    async updateUser(userId, updates) {
 
-    try {
-      decoded = verifyRefreshToken(refreshToken);
-    } catch (error) {
-      throw new AppError(401, "Invalid or expired refresh token");
+        const user = await this.userRepository.findUserById(userId)
+        if (!user) throw new AppError(404, "user not found.")
+
+        if (updates.email) {
+            const existingUser = await this.userRepository.findUserByEmail(updates.email);
+            if (existingUser) throw new AppError(400, "Email already registered");
+        }
+
+        const updatedUser = await this.userRepository.updateUser(userId, user)
+        if (!updatedUser) throw new AppError(500, "Update Failed")
+        return updatedUser;
     }
 
-    const user = await this.userRepository.findUserByIdWithRefreshToken(decoded.id);
+    async logout(refreshToken) {
 
-    if (!user || user.refreshToken !== refreshToken) {
-      throw new AppError(401, "Refresh token is invalid or already used");
+        const blackListedToken = await this.userRepository.findBlackListToken(refreshToken);
+        if (blackListedToken) throw new AppError(500, "Bad Request")
+
+        const newBlackList = await this.userRepository.blackListToken(refreshToken);
+
+        return newBlackList;
     }
 
-    const tokens = this.createTokens(user);
-    await this.userRepository.updateRefreshToken(user._id, tokens.refreshToken);
+    async refresh_token(refreshToken, userId) {
 
-    return tokens;
-  }
+        const blackListedToken = await this.userRepository.findBlackListToken(refreshToken);
+        if (blackListedToken) throw new AppError(500, "Please sign in again.")
 
-  async logout(userId) {
-    await this.userRepository.removeRefreshToken(userId);
-    return true;
-  }
+        const newAccessToken = generateAccessToken(userId)
+        const newRefreshToken = generateRefreshToken(userId)
+        const httpOnly = createHttpOnlyTokenCookie()
+
+        return { newAccessToken, newRefreshToken, httpOnly }
+    }
+
 }
 
-export default AuthService;
+export default new AuthService();
