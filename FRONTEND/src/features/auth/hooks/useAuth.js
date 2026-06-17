@@ -1,5 +1,4 @@
-import React from 'react'
-import { getUserService, loginService, logoutService, refreshTokenService, registerService } from '../services/auth.service'
+import { getUserService, googleAuthService, loginService, logoutService, refreshTokenService, registerService } from '../services/auth.service'
 import { useDispatch } from "react-redux"
 import { setAccessToken, setUser } from '../auth.slice'
 
@@ -7,6 +6,20 @@ const useAuth = () => {
 
 
   const dispatch = useDispatch()
+
+
+    const handleGoogleAuth = async (response) => {
+        try {
+            const token = await googleAuthService(response.credential);
+            const profileRes = await profileService(token);
+            const user = profileRes.data;
+            dispatch(loginSuccess({ token, user }));
+        } catch (error) {
+            dispatch(setError(error?.response?.data?.message || error.message));
+            console.error("Google Auth Error:", error?.response?.data || error.message);
+        }
+    };
+
 
   const handleRegister = async (data) => {
 
@@ -51,7 +64,7 @@ const useAuth = () => {
   }
 
 
-  return { handleRegister, handleLogin, handleGetUser, handleLogout, handleRefreshToken }
+  return { handleRegister, handleLogin, handleGetUser, handleLogout, handleRefreshToken , handleGoogleAuth }
 }
 
 export default useAuth

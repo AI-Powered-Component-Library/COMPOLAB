@@ -9,10 +9,9 @@ import Checkout from "../features/payment/pages/Checkout"
 import ProtectedRoute from "../features/auth/pages/ProtectedRoute"
 import PublicRoute from "../features/auth/pages/PublicRoute"
 import CreateComponent from "../features/components/pages/Create"
-import ComponentDetail from "../features/components/pages/ComponentDetail"
 import ComponentList from "../features/components/pages/ComponentList"
 import EditComponent from "../features/components/pages/EditComponent"
-
+import Google from "../features/auth/pages/Google"
 
 export const router = createBrowserRouter([
     {
@@ -27,12 +26,8 @@ export const router = createBrowserRouter([
                 children: [
                     {
                         path: "/login",
-                        element: <Login />
-                    },
-                    {
-                        path: "/register",
-                        element: <Register />
-                    },
+                        element: <Google />
+                    }
                 ]
             },
             {
@@ -58,10 +53,6 @@ export const router = createBrowserRouter([
                         path: "/c/:cid",
                         element: <Generate />
                     },
-                    // {
-                    //     path: "/c/:cid",
-                    //     element: <ComponentDetail />
-                    // },
                     {
                         path: "/c/list",
                         element: <ComponentList />

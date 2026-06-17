@@ -8,8 +8,8 @@ const CodePart = () => {
 
   const [isCodePreview, setIsCodePreview] = useState(false)
 
-  const code = useSelector(state => state.compo.code)
-  const Component = useSelector(state => state.compo.currentComponent)
+  const code = useSelector(state => state.component.code)
+  const Component = useSelector(state => state.component.currentComponent)
 
   const [codes, setCode] = useState(code || "const CodeEditorCard = ()=> {\n\n  return (\n    <h1>Enter Your Code.</h1>\n  );\n}\n\nexport default CodeEditorCard;")
 

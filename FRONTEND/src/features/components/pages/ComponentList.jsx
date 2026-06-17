@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 
 const ComponentList = () => {
 
-  const components = useSelector((state) => state.compo.components)
+  const components = useSelector((state) => state.component.components)
   const navigate = useNavigate()
   const { handleGetComponents } = useCompo()
 
