@@ -15,6 +15,8 @@ const Sidebar = () => {
     return (
         <aside className='bg-zinc-900 sidebar py-4 select-none'>
 
+            <h1 className='px-4 text-xl font-semibold mb-4'>UI-Library</h1>
+
             {files.map(file => <div key={file.path} onClick={() => setFolder(!folder)} className='flex items-center gap-2 px-4  cursor-pointer'>
                 <ChevronRight className={folder && 'rotate-90'} size={19} />
                 <h1 className='flex items-center gap-1.5'> {!folder ? <Folder size={16} /> : <FolderOpen size={16} />} main-project</h1>

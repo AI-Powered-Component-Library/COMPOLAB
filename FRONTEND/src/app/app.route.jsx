@@ -56,8 +56,12 @@ export const router = createBrowserRouter([
                     },
                     {
                         path: "/c/:cid",
-                        element: <ComponentDetail />
+                        element: <Generate />
                     },
+                    // {
+                    //     path: "/c/:cid",
+                    //     element: <ComponentDetail />
+                    // },
                     {
                         path: "/c/list",
                         element: <ComponentList />

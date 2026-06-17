@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { updateComponent } from '../component.slice'
 import componentService from '../service/component.service'
 import ComponentForm from '../ui/ComponentForm'
 import { useNavigate, useParams } from 'react-router-dom'
+
 
 // ── Skeleton ──────────────────────────────────────────────────────────────────
 const FormSkeleton = () => (
@@ -45,7 +45,7 @@ const EditComponent = () => {
   const navigate = useNavigate()
 
   const { cid } = useParams()
-const componentId = cid
+  const componentId = cid
 
   const [initialValues, setInitialValues] = useState(null)
   const [fetchLoading, setFetchLoading] = useState(true)
@@ -63,8 +63,8 @@ const componentId = cid
         theme: data.theme || 'light',
         tags: data.tags || [],
         isPublic: data.isPublic ?? true,
-          code: data.code || '',
-        
+        code: data.code || '',
+
       })
     } catch (err) {
       setFetchError(err.response?.data?.message || err.message || 'Failed to load component')
@@ -79,20 +79,6 @@ const componentId = cid
 
   const handleSubmit = async (values) => {
     setSubmitLoading(true)
-    setApiError('')
-    try {
-      const result = await dispatch(updateComponent({ id: componentId, data: values }))
-
-      if (updateComponent.rejected.match(result)) {
-        setApiError(result.payload || 'Something went wrong')
-        return
-      }
-
-      // success → go to detail page
-      navigate(`/c/${componentId}`, true)
-    } finally {
-      setSubmitLoading(false)
-    }
   }
 
   return (

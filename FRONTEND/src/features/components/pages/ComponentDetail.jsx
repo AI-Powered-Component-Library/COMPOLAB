@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { deleteComponent } from '../component.slice'
 import componentService from '../service/component.service'
 import { useParams, useNavigate } from "react-router-dom"
 import Preview from './Preview'
@@ -123,10 +122,6 @@ const componentId = cid
 
   const handleDelete = async () => {
     setDeleteLoading(true)
-    await dispatch(deleteComponent(componentId))
-    setDeleteLoading(false)
-    setShowConfirm(false)
-    navigate('/c/list', true)
   }
 
   const formatDate = (iso) => {

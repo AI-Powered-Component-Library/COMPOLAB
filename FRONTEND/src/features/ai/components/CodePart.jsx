@@ -1,37 +1,23 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Editor from '@monaco-editor/react'
 import { Copy, Download, Share2 } from 'lucide-react'
+import Preview from '../../components/pages/Preview'
+import { useSelector } from 'react-redux'
 
 const CodePart = () => {
-  
-  const [code, setCode] = useState(`// Welcome to CompoLab Code Editor
-// Start typing or paste your code here
 
-import React from 'react'
+  const [isCodePreview, setIsCodePreview] = useState(false)
 
-const Component = () => {
-  return (
-    <div className='p-4'>
-      <h1>Hello World</h1>
-    </div>
-  )
-}
+  const code = useSelector(state => state.compo.code)
+  const Component = useSelector(state => state.compo.currentComponent)
 
-export default Component
-`)
-
-  const [language, setLanguage] = useState('javascript')
-
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(code)
-    console.log('Code copied to clipboard')
-  }
+  const [codes, setCode] = useState(code || "const CodeEditorCard = ()=> {\n\n  return (\n    <h1>Enter Your Code.</h1>\n  );\n}\n\nexport default CodeEditorCard;")
 
   const handleDownloadCode = () => {
     const element = document.createElement('a')
     const file = new Blob([code], { type: 'text/plain' })
     element.href = URL.createObjectURL(file)
-    element.download = `component.${language === 'javascript' ? 'jsx' : language}`
+    element.download = `component.jsx`
     document.body.appendChild(element)
     element.click()
     document.body.removeChild(element)
@@ -39,57 +25,57 @@ export default Component
 
   return (
     <div className='w-full codepart  flex flex-col border-l border-slate-800'>
-      {/* Toolbar */}
-      <div className='flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-slate-900'>
-        <div className='flex items-center gap-2'>
-          <select 
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            className='px-3 py-1.5 bg-slate-800 border border-slate-700 hover:border-slate-600 focus:border-blue-500 focus:outline-none rounded text-xs text-slate-300 transition-colors'
-          >
-            <option value='javascript'>JavaScript</option>
-            <option value='typescript'>TypeScript</option>
-            <option value='jsx'>JSX</option>
-            <option value='css'>CSS</option>
-            <option value='html'>HTML</option>
-          </select>
+
+      <div className='flex items-center bg-purple-950 justify-end px-4 gap-2'>
+
+        <h1 className='text-left w-1/2'>{Component?.componentName}</h1>
+
+        <div className='flex items-center gap-3'>
+
+          <span className='text-xs text-slate-400'>Code / Preview</span>
+
+          <button onClick={() => setIsCodePreview(!isCodePreview)} className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${isCodePreview ? 'bg-blue-600' : 'bg-slate-600'} hover:shadow-lg hover:shadow-blue-500/30`}>
+            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${isCodePreview ? 'translate-x-5' : 'translate-x-0.5'}`} />
+          </button>
+
         </div>
 
-        <div className='flex items-center gap-2'>
-          <button
-            onClick={handleCopyCode}
-            className='p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded transition-colors'
-            title='Copy code'
-          >
-            <Copy size={18} />
-          </button>
-          <button
-            onClick={handleDownloadCode}
-            className='p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded transition-colors'
-            title='Download code'
-          >
-            <Download size={18} />
-          </button>
-          <button
-            className='p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded transition-colors'
-            title='Share code'
-          >
-            <Share2 size={18} />
-          </button>
-        </div>
+        <button
+          onClick={() => navigator.clipboard.writeText(code)}
+          className='p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded transition-colors'
+          title='Copy code'
+        >
+          <Copy size={18} />
+        </button>
+
+        <button
+          onClick={handleDownloadCode}
+          className='p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded transition-colors'
+          title='Download code'
+        >
+          <Download size={18} />
+        </button>
+
+        <button
+          className='p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded transition-colors'
+          title='Share code'
+        >
+          <Share2 size={18} />
+        </button>
+
       </div>
 
-      {/* Editor */}
+
       <div className='flex-1 overflow-hidden'>
-        <Editor
-          language={language}
+        {isCodePreview ? <Preview code={code} /> : <Editor
+          language={"javascript"}
           value={code}
           onChange={(value) => setCode(value || '')}
           theme='vs-dark'
           options={{
             minimap: { enabled: false },
-            fontSize: 13,
-            fontFamily: "'Fira Code', 'Courier New', monospace",
+            fontSize: 16,
+            fontFamily: " monospace",
             lineNumbers: 'on',
             scrollBeyondLastLine: false,
             automaticLayout: true,
@@ -97,9 +83,11 @@ export default Component
             tabSize: 2,
             wordWrap: 'on',
             bracketPairColorization: { enabled: true },
-          }}
-        />
+          }} />}
       </div>
+
+
+
     </div>
   )
 }

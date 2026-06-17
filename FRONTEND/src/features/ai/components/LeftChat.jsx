@@ -18,7 +18,7 @@ const LeftChat = () => {
   }
 
   return (
-    <div className='w-full leftchat h-screen bg-slate-950 border-r border-slate-800 flex flex-col'>
+    <div className='w-full leftchat bg-slate-950 border-r border-slate-800 flex flex-col'>
       {/* Header */}
       <div className='p-4 border-b border-slate-800'>
         <button

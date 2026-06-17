@@ -30,12 +30,12 @@ const componentSchema = new mongoose.Schema({
   },
 
 
-  tags: {
+  props: {
     type: [String],
     default: [],
     validate: {
-      validator: (tags) => tags.length <= 10,
-      message: "Cannot have more than 10 tags",
+      validator: (props) => props.length <= 10,
+      message: "Cannot have more than 10 props",
     },
   },
   isPublic: {

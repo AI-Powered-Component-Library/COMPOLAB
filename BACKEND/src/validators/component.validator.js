@@ -17,7 +17,7 @@ class ComponentValidator {
       .default("light")
       .messages({ "any.only": "Theme must be one of: light, dark, system" }),
 
-    tags: Joi.array()
+    props: Joi.array()
       .items(Joi.string().trim().max(30))
       .max(10)
       .default([])
@@ -66,7 +66,7 @@ class ComponentValidator {
       .valid("light", "dark", "system")
       .messages({ "any.only": "Theme must be one of: light, dark, system" }),
 
-    tags: Joi.array().items(Joi.string().trim().max(30)).max(10).messages({
+    props: Joi.array().items(Joi.string().trim().max(30)).max(10).messages({
       "array.max": "Cannot have more than 10 tags",
       "string.max": "Each tag cannot exceed 30 characters",
     }),

@@ -150,7 +150,7 @@ const ComponentForm = ({
     onSubmit({
       componentName: form.componentName.trim(),
       theme: form.theme,
-      tags: form.tags,
+      props: form.props,
       isPublic: form.isPublic,
       code: form.code,
     })

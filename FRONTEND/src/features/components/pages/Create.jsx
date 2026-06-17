@@ -1,36 +1,12 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { createComponent } from '../component.slice'
 import ComponentForm from '../ui/ComponentForm'
 import { useNavigate } from 'react-router-dom'
 
 const CreateComponent = () => {
-  const dispatch = useDispatch()
-  const [loading, setLoading] = useState(false)
-  const [apiError, setApiError] = useState('')
 
   const navigate = useNavigate()
 
   const handleSubmit = async (values) => {
-
     console.log(values)
-    // return
-    setLoading(true)
-    setApiError('')
-    try {
-      const result = await dispatch(createComponent(values))
-
-      // createAsyncThunk rejects return a rejected action — check for it
-      if (createComponent.rejected.match(result)) {
-        setApiError(result.payload || 'Something went wrong')
-        return
-      }
-
-      // success → go to list
-      navigate('/c/list', true)
-    } finally {
-      setLoading(false)
-    }
   }
 
 

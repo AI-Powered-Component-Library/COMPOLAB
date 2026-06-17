@@ -12,7 +12,7 @@ class MongoComponentRepository extends ComponentContract {
   }
 
   async getComponentById(id) {
-    return await ComponentModel.findById(id);
+    return await ComponentModel.findOne({ _id: id, isPublic: true }).select("code componentName props theme");
   }
 
   async updateComponent(id, data) {
@@ -22,7 +22,7 @@ class MongoComponentRepository extends ComponentContract {
       { new: true }
     );
   }
-  
+
   async deleteComponent(id) {
     return await ComponentModel.findByIdAndDelete(id);
   }
