@@ -7,7 +7,7 @@ const router = Router()
 
 router.post("/generate", userAuth, generateComponent);
 router.post("/npm",userAuth,componentController.publishComponent)
-router.post("/", userAuth, componentController.createComponent)
+router.post("/", userAuth, componentController.saveComponent)
 router.get("/", userAuth, componentController.getAllComponents)
 router.get("/:id", userAuth, componentController.getComponentById)
 router.delete("/:id", userAuth, componentController.deleteComponent)

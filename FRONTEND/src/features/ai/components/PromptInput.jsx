@@ -31,8 +31,8 @@ const PromptInput = ({ webBuilder, setParams }) => {
             {/* Left Section - Web Builder Toggle */}
             <div className='flex items-center justify-start flex-1 min-w-[180px]'>
                 <div className='flex items-center gap-3 bg-slate-900/60 border border-slate-800/80 px-3.5 py-1.5 rounded-full hover:border-slate-800 transition-all duration-300 shadow-sm'>
-                    <Wand2 size={14} className={`transition-colors duration-300 ${webBuilder ? 'text-blue-400' : 'text-slate-400'}`} />
-                    <span className='text-xs font-medium text-slate-300 select-none'>Web Builder</span>
+                    <Wand2 size={16} className={`transition-colors duration-300 ${webBuilder ? 'text-blue-400' : 'text-slate-400'}`} />
+                    <span className='text-base font-medium text-slate-300 select-none'>Web Builder</span>
 
 
                     <button className={` relative inline-flex h-6 w-12 items-center rounded-full transition-all duration-300 ease-out border border-white/10 backdrop-blur-md ${webBuilder ? "bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg shadow-blue-500/30" : "bg-slate-700/80 hover:bg-slate-600"} hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500/50`}

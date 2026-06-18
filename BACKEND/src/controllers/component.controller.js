@@ -4,7 +4,7 @@ import componentService from "../services/component.service.js";
 
 class ComponentController {
 
-    createComponent = asyncHandler(async (req, res) => {
+    saveComponent = asyncHandler(async (req, res) => {
 
         const userId = req.user.id;
 
