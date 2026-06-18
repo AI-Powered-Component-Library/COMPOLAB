@@ -3,15 +3,15 @@ import Editor from '@monaco-editor/react'
 import { Copy, Download, Share2 } from 'lucide-react'
 import Preview from '../../components/pages/Preview'
 import { useSelector } from 'react-redux'
+import useCompo from '../../components/hooks/useCompo'
 
 const CodePart = () => {
 
   const [isCodePreview, setIsCodePreview] = useState(false)
-
+  const { handleSetCode } = useCompo()
   const code = useSelector(state => state.component.code)
   const Component = useSelector(state => state.component.currentComponent)
 
-  const [codes, setCode] = useState(code || "const CodeEditorCard = ()=> {\n\n  return (\n    <h1>Enter Your Code.</h1>\n  );\n}\n\nexport default CodeEditorCard;")
 
   const handleDownloadCode = () => {
     const element = document.createElement('a')
@@ -70,7 +70,7 @@ const CodePart = () => {
         {isCodePreview ? <Preview code={code} /> : <Editor
           language={"javascript"}
           value={code}
-          onChange={(value) => setCode(value || '')}
+          onChange={handleSetCode}
           theme='vs-dark'
           options={{
             minimap: { enabled: false },

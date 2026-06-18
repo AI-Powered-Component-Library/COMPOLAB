@@ -39,8 +39,12 @@ const useCompo = () => {
         console.log(res)
     }
 
+    const handleSetCode = (code) => {
+        dispatch(setCode(code))
+    }
 
-    return { handleGetComponents, handleCreateComponent, handleGetCompoById, handleUpdateComponent, handleDeleteComponent };
+
+    return { handleGetComponents, handleCreateComponent, handleGetCompoById, handleUpdateComponent, handleDeleteComponent, handleSetCode };
 };
 
 export default useCompo;

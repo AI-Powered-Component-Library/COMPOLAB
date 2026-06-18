@@ -1,24 +1,26 @@
 import { useState } from 'react'
 import { Send, Wand2, Sparkles } from 'lucide-react'
 import { Link } from "react-router-dom"
+import useGenerate from '../hook/useGenerate'
+import { useSelector } from 'react-redux'
 
 const PromptInput = () => {
 
     const [isWebBuilder, setIsWebBuilder] = useState(false)
 
+    const { handleGenerate } = useGenerate()
+    const token = useSelector(state => state.auth.accessToken)
+
     const [input, setInput] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         if (input.trim()) {
             setIsLoading(true)
-            // Send prompt to backend
-            console.log('Prompt sent:', input)
-            setTimeout(() => {
-                setInput('')
-                setIsLoading(false)
-            }, 500)
+            await handleGenerate({ prompt: input, token })
+            setInput('')
+            setIsLoading(false)
         }
     }
 
@@ -32,8 +34,8 @@ const PromptInput = () => {
                 <div className='flex items-center gap-3 bg-slate-900/60 border border-slate-800/80 px-3.5 py-1.5 rounded-full hover:border-slate-800 transition-all duration-300 shadow-sm'>
                     <Wand2 size={14} className={`transition-colors duration-300 ${isWebBuilder ? 'text-blue-400' : 'text-slate-400'}`} />
                     <span className='text-xs font-medium text-slate-300 select-none'>Web Builder</span>
-                    <button 
-                        onClick={() => setIsWebBuilder(!isWebBuilder)} 
+                    <button
+                        onClick={() => setIsWebBuilder(!isWebBuilder)}
                         className={`relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-300 cursor-pointer ${isWebBuilder ? 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md shadow-blue-500/20' : 'bg-slate-700/80 hover:bg-slate-700'}`}
                         aria-label="Toggle Web Builder"
                     >
@@ -71,8 +73,8 @@ const PromptInput = () => {
 
             {/* Right Section - Premium Token Display */}
             <div id="right" className='flex items-center justify-end flex-1 min-w-[180px]'>
-                <Link 
-                    to="/pricing" 
+                <Link
+                    to="/pricing"
                     className='relative inline-flex items-center gap-2.5 px-4 py-1.5 bg-gradient-to-r from-purple-500/10 to-indigo-500/10 hover:from-purple-500/20 hover:to-indigo-500/20 border border-purple-500/25 hover:border-purple-500/40 rounded-full text-purple-200 text-xs font-semibold no-underline cursor-pointer transition-all duration-300 shadow-md hover:shadow-purple-500/10 hover:-translate-y-0.5 active:translate-y-0 group'
                 >
                     <Sparkles size={13} className="text-purple-400 group-hover:rotate-12 transition-transform duration-300" />

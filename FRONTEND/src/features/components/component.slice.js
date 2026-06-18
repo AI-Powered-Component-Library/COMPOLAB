@@ -5,9 +5,12 @@ const componentSlice = createSlice({
     initialState: {
         code: "",
         currentComponent: null,
-        components: []
+        components: [],
     },
     reducers: {
+        setCodeChunks: (state, { payload }) => {
+            state.code += payload
+        },
         setCode: (state, { payload }) => {
             state.code = payload
         },
@@ -20,5 +23,5 @@ const componentSlice = createSlice({
     }
 })
 
-export const { setCode, setComponents, setCurrentComponent } = componentSlice.actions
+export const { setCode, setComponents, setCurrentComponent , setCodeChunks } = componentSlice.actions
 export default componentSlice.reducer
