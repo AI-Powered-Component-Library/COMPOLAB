@@ -100,13 +100,15 @@ class ComponentService {
         return true
     }
 
-    async getAllComponents() {
-        const components = await MongoComponent.getAllComponents();
+
+    async getAllComponents(owner) {
+        const components = await MongoComponent.findComponents(owner);
         return components;
     }
 
+
     async getComponentById(id) {
-        const component = await MongoComponent.getComponentById(id);
+        const component = await MongoComponent.findComponentById(id);
         if (!component) throw new AppError(404, "Component not found.");
         return component;
     }

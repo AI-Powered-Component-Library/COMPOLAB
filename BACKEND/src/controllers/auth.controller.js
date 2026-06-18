@@ -14,7 +14,7 @@ class AuthController {
         let { accessToken, refreshToken, httpOnly } = await authService.googleService(idToken)
         res.cookie("refresh_token", refreshToken, httpOnly)
 
-        res.success(200, "Authentication Successfully.", { token: accessToken })
+        res.success(200, "Authentication Successfully.", accessToken)
     })
 
     register = asyncHandler(async (req, res) => {
@@ -28,7 +28,7 @@ class AuthController {
 
         res.cookie("refresh_token", refreshToken, httpOnly)
 
-        res.success(201, "Registered Successfully.", { token: accessToken })
+        res.success(201, "Registered Successfully.", { accessToken })
     })
 
     login = asyncHandler(async (req, res) => {
@@ -40,7 +40,7 @@ class AuthController {
         let { accessToken, refreshToken, httpOnly } = await authService.login(req.body)
 
         res.cookie("refresh_token", refreshToken, httpOnly)
-        res.success(200, "LoggedIn Successfully.", { token: accessToken })
+        res.success(200, "LoggedIn Successfully.", { accessToken })
     })
 
     getUser = asyncHandler(async (req, res) => {
@@ -62,12 +62,10 @@ class AuthController {
 
     logout = asyncHandler(async (req, res) => {
 
-        const userId = req.user.id;
-        const refresh_token = req.cookies.refresh_token;
+        // const userId = req.user.id;
+        const refresh_token = req.refresh_token;
 
-
-        if (!userId) throw new AppError(400, "Bad Request.")
-        if (!refresh_token) throw new AppError(400, "No refresh token found.")
+        // if (!userId) throw new AppError(400, "Bad Request.")
 
         await authService.logout(refresh_token);
 
@@ -91,7 +89,7 @@ class AuthController {
 
         res.cookie("refresh_token", newRefreshToken, httpOnly)
 
-        res.success(200, "Token Refreshed Successfully.", { token: newAccessToken })
+        res.success(200, "Token Refreshed Successfully.", { accessToken: newAccessToken })
     })
 
 }

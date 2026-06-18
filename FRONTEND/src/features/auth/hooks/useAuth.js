@@ -8,17 +8,11 @@ const useAuth = () => {
   const dispatch = useDispatch()
 
 
-    const handleGoogleAuth = async (response) => {
-        try {
-            const token = await googleAuthService(response.credential);
-            const profileRes = await profileService(token);
-            const user = profileRes.data;
-            dispatch(loginSuccess({ token, user }));
-        } catch (error) {
-            dispatch(setError(error?.response?.data?.message || error.message));
-            console.error("Google Auth Error:", error?.response?.data || error.message);
-        }
-    };
+  const handleGoogleAuth = async (response) => {
+    const token = await googleAuthService(response.credential);
+    console.log(token)
+    dispatch(setAccessToken(token));
+  };
 
 
   const handleRegister = async (data) => {
@@ -42,8 +36,7 @@ const useAuth = () => {
 
   const handleGetUser = async () => {
     let { data } = await getUserService()
-
-    dispatch(setUser(data.data.user))
+    dispatch(setUser(data.data))
   }
 
   const handleLogout = async () => {
@@ -64,7 +57,7 @@ const useAuth = () => {
   }
 
 
-  return { handleRegister, handleLogin, handleGetUser, handleLogout, handleRefreshToken , handleGoogleAuth }
+  return { handleRegister, handleLogin, handleGetUser, handleLogout, handleRefreshToken, handleGoogleAuth }
 }
 
 export default useAuth
