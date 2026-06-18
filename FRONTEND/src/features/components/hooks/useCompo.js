@@ -39,12 +39,22 @@ const useCompo = () => {
         console.log(res)
     }
 
+    const handleDownloadCode = (code) => {
+        const element = document.createElement('a')
+        const file = new Blob([code], { type: 'text/plain' })
+        element.href = URL.createObjectURL(file)
+        element.download = `component.jsx`
+        document.body.appendChild(element)
+        element.click()
+        document.body.removeChild(element)
+    }
+
     const handleSetCode = (code) => {
         dispatch(setCode(code))
     }
 
 
-    return { handleGetComponents, handleCreateComponent, handleGetCompoById, handleUpdateComponent, handleDeleteComponent, handleSetCode };
+    return { handleGetComponents, handleCreateComponent,handleDownloadCode, handleGetCompoById, handleUpdateComponent, handleDeleteComponent, handleSetCode };
 };
 
 export default useCompo;

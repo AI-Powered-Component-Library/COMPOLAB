@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import generateService from '../service/generate.service'
-import { setCode } from '../../components/component.slice'
+import { setCode, setWebBuilder } from '../../components/component.slice'
+
 
 const extractCode = (jsonStr) => {
     // 1. Locate the "code" field
@@ -58,8 +59,12 @@ const useGenerate = () => {
         })
     }
 
+    const handleWebBuilder = () => {
+        dispatch(setWebBuilder())
+    }
 
-    return { handleGenerate }
+
+    return { handleGenerate, handleWebBuilder }
 }
 
 export default useGenerate

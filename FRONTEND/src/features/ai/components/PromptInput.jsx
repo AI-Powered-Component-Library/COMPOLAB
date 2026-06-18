@@ -4,11 +4,9 @@ import { Link } from "react-router-dom"
 import useGenerate from '../hook/useGenerate'
 import { useSelector } from 'react-redux'
 
-const PromptInput = () => {
+const PromptInput = ({ webBuilder, setParams }) => {
 
-    const [isWebBuilder, setIsWebBuilder] = useState(false)
-
-    const { handleGenerate } = useGenerate()
+    const { handleGenerate, handleWebBuilder } = useGenerate()
     const token = useSelector(state => state.auth.accessToken)
 
     const [input, setInput] = useState('')
@@ -32,14 +30,21 @@ const PromptInput = () => {
             {/* Left Section - Web Builder Toggle */}
             <div className='flex items-center justify-start flex-1 min-w-[180px]'>
                 <div className='flex items-center gap-3 bg-slate-900/60 border border-slate-800/80 px-3.5 py-1.5 rounded-full hover:border-slate-800 transition-all duration-300 shadow-sm'>
-                    <Wand2 size={14} className={`transition-colors duration-300 ${isWebBuilder ? 'text-blue-400' : 'text-slate-400'}`} />
+                    <Wand2 size={14} className={`transition-colors duration-300 ${webBuilder ? 'text-blue-400' : 'text-slate-400'}`} />
                     <span className='text-xs font-medium text-slate-300 select-none'>Web Builder</span>
                     <button
-                        onClick={() => setIsWebBuilder(!isWebBuilder)}
-                        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-300 cursor-pointer ${isWebBuilder ? 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md shadow-blue-500/20' : 'bg-slate-700/80 hover:bg-slate-700'}`}
+                        onClick={() => {
+                            handleWebBuilder()
+                            if (webBuilder) {
+                                setParams({})
+                            } else {
+                                setParams({ web: "true" })
+                            }
+                        }}
+                        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-300 cursor-pointer ${webBuilder ? 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md shadow-blue-500/20' : 'bg-slate-700/80 hover:bg-slate-700'}`}
                         aria-label="Toggle Web Builder"
                     >
-                        <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-sm transition-transform duration-300 ${isWebBuilder ? 'translate-x-4' : 'translate-x-0.5'}`} />
+                        <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-sm transition-transform duration-300 ${webBuilder ? 'translate-x-4' : 'translate-x-0.5'}`} />
                     </button>
                 </div>
             </div>

@@ -1,19 +1,10 @@
 @import "tailwindcss";
 
-/* .grid-layout {
-  display: grid;
-  grid-template-columns: 250px 1fr 300px;
-  grid-template-rows: 50px 1fr 100px;
-  grid-template-areas:
-    "header header header"
-    "sidebar codepart leftchat"
-    "sidebar promptinput leftchat";
-} */
 
 .grid-layout {
-  display: grid;
-  grid-template-columns: 250px 1fr 300px;
-  grid-template-rows:1fr 100px;
+  /* display: grid; */
+  /* grid-template-columns: 250px 1fr 300px; */
+  /* grid-template-rows: 1fr 100px; */
   grid-template-areas:
     "sidebar codepart leftchat"
     "promptinput promptinput promptinput";
@@ -30,7 +21,4 @@
 }
 .leftchat {
   grid-area: leftchat;
-}
-.header {
-  grid-area: header;
 }

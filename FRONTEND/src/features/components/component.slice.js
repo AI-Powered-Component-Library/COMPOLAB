@@ -6,6 +6,7 @@ const componentSlice = createSlice({
         code: "",
         currentComponent: null,
         components: [],
+        webBuilder: false
     },
     reducers: {
         setCodeChunks: (state, { payload }) => {
@@ -19,9 +20,12 @@ const componentSlice = createSlice({
         },
         setCurrentComponent: (state, { payload }) => {
             state.currentComponent = payload
+        },
+        setWebBuilder: (state) => {
+            state.webBuilder = !state.webBuilder
         }
     }
 })
 
-export const { setCode, setComponents, setCurrentComponent , setCodeChunks } = componentSlice.actions
+export const { setCode, setComponents, setCurrentComponent, setCodeChunks , setWebBuilder } = componentSlice.actions
 export default componentSlice.reducer
