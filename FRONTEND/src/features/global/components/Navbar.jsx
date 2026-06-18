@@ -1,10 +1,11 @@
 import { Zap, LogOut, User } from 'lucide-react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import useAuth from '../features/auth/hooks/useAuth';
+import { useNavigate,Link } from 'react-router-dom';
+import useAuth from '../../auth/hooks/useAuth';
 
 const Navbar = () => {
 
+    const navigate = useNavigate()
     const user = useSelector((state) => state.auth.user);
     const { handleLogout } = useAuth();
 
@@ -35,15 +36,11 @@ const Navbar = () => {
                             <LogOut className="w-4 h-4" />
                             <span className="hidden sm:inline">Logout</span>
                         </button>
-                    </div>
-                ) : (
-                    <Link to="/login">
-                        <button className="bg-cyan-400 hover:bg-cyan-500 text-slate-900 px-6 py-2 rounded-lg font-semibold transition flex items-center gap-2">
-                            <Zap className="w-4 h-4" />
-                            Login
-                        </button>
-                    </Link>
-                )}
+                    </div>) : (<button onClick={() => navigate('/g/login')} className="bg-cyan-400 cursor-pointer hover:bg-cyan-500 text-slate-900 px-6 py-2 rounded-lg font-semibold transition flex items-center gap-2">
+                        <Zap className="w-4 h-4" />
+                        Login
+                    </button>)
+                }
             </div>
         </nav>
     )

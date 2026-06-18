@@ -35,8 +35,13 @@ const useAuth = () => {
   }
 
   const handleGetUser = async () => {
-    let { data } = await getUserService()
-    dispatch(setUser(data.data))
+    try {
+      let { data } = await getUserService()
+      dispatch(setUser(data.data))
+    } catch (error) {
+      console.log(error.message)
+      dispatch(setUser(null))
+    }
   }
 
   const handleLogout = async () => {

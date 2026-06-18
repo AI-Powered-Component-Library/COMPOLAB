@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import Editor from '@monaco-editor/react'
 import { Code2Icon, Copy, Cross, Download, Eye, File, Save, Share2, UploadCloudIcon, X } from 'lucide-react'
-import Preview from '../../components/pages/Preview'
+import Preview from '../../code/pages/Preview'
 import { useSelector } from 'react-redux'
-import useCompo from '../../components/hooks/useCompo'
+import useCompo from '../../code/hooks/useCompo'
 import Header from './Header'
 
 const CodePart = ({ cid }) => {

@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 import generateService from '../service/generate.service'
-import { setCode, setWebBuilder } from '../../components/component.slice'
+import { setCode, setWebBuilder } from '../../code/component.slice'
 
 
 const extractCode = (jsonStr) => {

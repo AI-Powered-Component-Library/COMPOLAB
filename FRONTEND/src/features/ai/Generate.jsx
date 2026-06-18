@@ -4,7 +4,7 @@ import CodePart from './components/CodePart.jsx';
 import LeftChat from './components/LeftChat.jsx';
 import PromptInput from './components/PromptInput.jsx';
 import { useParams } from 'react-router-dom';
-import useCompo from '../components/hooks/useCompo.js';
+import useCompo from '../code/hooks/useCompo.js';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import useGenerate from './hook/useGenerate.js';
@@ -21,18 +21,16 @@ const Generate = () => {
     const [options, setOptions] = useState(false)
 
     useEffect(() => {
+        const web = searchParams.get("web")
         if (cid) {
             handleGetCompoById(cid)
         }
-        const web = searchParams.get("web")
         if (web) {
             handleWebBuilder()
         }
-
         const handleClick = () => {
             setOptions(false);
         };
-
         document.addEventListener("click", handleClick);
 
         return () => {

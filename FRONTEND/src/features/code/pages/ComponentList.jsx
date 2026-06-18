@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import ComponentCard from '../ui/ComponentCard'
+import ComponentCard from '../components/ComponentCard'
 import { useNavigate } from 'react-router-dom'
 import useCompo from '../hooks/useCompo'
 import { useEffect } from 'react'

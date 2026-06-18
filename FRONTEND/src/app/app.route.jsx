@@ -2,15 +2,15 @@ import { createBrowserRouter } from "react-router-dom"
 import Login from "../features/auth/pages/Login"
 import Register from "../features/auth/pages/Register"
 import App from "./App"
-import Home from "./Home"
+import Home from "../features/global/pages/Home"
 import Generate from "../features/ai/Generate"
 import Pricing from "../features/payment/pages/Pricing"
 import Checkout from "../features/payment/pages/Checkout"
 import ProtectedRoute from "../features/auth/pages/ProtectedRoute"
 import PublicRoute from "../features/auth/pages/PublicRoute"
-import CreateComponent from "../features/components/pages/Create"
-import ComponentList from "../features/components/pages/ComponentList"
-import EditComponent from "../features/components/pages/EditComponent"
+import CreateComponent from "../features/code/pages/Create"
+import ComponentList from "../features/code/pages/ComponentList"
+import EditComponent from "../features/code/pages/EditComponent"
 import Google from "../features/auth/pages/Google"
 
 export const router = createBrowserRouter([
@@ -25,8 +25,15 @@ export const router = createBrowserRouter([
                 element: <PublicRoute />,
                 children: [
                     {
-                        path: "/login",
+                        path: "/g/login",
                         element: <Google />
+                    },{
+                        path : "/login",
+                        element : <Login/>
+                    },
+                    {
+                        path  : "/register",
+                        element : <Register/>
                     }
                 ]
             },
@@ -47,7 +54,7 @@ export const router = createBrowserRouter([
                     },
                     {
                         path: "/c/create",
-                        element: <CreateComponent />
+                        element: <Generate />
                     },
                     {
                         path: "/c/:cid",

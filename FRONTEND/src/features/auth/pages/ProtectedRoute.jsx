@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 
 const ProtectedRoute = () => {
 
@@ -7,6 +7,10 @@ const ProtectedRoute = () => {
     const isLoading = useSelector(state => state.auth.isLoading)
 
     if (isLoading) return <h1>Loading...</h1>
+
+    if (!user) {
+        return <Navigate to={"/g/login"} replace={true} />        
+    }
 
     return <Outlet />
 }

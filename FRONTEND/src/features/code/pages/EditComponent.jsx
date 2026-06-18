@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import componentService from '../service/component.service'
-import ComponentForm from '../ui/ComponentForm'
+import ComponentForm from '../components/ComponentForm'
 import { useNavigate, useParams } from 'react-router-dom'
 
 
