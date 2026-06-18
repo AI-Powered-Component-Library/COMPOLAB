@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import Editor from '@monaco-editor/react'
-import { Copy, Download, Save, Share2, UploadCloudIcon } from 'lucide-react'
+import { Code2Icon, Copy, Cross, Download, Eye, File, Save, Share2, UploadCloudIcon } from 'lucide-react'
 import Preview from '../../components/pages/Preview'
 import { useSelector } from 'react-redux'
 import useCompo from '../../components/hooks/useCompo'
+import { FaReact } from "react-icons/fa";
 
-const CodePart = () => {
+const CodePart = ({ cid }) => {
 
   const [isCodePreview, setIsCodePreview] = useState(false)
   const code = useSelector(state => state.component.code)
+  const loggedInUser = useSelector(state => state.auth.user)
   const Component = useSelector(state => state.component.currentComponent)
   const { handleSetCode, handleDownloadCode } = useCompo()
 
@@ -18,41 +20,34 @@ const CodePart = () => {
 
       <div className='flex py-2 items-center bg-slate-950 justify-between w-full px-4 gap-2'>
 
-        <div className='flex flex-1 gap-4 items-center justify-start'>
+        <div className='flex flex-1 gap-2 items-center justify-start'>
 
-          <div className='flex items-center gap-3'>
+          {
+            Component && <div className='text-left truncate flex  h-full items-center border border-blue-300 bg-blue-400/50 gap-2 px-3 py-1 rounded-lg cursor-pointer'>
+              <FaReact size={20} color='cyan' />
+              <h1 className='text-sm font-medium text-cyan-400'> {Component?.componentName} X </h1>
+            </div>
+          }
 
-            <span className='text-xs text-slate-400'>Code / Preview</span>
-
-            <button onClick={() => setIsCodePreview(!isCodePreview)} className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ${isCodePreview ? 'bg-blue-600' : 'bg-slate-600'} hover:shadow-lg hover:shadow-blue-500/30`}>
-              <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${isCodePreview ? 'translate-x-5' : 'translate-x-0.5'}`} />
-            </button>
-
-          </div>
-
-          <div className='flex items-center gap-2'>
+          {cid && code && <div className='flex cursor-pointer border  bg-gray-700 hover:bg-orange-800 border-slate-800 px-3 py-1 rounded-md items-center gap-2'>
             <button>
               <Save size={18} />
 
             </button>
             <p className='text-sm font-medium'>Save</p>
-          </div>
+          </div>}
 
-          <div className='flex items-center gap-2'>
+          {loggedInUser.role === "user" && <div className='flex cursor-pointer border hover:bg-purple-700 bg-gray-700 border-slate-800  px-3 py-1 rounded-md  px-4 items-center gap-2'>
             <button>
               <UploadCloudIcon size={18} />
 
             </button>
-            <p className='text-sm font-medium'>Publish</p>
-          </div>
+            <p className='text-sm font-medium'>Publish On Npm</p>
+          </div>}
 
-          {
-            Component &&
-            <h1 className='text-left '>{Component?.componentName}</h1>
-          }
         </div>
 
-        <div className='flex flex-1 items-center justify-center gap-3'>
+        <div className='flex flex-1 items-center justify-end gap-3'>
 
           <button
             onClick={() => navigator.clipboard.writeText(code)}
@@ -95,6 +90,16 @@ const CodePart = () => {
           >
             <Share2 size={18} />
           </button>
+
+          <div className="inline-flex  items-center gap-0.5 rounded-full border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-700 dark:bg-neutral-800 shadow-sm">
+            <button onClick={() => setIsCodePreview(false)} className={`flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium transition-colors ${!isCodePreview ? 'bg-purple-700 text-purple-50' : 'text-neutral-500 hover:text-neutral-700'}`}>
+              <Code2Icon size={15} /> Code
+            </button>
+            <button onClick={() => setIsCodePreview(true)} className={`flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium transition-colors ${isCodePreview ? 'bg-purple-700 text-purple-50' : 'text-neutral-500 hover:text-neutral-700'}`}>
+              <Eye size={15} /> Preview
+            </button>
+          </div>
+
         </div>
 
       </div>

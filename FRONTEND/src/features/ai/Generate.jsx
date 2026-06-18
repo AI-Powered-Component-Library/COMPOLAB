@@ -42,7 +42,7 @@ const Generate = () => {
     return (
         <div style={{ gridTemplateColumns: webBuilder ? "250px 1fr 300px" : "4px 1fr 300px", gridTemplateRows: "1fr 100px" }} className="h-screen grid-layout overflow-hidden w-full grid bg-black text-white">
             {webBuilder && <Sidebar props={{options,setOptions}} />}
-            <CodePart />
+            <CodePart cid={cid} />
             <LeftChat />
             <PromptInput setParams={setSearchParams} webBuilder={webBuilder} />
         </div>

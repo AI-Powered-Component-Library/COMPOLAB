@@ -22,6 +22,7 @@ const PromptInput = ({ webBuilder, setParams }) => {
         }
     }
 
+
     return (
         <div className='promptinput bg-slate-950 border-t border-slate-900 px-6 py-4 flex items-center justify-between gap-6 w-full h-full relative overflow-hidden backdrop-blur-md bg-opacity-95'>
             {/* Ambient Background Light Effects */}
@@ -32,7 +33,9 @@ const PromptInput = ({ webBuilder, setParams }) => {
                 <div className='flex items-center gap-3 bg-slate-900/60 border border-slate-800/80 px-3.5 py-1.5 rounded-full hover:border-slate-800 transition-all duration-300 shadow-sm'>
                     <Wand2 size={14} className={`transition-colors duration-300 ${webBuilder ? 'text-blue-400' : 'text-slate-400'}`} />
                     <span className='text-xs font-medium text-slate-300 select-none'>Web Builder</span>
-                    <button
+
+
+                    <button className={` relative inline-flex h-6 w-12 items-center rounded-full transition-all duration-300 ease-out border border-white/10 backdrop-blur-md ${webBuilder ? "bg-gradient-to-r from-blue-500 to-cyan-500 shadow-lg shadow-blue-500/30" : "bg-slate-700/80 hover:bg-slate-600"} hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500/50`}
                         onClick={() => {
                             handleWebBuilder()
                             if (webBuilder) {
@@ -40,12 +43,12 @@ const PromptInput = ({ webBuilder, setParams }) => {
                             } else {
                                 setParams({ web: "true" })
                             }
-                        }}
-                        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-all duration-300 cursor-pointer ${webBuilder ? 'bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md shadow-blue-500/20' : 'bg-slate-700/80 hover:bg-slate-700'}`}
-                        aria-label="Toggle Web Builder"
-                    >
-                        <span className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-sm transition-transform duration-300 ${webBuilder ? 'translate-x-4' : 'translate-x-0.5'}`} />
+                        }}>
+                        <span className={` flex items-center justify-center h-6 w-6 rounded-full bg-white shadow-lg transition-all duration-300 ease-out ${webBuilder ? "translate-x-7" : "translate-x-0.5"}`}>
+                            <span className={` h-2 w-2 rounded-full transition-colors duration-300 ${webBuilder ? "bg-blue-500" : "bg-slate-400"}`} />
+                        </span>
                     </button>
+
                 </div>
             </div>
 
