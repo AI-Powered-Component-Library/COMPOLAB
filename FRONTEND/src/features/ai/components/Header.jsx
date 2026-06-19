@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux'
-import { Code2Icon, Copy, Download, Eye, Save, Share2, UploadCloudIcon, X } from 'lucide-react'
+import { Code2Icon, Copy, Download, Eye, Save, Share2, X } from 'lucide-react'
+import { LiaNpm } from "react-icons/lia";
 import { FaReact } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom'
 
@@ -9,11 +10,12 @@ const Header = ({ props }) => {
     const navigate = useNavigate()
     const loggedInUser = useSelector(state => state.auth.user)
     const Component = useSelector(state => state.component.currentComponent)
+    const isChunking = useSelector(state => state.component.chunking)
 
     return (
         <div className="flex items-center justify-between w-full px-6 py-4 bg-[#0b0c14] border-b border-white/10">
 
-            {/* Left */}
+
             <div className="flex flex-1 items-center gap-4">
 
                 {Component && (
@@ -46,9 +48,9 @@ const Header = ({ props }) => {
 
                 {/* Publish */}
                 {loggedInUser.role === "admin" && (
-                    <div className="flex items-center gap-3 px-8 py-3 rounded-2xl border border-white/15 text-white hover:border-red-500/40 hover:bg-red-500/5 transition cursor-pointer">
-                        <UploadCloudIcon size={18} className="text-red-500" />
-                        <p className="font-medium">Publish on npm</p>
+                    <div className="flex items-center gap-3 px-4 py-2 rounded-md border text-white border-red-400/50 hover:bg-red-500/5 transition cursor-pointer">
+                        <LiaNpm size={24} className="text-red-500" />
+                        {/* <p className="font-medium">Publish To Npm</p> */}
                     </div>
                 )}
             </div>
@@ -58,7 +60,7 @@ const Header = ({ props }) => {
 
                 <button
                     onClick={() => navigator.clipboard.writeText(code)}
-                    className="h-12 w-12 flex items-center justify-center rounded-2xl border border-white/15 text-slate-300 hover:border-white/30 hover:bg-white/5 transition"
+                    className="h-10 w-10 flex items-center justify-center rounded-md cursor-pointer border border-white/15 text-slate-300 hover:border-white/30 hover:bg-white/5 transition"
                     title="Copy code"
                 >
                     <Copy size={18} />
@@ -66,7 +68,7 @@ const Header = ({ props }) => {
 
                 <button
                     onClick={() => handleDownloadCode(code)}
-                    className="h-12 w-12 flex items-center justify-center rounded-2xl border border-white/15 text-slate-300 hover:border-white/30 hover:bg-white/5 transition"
+                    className="h-10 w-10 flex items-center justify-center rounded-md cursor-pointer border border-white/15 text-slate-300 hover:border-white/30 hover:bg-white/5 transition"
                     title="Download code"
                 >
                     <Download size={18} />
@@ -92,7 +94,7 @@ const Header = ({ props }) => {
                             alert("Link copied to clipboard!");
                         }
                     }}
-                    className="h-12 w-12 flex items-center justify-center rounded-2xl border border-white/15 text-slate-300 hover:border-white/30 hover:bg-white/5 transition"
+                    className="h-10 w-10 flex items-center justify-center rounded-md cursor-pointer border border-white/15 text-slate-300 hover:border-white/30 hover:bg-white/5 transition"
                     title="Share code"
                 >
                     <Share2 size={18} />
@@ -100,10 +102,21 @@ const Header = ({ props }) => {
 
                 <div className="h-10 w-px bg-white/10" />
 
-                {!cid && code && (
-                    <div className="flex items-center gap-3 px-8 py-3 rounded-2xl border border-white/15 text-white hover:border-green-500/40 hover:bg-green-500/5 transition cursor-pointer">
-                        <Save size={18} />
-                        <p className="font-medium">Save</p>
+                {!cid && code && !isChunking && (
+                    <div onClick={() => {
+
+                        let obj = {
+                            name: "Card",
+                            code: code,
+                            props: [],
+                            owner: loggedInUser._id,
+                            visibility: "public"
+                        }
+
+                        console.log(obj)
+
+                    }} className="flex items-center gap-3 px-4 py-1.5 rounded-md bg-green-400/50 border border-white/15 text-white hover:border-green-500/40 hover:bg-green-500/5 transition cursor-pointer">
+                        <Save size={18} /> <p className="font-medium">Save</p>
                     </div>
                 )}
             </div>

@@ -12,6 +12,7 @@ import CreateComponent from "../features/code/pages/Create"
 import ComponentList from "../features/code/pages/ComponentList"
 import EditComponent from "../features/code/pages/EditComponent"
 import Google from "../features/auth/pages/Google"
+import Profile from "../features/auth/pages/Profile"
 
 export const router = createBrowserRouter([
     {
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
             {
                 element: <ProtectedRoute />,
                 children: [
+                    {
+                        path : "/profile",
+                        element : <Profile/>
+                    },
                     {
                         path: "/generate",
                         element: <Generate />

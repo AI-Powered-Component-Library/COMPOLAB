@@ -36,7 +36,7 @@ const CodePart = ({ cid }) => {
 
       <Header props={{ cid, code, isCodePreview, setIsCodePreview, handleDownloadCode }} />
 
-      <div className='flex-1 overflow-hidden'>
+      <div style={{scrollBehavior : "smooth"}} className='flex-1 overflow-hidden'>
         {isCodePreview ? <Preview code={code} /> : <Editor
           language={"javascript"}
           value={code}

@@ -33,7 +33,7 @@ const Navbar = () => {
                                 <span>Token : {user.aiCredits}</span>
                             </Link>
                         </div>
-                        <div className="flex items-center gap-2 bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg">
+                        <div onClick={()=>navigate("/profile")} className="flex items-center gap-2 bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg">
                             <div className="w-6 h-6 rounded-full bg-cyan-400 flex items-center justify-center text-slate-950 font-bold text-xs">
                                 {user?.fullName ? user.fullName[0].toUpperCase() : <User size={12} />}
                             </div>
