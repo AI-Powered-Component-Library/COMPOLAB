@@ -12,6 +12,11 @@ const componentService = {
     return data.data // returns array
   },
 
+  getSavedService: async () => { 
+    const { data } = await api.get("/component/saved")
+    return data.data
+  },
+
 
   getByIdService: async (id) => {
     const { data } = await api.get(`${"/component"}/${id}`)

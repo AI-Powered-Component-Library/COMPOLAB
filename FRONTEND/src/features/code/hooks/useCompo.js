@@ -12,6 +12,13 @@ const useCompo = () => {
     }
 
 
+    const handleGetSavedComponents = async () => {
+        const res = await componentService.getSavedService()
+
+        console.log(res)
+        dispatch(setComponents(res))
+    }
+
     const handleGetComponents = async () => {
         const res = await componentService.getAllService()
         dispatch(setComponents(res))
@@ -54,7 +61,7 @@ const useCompo = () => {
     }
 
 
-    return { handleGetComponents, handleCreateComponent,handleDownloadCode, handleGetCompoById, handleUpdateComponent, handleDeleteComponent, handleSetCode };
+    return { handleGetComponents, handleGetSavedComponents, handleCreateComponent,handleDownloadCode, handleGetCompoById, handleUpdateComponent, handleDeleteComponent, handleSetCode };
 };
 
 export default useCompo;

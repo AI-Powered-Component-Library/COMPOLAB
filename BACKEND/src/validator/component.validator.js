@@ -6,7 +6,7 @@ function componentValidator(compoData) {
         name: joi.string().required().trim(),
         code: joi.string().required().trim(),
         props: joi.array().optional(),
-        owner : joi.string().required().trim(),
+        // owner : joi.string().required().trim(),
         visibility : joi.string().optional().trim(),
         npmPackage : joi.string().optional().trim()
     })

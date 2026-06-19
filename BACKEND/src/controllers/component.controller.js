@@ -26,6 +26,14 @@ class ComponentController {
     })
 
 
+    getSavedComponents = asyncHandler(async (req, res) => {
+        const userId = req.user.id;
+
+        const components = await componentService.getAllComponents(userId);
+        return res.success(200, "Components fetched successfully", components);
+
+    })
+
     getAllComponents = asyncHandler(async (req, res) => {
 
         const components = await componentService.getAllComponents();

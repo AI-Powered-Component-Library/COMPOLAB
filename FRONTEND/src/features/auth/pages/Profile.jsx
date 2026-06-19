@@ -1,7 +1,16 @@
 import React from 'react'
 import ComponentList from '../../code/pages/ComponentList'
+import useCompo from '../../code/hooks/useCompo'
+import { useEffect } from 'react'
 
 const Profile = () => {
+
+    const { handleGetSavedComponents } = useCompo()
+
+    useEffect(() => {
+        handleGetSavedComponents()
+    }, [])
+
     return (
         <div className='bg-black'>
             <div>

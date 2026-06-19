@@ -3,14 +3,17 @@ import { Code2Icon, Copy, Download, Eye, Save, Share2, X } from 'lucide-react'
 import { LiaNpm } from "react-icons/lia";
 import { FaReact } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom'
+import useCompo from '../../code/hooks/useCompo';
 
 const Header = ({ props }) => {
 
     const { code, cid, isCodePreview, setIsCodePreview, handleDownloadCode } = props
     const navigate = useNavigate()
+    const { handleCreateComponent } = useCompo()
     const loggedInUser = useSelector(state => state.auth.user)
     const Component = useSelector(state => state.component.currentComponent)
     const isChunking = useSelector(state => state.component.chunking)
+    const AiGeneratedRes = useSelector(state => state.component.generatedRes)
 
     return (
         <div className="flex items-center justify-between w-full px-6 py-4 bg-[#0b0c14] border-b border-white/10">
@@ -103,19 +106,7 @@ const Header = ({ props }) => {
                 <div className="h-10 w-px bg-white/10" />
 
                 {!cid && code && !isChunking && (
-                    <div onClick={() => {
-
-                        let obj = {
-                            name: "Card",
-                            code: code,
-                            props: [],
-                            owner: loggedInUser._id,
-                            visibility: "public"
-                        }
-
-                        console.log(obj)
-
-                    }} className="flex items-center gap-3 px-4 py-1.5 rounded-md bg-green-400/50 border border-white/15 text-white hover:border-green-500/40 hover:bg-green-500/5 transition cursor-pointer">
+                    <div onClick={() => handleCreateComponent(AiGeneratedRes)} className="flex items-center gap-3 px-4 py-1.5 rounded-md bg-green-400/50 border border-white/15 text-white hover:border-green-500/40 hover:bg-green-500/5 transition cursor-pointer">
                         <Save size={18} /> <p className="font-medium">Save</p>
                     </div>
                 )}

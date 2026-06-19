@@ -46,10 +46,9 @@ const useGenerate = () => {
   const handleGenerate = async ({ prompt, token }) => {
     let accumulatedStream = "";
     dispatch(setCode('')) // Clear previous code
-
+    dispatch(setChunking())
     await generateService.generateService({
       prompt, token, getChunks: (chunk) => {
-        // dispatch(setChunking())
         accumulatedStream += chunk
         const parsedCode = extractCode(accumulatedStream)
         if (parsedCode) {
@@ -63,8 +62,6 @@ const useGenerate = () => {
     dispatch(setGeneratedRes(finalResponseData))
 
   }
-
-
 
   // const handleGenerate = () => {
 

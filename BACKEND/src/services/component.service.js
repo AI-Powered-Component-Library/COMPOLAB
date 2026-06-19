@@ -25,7 +25,7 @@ class ComponentService {
             }
         }
 
-        let newComponent = await MongoComponent.createComponent(componentData)
+        let newComponent = await MongoComponent.createComponent({ ...componentData, owner: userId })
         if (!newComponent) throw new AppError(500, "Creation Failed.")
 
         return newComponent;
@@ -74,23 +74,23 @@ class ComponentService {
 
         console.log("Building Library.")
 
-        execSync("npm run build",{
-            cwd : libPath,
-            stdio : "inherit"
+        execSync("npm run build", {
+            cwd: libPath,
+            stdio: "inherit"
         })
 
         console.log("Updating Version.")
 
-        execSync("npm version patch --no git-tag-version",{
-            cwd : libPath,
-            stdio : "inherit"
+        execSync("npm version patch --no git-tag-version", {
+            cwd: libPath,
+            stdio: "inherit"
         })
 
         console.log("Publishing to NPM.")
 
-        execSync("npm publish --access public",{
-            cwd : libPath,
-            stdio : "inherit"
+        execSync("npm publish --access public", {
+            cwd: libPath,
+            stdio: "inherit"
         })
 
         component.visibility = "public"
