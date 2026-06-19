@@ -10,7 +10,7 @@
     "promptinput promptinput promptinput";
 }
 
-.promptinput {
+/* .promptinput {
   grid-area: promptinput;
 }
 .sidebar {
@@ -21,4 +21,4 @@
 }
 .leftchat {
   grid-area: leftchat;
-}
+} */

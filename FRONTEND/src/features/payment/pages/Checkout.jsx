@@ -1,100 +1,157 @@
 import React from 'react'
+import { ShieldCheck, RefreshCw, Clock, CreditCard, Rocket } from 'lucide-react'
+
+const PLAN = {
+  name: 'Medium',
+  tokens: '500K / month',
+  support: 'Email · priority',
+  projects: 'Up to 10',
+  price: 829,
+  gst: 149,
+}
+
+const loadRazorpay = () =>
+  new Promise((resolve) => {
+    if (window.Razorpay) return resolve(true)
+    const script = document.createElement('script')
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+    script.onload = () => resolve(true)
+    script.onerror = () => resolve(false)
+    document.body.appendChild(script)
+  })
+
+const handlePay = async () => {
+  const ok = await loadRazorpay()
+  if (!ok) return alert('Failed to load Razorpay. Check your connection.')
+
+  const options = {
+    key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+    amount: (PLAN.price + PLAN.gst) * 100,
+    currency: 'INR',
+    name: 'Your App',
+    description: `${PLAN.name} Plan — ${PLAN.tokens}`,
+    theme: { color: '#534AB7' },
+    handler(response) {
+      console.log('Payment success:', response)
+      window.location.href = '/dashboard?payment=success'
+    },
+    modal: {
+      ondismiss() {
+        console.log('Payment dismissed')
+      },
+    },
+  }
+
+  const rzp = new window.Razorpay(options)
+  rzp.on('payment.failed', (res) => console.error('Payment failed:', res.error))
+  rzp.open()
+}
+
+const InfoRow = ({ label, value }) => (
+  <div className="flex justify-between text-sm">
+    <span className="text-slate-500">{label}</span>
+    <span className="text-slate-300">{value}</span>
+  </div>
+)
+
+const TrustItem = ({ icon: Icon, text }) => (
+  <div className="flex items-center gap-2 text-xs text-slate-500">
+    <Icon size={13} className="text-slate-600 shrink-0" />
+    {text}
+  </div>
+)
+
+const Step = ({ n, text }) => (
+  <div className="flex items-start gap-2.5 py-1.5">
+    <span className="w-5 h-5 rounded-full bg-slate-800 text-slate-400 text-[11px] font-medium flex items-center justify-center shrink-0 mt-0.5">
+      {n}
+    </span>
+    <span className="text-xs text-slate-500 leading-relaxed">{text}</span>
+  </div>
+)
 
 const Checkout = () => {
+  const total = PLAN.price + PLAN.gst
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 px-4 py-10">
-      <div className="mx-auto max-w-5xl rounded-3xl border border-slate-800 bg-slate-900/95 p-8 shadow-xl shadow-slate-950/40">
-        <header className="mb-10">
-          <h1 className="text-4xl font-semibold text-white">Checkout</h1>
-          <p className="mt-3 text-slate-400">Review your plan, enter payment details, and complete your order.</p>
-        </header>
+    <div className="h-screen w-full bg-slate-950 flex items-center justify-center p-6 overflow-hidden">
+      <div className=" grid grid-cols-[1fr_1.15fr] border border-slate-800 rounded-2xl overflow-hidden">
 
-        <section className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
-          <div className="rounded-3xl border border-slate-800 bg-slate-950 p-8">
-            <h2 className="text-2xl font-semibold text-white mb-6">Order Summary</h2>
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4 text-slate-200">
-              <span>Pro Plan</span>
-              <strong>$29 / month</strong>
-            </div>
-            <div className="flex items-center justify-between border-b border-slate-800 py-4 text-slate-300">
-              <span>One-time setup</span>
-              <span>$15</span>
-            </div>
-            <div className="flex items-center justify-between pt-4 text-base font-semibold text-white">
-              <span>Total</span>
-              <span>$44</span>
+        {/* LEFT — order summary */}
+        <div className="bg-slate-900 border-r border-slate-800 p-7 flex flex-col gap-6">
+
+          <div>
+            <span className="inline-flex items-center gap-1.5 bg-violet-950 text-violet-400 border border-violet-800 rounded-lg px-2.5 py-1 text-xs font-medium">
+              <Rocket size={13} /> {PLAN.name} plan
+            </span>
+            <p className="mt-4 text-4xl font-semibold text-slate-100 leading-none">
+              <sup className="text-xl align-super">₹</sup>{PLAN.price}
+            </p>
+            <p className="mt-1 text-xs text-slate-500">per month · billed today</p>
+          </div>
+
+          <div className="h-px bg-slate-800" />
+
+          <div className="flex flex-col gap-3">
+            <InfoRow label={`${PLAN.name} plan`} value={`₹${PLAN.price}`} />
+            <InfoRow label="GST (18%)" value={`₹${PLAN.gst}`} />
+            <div className="h-px bg-slate-800" />
+            <div className="flex justify-between text-sm font-medium">
+              <span className="text-slate-300">Total due</span>
+              <span className="text-slate-100 text-base">₹{total}</span>
             </div>
           </div>
 
-          <div className="grid gap-8">
-            <div className="rounded-3xl border border-slate-800 bg-slate-950 p-8">
-              <h2 className="text-2xl font-semibold text-white mb-6">Billing Details</h2>
-              <label className="mb-5 block text-slate-300">
-                <span className="mb-2 block text-sm font-medium">Full Name</span>
-                <input
-                  type="text"
-                  placeholder="Jane Doe"
-                  className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20"
-                />
-              </label>
-              <label className="mb-5 block text-slate-300">
-                <span className="mb-2 block text-sm font-medium">Email Address</span>
-                <input
-                  type="email"
-                  placeholder="jane@example.com"
-                  className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20"
-                />
-              </label>
-              <label className="block text-slate-300">
-                <span className="mb-2 block text-sm font-medium">Company</span>
-                <input
-                  type="text"
-                  placeholder="Acme Inc."
-                  className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20"
-                />
-              </label>
-            </div>
+          <div className="h-px bg-slate-800" />
 
-            <div className="rounded-3xl border border-slate-800 bg-slate-950 p-8">
-              <h2 className="text-2xl font-semibold text-white mb-6">Payment Method</h2>
-              <label className="mb-5 block text-slate-300">
-                <span className="mb-2 block text-sm font-medium">Card Number</span>
-                <input
-                  type="text"
-                  placeholder="1234 5678 9012 3456"
-                  className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20"
-                />
-              </label>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <label className="block text-slate-300">
-                  <span className="mb-2 block text-sm font-medium">Expiry</span>
-                  <input
-                    type="text"
-                    placeholder="MM/YY"
-                    className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20"
-                  />
-                </label>
-                <label className="block text-slate-300">
-                  <span className="mb-2 block text-sm font-medium">CVC</span>
-                  <input
-                    type="text"
-                    placeholder="123"
-                    className="w-full rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20"
-                  />
-                </label>
-              </div>
+          <div className="flex flex-col gap-2.5 mt-auto">
+            <TrustItem icon={ShieldCheck} text="256-bit SSL encryption" />
+            <TrustItem icon={RefreshCw} text="Cancel anytime, no lock-in" />
+            <TrustItem icon={Clock} text="Instant activation after payment" />
+          </div>
+        </div>
+
+        {/* RIGHT — plan info + pay button */}
+        <div className="bg-slate-950 p-7 flex flex-col gap-5">
+
+          <div>
+            <p className="text-[11px] font-medium uppercase tracking-widest text-slate-500 mb-3">
+              What you're getting
+            </p>
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col gap-2.5">
+              <InfoRow label="Plan" value={PLAN.name} />
+              <InfoRow label="Tokens" value={PLAN.tokens} />
+              <InfoRow label="Support" value={PLAN.support} />
+              <InfoRow label="Projects" value={PLAN.projects} />
+              <InfoRow label="Billing" value="Monthly · auto-renews" />
             </div>
           </div>
-        </section>
 
-        <footer className="mt-10 text-right">
-          <button
-            type="button"
-            className="inline-flex items-center justify-center rounded-2xl bg-sky-500 px-8 py-4 text-base font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:bg-sky-400"
-          >
-            Complete Purchase
-          </button>
-        </footer>
+          <div>
+            <p className="text-[11px] font-medium uppercase tracking-widest text-slate-500 mb-3">
+              What happens next
+            </p>
+            <div className="bg-slate-900 border border-slate-800 rounded-xl px-4 py-2">
+              <Step n={1} text="Razorpay opens a secure payment window — UPI, card, or netbanking." />
+              <Step n={2} text="You authenticate and confirm the payment." />
+              <Step n={3} text="Your plan activates instantly and you're redirected to the dashboard." />
+            </div>
+          </div>
+
+          <div className="mt-auto flex flex-col gap-2">
+            <button
+              onClick={handlePay}
+              className="w-full cursor-pointer flex items-center justify-center gap-2 bg-blue-950 hover:bg-blue-900 text-blue-400 font-medium text-sm py-3 rounded-xl transition-colors duration-150"
+            >
+              <CreditCard size={16} />
+              Pay ₹{total}
+            </button>
+            <p className="text-center text-xs text-slate-600">
+              Powered by <span className="text-blue-500">Razorpay</span> · PCI DSS compliant
+            </p>
+          </div>
+        </div>
+
       </div>
     </div>
   )

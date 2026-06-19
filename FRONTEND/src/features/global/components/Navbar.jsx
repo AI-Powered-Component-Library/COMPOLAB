@@ -1,6 +1,6 @@
-import { Zap, LogOut, User } from 'lucide-react';
+import { Zap, LogOut, User, Sparkles } from 'lucide-react';
 import { useSelector } from 'react-redux';
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import useAuth from '../../auth/hooks/useAuth';
 
 const Navbar = () => {
@@ -24,6 +24,15 @@ const Navbar = () => {
 
                 {user ? (
                     <div className="flex items-center gap-4">
+
+                        <div id="right" className='flex items-center justify-end flex-1 min-w-[180px]'>
+                            <Link
+                                to="/pricing"
+                                className='relative inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-r from-purple-500/10 to-indigo-500/10 hover:from-purple-500/20 hover:to-indigo-500/20 border border-purple-500/25 hover:border-purple-500/40 rounded-full text-purple-200 text-sm font-semibold no-underline cursor-pointer transition-all duration-300 shadow-md hover:shadow-purple-500/10 hover:-translate-y-0.5 active:translate-y-0 group'>
+                                <Sparkles size={16} className="text-purple-400 group-hover:rotate-12 transition-transform duration-300" />
+                                <span>Token : {user.aiCredits}</span>
+                            </Link>
+                        </div>
                         <div className="flex items-center gap-2 bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg">
                             <div className="w-6 h-6 rounded-full bg-cyan-400 flex items-center justify-center text-slate-950 font-bold text-xs">
                                 {user?.fullName ? user.fullName[0].toUpperCase() : <User size={12} />}

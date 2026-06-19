@@ -15,10 +15,10 @@ const Generate = () => {
 
     const { cid } = useParams()
     const { handleGetCompoById } = useCompo()
+    const loggedInUser = useSelector(state => state.auth.user)
     const webBuilder = useSelector(state => state.component.webBuilder)
     const [searchParams, setSearchParams] = useSearchParams()
     const { handleWebBuilder } = useGenerate()
-    const [options, setOptions] = useState(false)
 
     useEffect(() => {
         const web = searchParams.get("web")
@@ -28,23 +28,14 @@ const Generate = () => {
         if (web) {
             handleWebBuilder()
         }
-        const handleClick = () => {
-            setOptions(false);
-        };
-        document.addEventListener("click", handleClick);
-
-        return () => {
-            document.removeEventListener("click", handleClick);
-        };
     }, [cid])
 
 
     return (
-        <div style={{ gridTemplateColumns: webBuilder ? "250px 1fr 300px" : "4px 1fr 300px", gridTemplateRows: "1fr 100px" }} className="h-screen grid-layout overflow-hidden w-full grid bg-black text-white">
-            {webBuilder && <Sidebar props={{ options, setOptions }} />}
+        <div style={{gridTemplateColumns : "auto 2fr 20vw"}} className="h-screen grid overflow-hidden w-full  bg-black text-white">
+            <Sidebar props={{ setSearchParams, webBuilder }} />
             <CodePart cid={cid} />
-            <LeftChat />
-            <PromptInput setParams={setSearchParams} webBuilder={webBuilder} />
+            <LeftChat props={{loggedInUser}} />
         </div>
     );
 };
