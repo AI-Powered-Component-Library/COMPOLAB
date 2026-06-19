@@ -5,7 +5,7 @@ const googleAuthService = async (idToken) => {
 
     let res = await api.post("/auth/google", { idToken });
 
-    return res.data.token;
+    return res.data.data.accessToken;
 
 }
 

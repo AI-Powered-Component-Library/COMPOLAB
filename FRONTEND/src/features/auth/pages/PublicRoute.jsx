@@ -3,9 +3,9 @@ import { Outlet, Navigate } from 'react-router-dom'
 
 const PublicRoute = () => {
 
-  const token = useSelector(state => state.auth.accessToken)
+  const user = useSelector(state => state.auth.user)
 
-  return token ? <Navigate to={"/"} replace /> : <Outlet />
+  return user ? <Navigate to={"/"} replace /> : <Outlet />
 }
 
 export default PublicRoute

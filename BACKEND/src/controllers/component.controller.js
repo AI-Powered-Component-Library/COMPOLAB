@@ -1,6 +1,7 @@
 import componentValidator from "../validator/component.validator.js";
 import { AppError, asyncHandler } from "../utils/error.utils.js"
 import componentService from "../services/component.service.js";
+import npmService from "../services/npm.service.js";
 
 class ComponentController {
 
@@ -20,9 +21,9 @@ class ComponentController {
 
         const userId = req.user.id;
 
-        const response = await componentService.publishComponent(req.params.id, userId);
+        const response = await npmService.publishToNPM(req.params.id, userId);
 
-        return res.success(200, "Component published successfully", res);
+        return res.success(200, "Component published successfully", response);
     })
 
 

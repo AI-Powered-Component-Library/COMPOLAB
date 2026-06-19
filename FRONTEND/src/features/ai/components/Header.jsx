@@ -40,10 +40,10 @@ const Header = ({ props }) => {
 
                 {/* Code / Preview */}
                 <div className="inline-flex  items-center gap-0.5 rounded-full border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-700 dark:bg-neutral-800 shadow-sm">
-                    <button onClick={() => setIsCodePreview(false)} className={`flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium transition-colors ${!isCodePreview ? 'bg-purple-700 text-purple-50' : 'text-neutral-500 hover:text-neutral-700'}`}>
+                    <button onClick={() => setIsCodePreview(false)} className={`flex cursor-pointer items-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-medium transition-colors ${!isCodePreview ? 'bg-purple-700 text-purple-50' : 'text-neutral-500 hover:text-neutral-700'}`}>
                         <Code2Icon size={15} /> Code
                     </button>
-                    <button onClick={() => setIsCodePreview(true)} className={`flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium transition-colors ${isCodePreview ? 'bg-purple-700 text-purple-50' : 'text-neutral-500 hover:text-neutral-700'}`}>
+                    <button onClick={() => setIsCodePreview(true)} className={`flex cursor-pointer items-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-medium transition-colors ${isCodePreview ? 'bg-purple-700 text-purple-50' : 'text-neutral-500 hover:text-neutral-700'}`}>
                         <Eye size={15} /> Preview
                     </button>
                 </div>
@@ -51,9 +51,9 @@ const Header = ({ props }) => {
 
                 {/* Publish */}
                 {loggedInUser.role === "admin" && (
-                    <div className="flex items-center gap-3 px-4 py-2 rounded-md border text-white border-red-400/50 hover:bg-red-500/5 transition cursor-pointer">
-                        <LiaNpm size={24} className="text-red-500" />
-                        {/* <p className="font-medium">Publish To Npm</p> */}
+                    <div className="flex items-center gap-3 px-3 py-1.5 rounded-lg border text-white border-pink-400/50 hover:bg-red-500/10 transition cursor-pointer">
+                        <LiaNpm size={24} className="text-pink-500" />
+                        <p className="font-bold text-xs">Publish To NPM</p>
                     </div>
                 )}
             </div>

@@ -14,7 +14,7 @@ class AuthController {
         let { accessToken, refreshToken, httpOnly } = await authService.googleService(idToken)
         res.cookie("refresh_token", refreshToken, httpOnly)
 
-        res.success(200, "Authentication Successfully.", accessToken)
+        res.success(200, "Authentication Successfully.", {accessToken})
     })
 
     register = asyncHandler(async (req, res) => {

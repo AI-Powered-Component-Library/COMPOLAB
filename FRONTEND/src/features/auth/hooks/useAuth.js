@@ -10,7 +10,6 @@ const useAuth = () => {
 
   const handleGoogleAuth = async (response) => {
     const token = await googleAuthService(response.credential);
-    console.log(token)
     dispatch(setAccessToken(token));
   };
 

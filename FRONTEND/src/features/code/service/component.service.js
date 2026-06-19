@@ -12,8 +12,14 @@ const componentService = {
     return data.data // returns array
   },
 
-  getSavedService: async () => { 
+  getSavedService: async () => {
     const { data } = await api.get("/component/saved")
+    return data.data
+  },
+
+
+  npmPublishService: async () => {
+    const { data } = await api.post("/component/npm")
     return data.data
   },
 
