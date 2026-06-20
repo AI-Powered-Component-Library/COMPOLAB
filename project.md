@@ -178,4 +178,8 @@ PUBLISH TO NPM
 RAZORPAY INTEGRATION
 MICROSERVICES
 
-| File Export | JSZip |❌
+
+## This token will:
+- Provide no access to packages and scopes
+- Provide read and write access to 0 organizations
+- Expires on Friday, September 18, 2026

@@ -6,7 +6,7 @@ import { generateComponent } from "../controllers/ai.controller.js";
 const router = Router()
 
 router.post("/generate", userAuth, generateComponent);
-router.post("/npm",userAuth,componentController.publishComponent)
+router.post("/npm/:cid",userAuth,componentController.publishComponent)
 router.post("/", userAuth, componentController.saveComponent)
 router.get("/", userAuth, componentController.getAllComponents)
 router.get("/saved",userAuth,componentController.getSavedComponents)

@@ -18,9 +18,9 @@ const componentService = {
   },
 
 
-  npmPublishService: async () => {
-    const { data } = await api.post("/component/npm")
-    return data.data
+  npmPublishService: async (cid) => {
+    const { data } = await api.post("/component/npm/" + cid)
+    return data
   },
 
 

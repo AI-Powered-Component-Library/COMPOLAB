@@ -20,8 +20,9 @@ const useCompo = () => {
     }
 
 
-    const handleNpmPublish = async ()=>{
-        const res = await componentService.npmPublishService()
+    const handleNpmPublish = async (cid)=>{
+        const res = await componentService.npmPublishService(cid)
+        console.log(res)
     }
 
 

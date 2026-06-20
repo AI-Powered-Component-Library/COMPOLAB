@@ -9,7 +9,7 @@ const Header = ({ props }) => {
 
     const { code, cid, isCodePreview, setIsCodePreview, handleDownloadCode } = props
     const navigate = useNavigate()
-    const { handleCreateComponent } = useCompo()
+    const { handleCreateComponent, handleNpmPublish } = useCompo()
     const loggedInUser = useSelector(state => state.auth.user)
     const Component = useSelector(state => state.component.currentComponent)
     const isChunking = useSelector(state => state.component.chunking)
@@ -51,7 +51,9 @@ const Header = ({ props }) => {
 
                 {/* Publish */}
                 {loggedInUser.role === "admin" && (
-                    <div className="flex items-center gap-3 px-3 py-1.5 rounded-lg border text-white border-pink-400/50 hover:bg-red-500/10 transition cursor-pointer">
+                    <div onClick={() => {
+                        handleNpmPublish(cid)
+                    }} className="flex items-center gap-3 px-3 py-1.5 rounded-lg border text-white border-pink-400/50 hover:bg-red-500/10 transition cursor-pointer">
                         <LiaNpm size={24} className="text-pink-500" />
                         <p className="font-bold text-xs">Publish To NPM</p>
                     </div>

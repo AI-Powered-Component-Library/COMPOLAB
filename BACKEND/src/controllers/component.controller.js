@@ -21,7 +21,7 @@ class ComponentController {
 
         const userId = req.user.id;
 
-        const response = await npmService.publishToNPM(req.params.id, userId);
+        const response = await npmService.publishToNPM(req.params.cid, userId);
 
         return res.success(200, "Component published successfully", response);
     })

@@ -29,18 +29,23 @@ const Navbar = () => {
                             <Link
                                 to="/pricing"
                                 className='relative inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-r from-purple-500/10 to-indigo-500/10 hover:from-purple-500/20 hover:to-indigo-500/20 border border-purple-500/25 hover:border-purple-500/40 rounded-full text-purple-200 text-sm font-semibold no-underline cursor-pointer transition-all duration-300 shadow-md hover:shadow-purple-500/10 hover:-translate-y-0.5 active:translate-y-0 group'>
-                                <Sparkles size={16} className="text-purple-400 group-hover:rotate-12 transition-transform duration-300" />
+                                <Sparkles size={16} className={" group-hover:rotate-12 transition-transform duration-300 " + (user.role === "admin" ? "text-yellow-600" : "text-purple-400")} />
                                 <span>Token : {user.aiCredits}</span>
                             </Link>
                         </div>
-                        <div onClick={()=>navigate("/profile")} className="flex cursor-pointer items-center gap-2 bg-slate-800/80 border border-slate-700 px-3 py-1.5 rounded-lg">
-                            <div className="w-6 h-6 rounded-full bg-cyan-400 flex items-center justify-center text-slate-950 font-bold text-xs">
-                                {user?.fullName ? user.fullName[0].toUpperCase() : <User size={12} />}
-                            </div>
-                            <span className="text-sm font-medium text-gray-200 hidden sm:inline">
+                        <div onClick={() => navigate("/profile")} className={`flex items-center gap-3 cursor-pointer rounded-md border border-slate-700 px-4 py-1 transition-all duration-200 hover:scale-105 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 ${user.role === "admin" ? "bg-gradient-to-r from-pink-600/30 to-purple-600/30" : "bg-slate-800/80 hover:bg-slate-700/80"}`}> <div className="w-7 h-7 rounded-full bg-cyan-400 flex items-center justify-center text-slate-950 font-bold text-sm shadow-md">
+                            {user?.fullName ? (
+                                user.fullName[0].toUpperCase()
+                            ) : (
+                                <User size={14} />
+                            )}
+                        </div>
+
+                            <span className="hidden sm:inline text-sm font-semibold text-gray-100">
                                 {user?.fullName}
                             </span>
                         </div>
+
                         <button onClick={handleLogout} className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2 text-sm" >
                             <LogOut className="w-4 h-4" />
                             <span className="hidden sm:inline">Logout</span>

@@ -22,7 +22,7 @@ class NpmService {
         const component = await MongoComponent.findComponentById(componentId);
         if (!component) throw new AppError(404, "Component not found")
 
-        if (component.owner !== userId) throw new AppError(403, "You are not authorized to publish this component")
+        if (component.owner.toString() !== userId) throw new AppError(403, "You are not authorized to publish this component")
 
         const libPath = path.join(process.cwd(), "../PACKAGE")
         const componentDir = path.join(libPath, "src/components", component.name)
