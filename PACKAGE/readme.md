@@ -1,9 +1,9 @@
 ## Installation
 
-Install CompoLab using npm:
+Install Compo-UI using npm:
 
 ```bash
-npm install compolab
+npm install compo-ui
 ```
 
 ---
@@ -33,7 +33,7 @@ A lightweight animated spinner designed for loading states.
 ### Example
 
 ```jsx
-import { LoadingSpinner } from "compolab";
+import { LoadingSpinner } from "compo-ui";
 
 function App() {
   return (
@@ -62,7 +62,7 @@ A demonstration component that showcases different button styles, variants, size
 ### Example
 
 ```jsx
-import { ButtonDemo } from "compolab";
+import { ButtonDemo } from "compo-ui";
 
 function Demo() {
   return (
@@ -95,7 +95,7 @@ Designed with accessibility best practices to provide an inclusive user experien
 import {
   LoadingSpinner,
   ButtonDemo
-} from "compolab";
+} from "compo-ui";
 ```
 
 ---

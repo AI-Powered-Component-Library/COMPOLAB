@@ -88,7 +88,7 @@ const Header = ({ props }) => {
                                         Component?.componentName ||
                                         "Shared Component",
                                     text:
-                                        "Check out this React component code generated with CompoLab!",
+                                        "Check out this React component code generated with compo-ui!",
                                     url: window.location.href,
                                 });
                             } catch (err) {

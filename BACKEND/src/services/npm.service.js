@@ -50,29 +50,31 @@ class NpmService {
             fs.rmSync(distPath, { recursive: true, force: true })
         }
 
-        console.log("Building Library.")
+        try {
+            console.log("Building Library.")
+            execSync("npm run build", {
+                cwd: libPath,
+                stdio: "inherit"
+            })
 
-        execSync("npm run build", {
-            cwd: libPath,
-            stdio: "inherit"
-        })
-
-        console.log("Updating Version.")
-
-        execSync("npm version patch --no git-tag-version", {
-            cwd: libPath,
-            stdio: "inherit"
-        })
-
-        console.log("Publishing to NPM.")
-
-        execSync("npm publish --access public", {
-            cwd: libPath,
-            stdio: "inherit"
-        })
+            console.log("Updating Version.")
+            execSync("npm version patch --no-git-tag-version", {
+                cwd: libPath,
+                stdio: "inherit",
+            }); 
+            
+            console.log("Publishing to NPM.")
+            execSync("npm publish --access public", {
+                cwd: libPath,
+                stdio: "inherit"
+            })
+        } catch (error) {
+            console.error("NPM operation failed:", error);
+            throw new AppError(500, `NPM build/publish failed: ${error.message}`);
+        }
 
         component.visibility = "public"
-        component.npmPackage = "compolab"
+        component.npmPackage = "compo-ui"
 
         await component.save()
         return true
