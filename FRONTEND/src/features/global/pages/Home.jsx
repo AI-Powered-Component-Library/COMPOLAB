@@ -4,6 +4,7 @@ import ShowcaseCards from '../components/ShowCaseCards';
 import StepsGuide from '../components/StepGuide';
 import Hero from '../components/Hero';
 import Navbar from '../components/Navbar';
+import {CodeCard} from "compolab"
 
 
 export default function Home() {
@@ -21,7 +22,7 @@ export default function Home() {
       <Hero />
       {/* Bottom accent line */}
       <div className="relative z-10 h-px bg-linear-to-r from-transparent via-cyan-500/20 to-transparent"></div>
-
+<CodeCard/>
       <ShowcaseCards />
       <StepsGuide />
       <StartBuildingUI />
