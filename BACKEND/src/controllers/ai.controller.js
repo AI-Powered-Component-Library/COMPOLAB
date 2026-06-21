@@ -18,13 +18,13 @@ export const generateComponent = asyncHandler(async (req, res) => {
         usage = chunk[0].usage_metadata
     }
 
-    let deductToken = Math.round((usage.total_tokens - 4600) / 10)
+    let deductToken = Math.round((usage.total_tokens - 4600))
 
     console.log("Deducted Token : ", deductToken)
 
     if (user.role === "user") {
         user.aiCredits -= deductToken;
-        // await user.save();
+        await user.save();
     }
 
     res.write(`data: ${JSON.stringify({ type: "done" })}\n\n`)

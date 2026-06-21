@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
     },
     aiCredits: {
       type: Number,
-      default: 1000
+      default: 10000
     },
     googleId: {
       type: String,
