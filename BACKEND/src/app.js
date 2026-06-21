@@ -5,6 +5,7 @@ import morgan from "morgan";
 
 import authRouter from "./routes/auth.routes.js";
 import componentRoutes from "./routes/component.routes.js";
+import paymentRouter from "./routes/payment.route.js"
 
 import errorMiddleware from "./middlewares/reject.middleware.js";
 import responseMiddleware from "./middlewares/response.middleware.js";
@@ -44,6 +45,9 @@ app.use("/api/v1/auth", authRouter);
 
 // component routes
 app.use("/api/v1/component", componentRoutes);
+
+// payment routes
+app.use("/api/v1/payment",paymentRouter)
 
 app.use(errorMiddleware);
 

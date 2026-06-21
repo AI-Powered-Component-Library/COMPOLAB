@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Zap, Rocket, Crown, Check, Box } from 'lucide-react'
+import { Zap, Rocket, Crown, Check, Box, BaselineIcon } from 'lucide-react'
 
 const plans = [
   {
@@ -14,6 +14,18 @@ const plans = [
     features: ['Basic API access', 'Community support', '1 project'],
     cta: 'Get started',
     featured: false,
+  },
+  {
+    name: 'Basic',
+    price: { monthly: 5, annual: 8 },
+    tokens: '100K',
+    period: 'per month',
+    icon: BaselineIcon,
+    iconBg: 'bg-purple-950',
+    iconColor: 'text-purple-400',
+    features: ['Priority API access', '4 projects', 'Usage analytics'],
+    cta: 'Select plan',
+    featured: true,
   },
   {
     name: 'Medium',
@@ -46,28 +58,8 @@ const Pricing = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center p-6 gap-10">
-
-      <div className="text-center space-y-3 max-w-lg">
-        <p className="text-xs font-semibold uppercase tracking-widest text-violet-400">Pricing</p>
-        <h1 className="text-3xl font-semibold tracking-tight text-white">Upgrade your plan</h1>
-        <p className="text-slate-400 text-sm">Start free. Scale as you grow.</p>
-      </div>
-
-      <div className="flex items-center gap-3">
-        <span className={`text-sm transition-colors ${!annual ? 'text-white' : 'text-slate-500'}`}>Monthly</span>
-        <button
-          onClick={() => setAnnual(!annual)}
-          className={`relative w-10 h-6 rounded-full transition-colors duration-200 ${annual ? 'bg-violet-600' : 'bg-slate-700'}`}
-        >
-          <span className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${annual ? 'translate-x-4' : 'translate-x-0'}`} />
-        </button>
-        <span className={`text-sm transition-colors ${annual ? 'text-white' : 'text-slate-500'}`}>Annually</span>
-        <span className="text-xs font-medium bg-violet-950 text-violet-300 px-2.5 py-1 rounded-full border border-violet-800">
-          Save 20%
-        </span>
-      </div>
-
-      <div className="grid w-full max-w-4xl gap-4 md:grid-cols-3">
+      <h1 className="text-3xl font-semibold tracking-tight text-white">Upgrade your plan</h1>
+      <div className="grid w-10/12 gap-4 md:grid-cols-4">
         {plans.map((plan) => {
           const Icon = plan.icon
           const price = annual ? plan.price.annual : plan.price.monthly
@@ -121,8 +113,8 @@ const Pricing = () => {
                 ))}
               </ul>
 
-              <Link
-                to="/checkout"
+              {plan.name !== "Free" && <Link
+                to={`/checkout?plan=${plan.name.toLocaleLowerCase()}`}
                 className={`mt-auto w-full text-center rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-150
                   ${plan.featured
                     ? 'bg-violet-600 hover:bg-violet-500 text-white'
@@ -130,7 +122,7 @@ const Pricing = () => {
                   }`}
               >
                 {plan.cta}
-              </Link>
+              </Link>}
             </div>
           )
         })}
