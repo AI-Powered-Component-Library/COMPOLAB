@@ -22,6 +22,10 @@ class NpmService {
         const component = await MongoComponent.findComponentById(componentId);
         if (!component) throw new AppError(404, "Component not found")
 
+        if (component.visibility === "public") {
+            throw new AppError(400, "Component is already published!")
+        }
+        
         if (component.owner.toString() !== userId) throw new AppError(403, "You are not authorized to publish this component")
 
         const libPath = path.join(process.cwd(), "../PACKAGE")
@@ -61,8 +65,8 @@ class NpmService {
             execSync("npm version patch --no-git-tag-version", {
                 cwd: libPath,
                 stdio: "inherit",
-            }); 
-            
+            });
+
             console.log("Publishing to NPM.")
             execSync("npm publish --access public", {
                 cwd: libPath,

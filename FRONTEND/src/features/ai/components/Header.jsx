@@ -39,18 +39,19 @@ const Header = ({ props }) => {
                 )}
 
                 {/* Code / Preview */}
-                <div className="inline-flex  items-center gap-0.5 rounded-full border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-700 dark:bg-neutral-800 shadow-sm">
+              {code &&  <div className="inline-flex  items-center gap-0.5 rounded-full border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-700 dark:bg-neutral-800 shadow-sm">
                     <button onClick={() => setIsCodePreview(false)} className={`flex cursor-pointer items-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-medium transition-colors ${!isCodePreview ? 'bg-purple-700 text-purple-50' : 'text-neutral-500 hover:text-neutral-700'}`}>
                         <Code2Icon size={15} /> Code
                     </button>
                     <button onClick={() => setIsCodePreview(true)} className={`flex cursor-pointer items-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-medium transition-colors ${isCodePreview ? 'bg-purple-700 text-purple-50' : 'text-neutral-500 hover:text-neutral-700'}`}>
                         <Eye size={15} /> Preview
                     </button>
-                </div>
+                </div>}
+
                 <div className="h-10 w-px bg-white/10" />
 
                 {/* Publish */}
-                {loggedInUser.role === "admin" && (
+                {loggedInUser.role === "admin" && Component?.visibility == "private" && (
                     <div onClick={() => {
                         handleNpmPublish(cid)
                     }} className="flex items-center gap-3 px-3 py-1.5 rounded-lg border text-white border-pink-400/50 hover:bg-red-500/10 transition cursor-pointer">

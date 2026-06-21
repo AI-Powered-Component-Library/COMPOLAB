@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import StartBuildingUI from '../components/StartBuilding';
 import ShowcaseCards from '../components/ShowCaseCards';
 import StepsGuide from '../components/StepGuide';
