@@ -1,7 +1,4 @@
-import { useRazorpay } from "react-razorpay";
 import { api } from "../../../utils/axios.utils"
-
-const { Razorpay } = useRazorpay();
 
 const handler = async (response) => {
 
@@ -21,27 +18,35 @@ const handler = async (response) => {
     }
 }
 
-async function handlePayment(subscriber) {
+const paymentService = {
 
-    const response = await api.post('/payments/order', { plan: "medium" })
+    paymentService: async (subscriber) => {
 
-    const order = response.data;
+        const { fullName: name, email } = subscriber;
 
-    const options = {
-        key: "rzp_test_SyFcxS7jGdvGXI",
-        amount: order.amount, // Amount in paise
-        currency: order.currency,
-        name: "CompoLab",
-        description: "CompoLab Test Transaction",
-        order_id: order.orderId, // Generate order_id on server
-        handler,
-        prefill: {
-            name: subscriber.name,
-            email: subscriber.email,
-        },
-        theme: { color: "#F37254" }
-    };
+        const response = await api.post('/payment/order', { plan: "medium" })
 
-    const razorpayInstance = new Razorpay(options);
-    razorpayInstance.open();
+        const order = response.data.data;
+
+        const options = {
+            key: "rzp_test_TdsyB6VuIxFT5s",
+            amount: order.amount,
+            currency: order.currency,
+            name: "CompoLab",
+            description: "CompoLab Test Transaction",
+            order_id: order.orderId,
+            handler,
+            prefill: { name, email },
+            theme: { color: "#F37254" }
+        };
+
+        return options;
+    },
+
+    checkoutService: async (plan) => {
+        const res = await api.get("/payment/checkout?plan=" + plan)
+        return res.data
+    }
 }
+
+export default paymentService;

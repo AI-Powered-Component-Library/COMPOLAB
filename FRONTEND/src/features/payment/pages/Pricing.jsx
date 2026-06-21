@@ -18,7 +18,7 @@ const plans = [
   {
     name: 'Basic',
     price: { monthly: 5, annual: 8 },
-    tokens: '100K',
+    tokens: '10K',
     period: 'per month',
     icon: BaselineIcon,
     iconBg: 'bg-purple-950',
@@ -30,7 +30,7 @@ const plans = [
   {
     name: 'Medium',
     price: { monthly: 10, annual: 8 },
-    tokens: '500K',
+    tokens: '50K',
     period: 'per month',
     icon: Rocket,
     iconBg: 'bg-violet-950',
@@ -42,7 +42,7 @@ const plans = [
   {
     name: 'Premium',
     price: { monthly: 25, annual: 20 },
-    tokens: '10M',
+    tokens: '100k',
     period: 'per month',
     icon: Crown,
     iconBg: 'bg-emerald-950',
