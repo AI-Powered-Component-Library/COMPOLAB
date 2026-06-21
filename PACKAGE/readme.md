@@ -1,9 +1,9 @@
 ## Installation
 
-Install Compo-UI using npm:
+Install compo-ui-lib using npm:
 
 ```bash
-npm install compo-ui
+npm install compo-ui-lib
 ```
 
 ---
@@ -33,7 +33,7 @@ A lightweight animated spinner designed for loading states.
 ### Example
 
 ```jsx
-import { LoadingSpinner } from "compo-ui";
+import { LoadingSpinner } from "compo-ui-lib";
 
 function App() {
   return (
@@ -62,7 +62,7 @@ A demonstration component that showcases different button styles, variants, size
 ### Example
 
 ```jsx
-import { ButtonDemo } from "compo-ui";
+import { ButtonDemo } from "compo-ui-lib";
 
 function Demo() {
   return (
@@ -95,7 +95,7 @@ Designed with accessibility best practices to provide an inclusive user experien
 import {
   LoadingSpinner,
   ButtonDemo
-} from "compo-ui";
+} from "compo-ui-lib";
 ```
 
 ---

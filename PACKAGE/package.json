@@ -1,6 +1,6 @@
 {
-  "name": "@kodr/compolab",
-  "version": "1.0.1",
+  "name": "compo-ui-lib",
+  "version": "1.0.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "files": [
