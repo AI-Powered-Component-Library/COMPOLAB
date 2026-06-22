@@ -1,7 +1,7 @@
 
 const componentService = {
 
-    generateService: async ({ prompt, token, getChunks }) => {
+    generateService: async ({ prompt, token, getChunks,onError }) => {
 
         const response = await fetch("http://localhost:4000/api/v1/component/generate", {
             method: "POST",
@@ -12,6 +12,12 @@ const componentService = {
             credentials: "include",
             body: JSON.stringify({ prompt })
         })
+
+        if (!response.ok) {
+            const error = await response.json()
+            onError(error);
+            return;
+        }
 
         const decoder = new TextDecoder()
 

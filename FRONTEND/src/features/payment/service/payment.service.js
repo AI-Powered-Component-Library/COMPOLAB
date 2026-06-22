@@ -1,47 +1,47 @@
-import { useRazorpay } from "react-razorpay";
 import { api } from "../../../utils/axios.utils"
 
-const { Razorpay } = useRazorpay();
 
-const handler = async (response) => {
+const handler = async (response, plan, onSuccess) => {
 
-    console.log(response);
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = response;
 
-    try {
-        await api.post('/payments/verify', {
-            razorpayOrderId: response.razorpay_order_id,
-            razorpayPaymentId: response.razorpay_payment_id,
-            razorpaySignature: response.razorpay_signature
-        })
-        alert("Payment Successful!");
-    } catch (error) {
-        console.error("Payment verification failed:", error);
-        alert("Payment verification failed. Please try again.");
-        return;
+    let verify = await api.post('/payment/verify', {
+        razorpayOrderId: razorpay_order_id,
+        razorpayPaymentId: razorpay_payment_id,
+        razorpaySignature: razorpay_signature,
+        plan
+    })
+
+    onSuccess(verify.data.data)
+
+}
+
+const paymentService = {
+
+    paymentService: async (subscriber, plan, onSuccess) => {
+
+        const response = await api.post('/payment/order', { plan })
+        const order = response.data.data;
+
+        const options = {
+            key: "rzp_test_TdsyB6VuIxFT5s",
+            amount: order.amount,
+            currency: order.currency,
+            name: "CompoLab",
+            description: "CompoLab Test Transaction",
+            order_id: order.orderId,
+            handler: (response) => handler(response, plan, onSuccess),
+            prefill: subscriber,
+            theme: { color: "#7700ffff" }
+        };
+
+        return options;
+    },
+
+    checkoutService: async (plan) => {
+        const res = await api.get("/payment/checkout?plan=" + plan)
+        return res.data
     }
 }
 
-async function handlePayment(subscriber) {
-
-    const response = await api.post('/payments/order', { plan: "medium" })
-
-    const order = response.data;
-
-    const options = {
-        key: "rzp_test_SyFcxS7jGdvGXI",
-        amount: order.amount, // Amount in paise
-        currency: order.currency,
-        name: "CompoLab",
-        description: "CompoLab Test Transaction",
-        order_id: order.orderId, // Generate order_id on server
-        handler,
-        prefill: {
-            name: subscriber.name,
-            email: subscriber.email,
-        },
-        theme: { color: "#F37254" }
-    };
-
-    const razorpayInstance = new Razorpay(options);
-    razorpayInstance.open();
-}
+export default paymentService;
