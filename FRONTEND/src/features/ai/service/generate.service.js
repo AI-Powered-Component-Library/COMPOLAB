@@ -3,7 +3,7 @@ const componentService = {
 
     generateService: async ({ prompt, token, getChunks,onError }) => {
 
-        const response = await fetch("http://localhost:4000/api/v1/component/generate", {
+        const response = await fetch("https://compolab.onrender.com/api/v1/component/generate", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

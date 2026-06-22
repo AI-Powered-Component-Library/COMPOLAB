@@ -3,7 +3,7 @@ import { store } from "../store/store"
 import { setAccessToken, setUser } from "../features/auth/auth.slice"
 
 export const api = axios.create({
-    baseURL: "http://localhost:4000/api/v1",
+    baseURL: "https://compolab.onrender.com/api/v1",
     withCredentials: true,
     headers: {
         "Content-Type": "application/json"
