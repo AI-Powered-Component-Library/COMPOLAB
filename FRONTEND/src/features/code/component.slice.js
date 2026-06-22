@@ -14,9 +14,6 @@ const componentSlice = createSlice({
         setChunking: (state) => {
             state.chunking = !state.chunking
         },
-        setCodeChunks: (state, { payload }) => {
-            state.code += payload
-        },
         setCode: (state, { payload }) => {
             state.code = payload
         },
@@ -35,5 +32,5 @@ const componentSlice = createSlice({
     }
 })
 
-export const { setCode, setComponents, setCurrentComponent, setCodeChunks, setWebBuilder,setChunking,setGeneratedRes } = componentSlice.actions
+export const { setCode, setComponents, setCurrentComponent, setWebBuilder,setChunking,setGeneratedRes } = componentSlice.actions
 export default componentSlice.reducer
