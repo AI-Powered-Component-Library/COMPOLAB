@@ -5,8 +5,8 @@ import { Zap, Rocket, Crown, Check, Box, BaselineIcon } from 'lucide-react'
 const plans = [
   {
     name: 'Free',
-    price: { monthly: 0, annual: 0 },
-    tokens: '10K',
+    price: 0,
+    tokens: '1K',
     period: 'forever',
     icon: Zap,
     iconBg: 'bg-slate-800',
@@ -17,7 +17,7 @@ const plans = [
   },
   {
     name: 'Basic',
-    price: { monthly: 5, annual: 8 },
+    price: 199,
     tokens: '10K',
     period: 'per month',
     icon: BaselineIcon,
@@ -25,11 +25,11 @@ const plans = [
     iconColor: 'text-purple-400',
     features: ['Priority API access', '4 projects', 'Usage analytics'],
     cta: 'Select plan',
-    featured: true,
+    featured: false,
   },
   {
     name: 'Medium',
-    price: { monthly: 10, annual: 8 },
+    price: 399,
     tokens: '50K',
     period: 'per month',
     icon: Rocket,
@@ -41,7 +41,7 @@ const plans = [
   },
   {
     name: 'Premium',
-    price: { monthly: 25, annual: 20 },
+    price: 699,
     tokens: '100k',
     period: 'per month',
     icon: Crown,
@@ -62,7 +62,7 @@ const Pricing = () => {
       <div className="grid w-10/12 gap-4 md:grid-cols-4">
         {plans.map((plan) => {
           const Icon = plan.icon
-          const price = annual ? plan.price.annual : plan.price.monthly
+          const price = plan.price
 
           return (
             <div
@@ -70,7 +70,7 @@ const Pricing = () => {
               className={`relative rounded-2xl p-5 flex flex-col gap-5 transition-colors
                 ${plan.featured
                   ? 'bg-slate-900 border-2 border-violet-600'
-                  : 'bg-slate-900/60 border border-slate-800 hover:border-slate-700'
+                  : plan.name !== "Premium" ? 'bg-slate-900/60 border border-slate-800 hover:border-slate-700' : 'bg-slate-900/60 border border-green-950 hover:border-green-800'
                 }`}
             >
               {plan.featured && (
@@ -88,7 +88,7 @@ const Pricing = () => {
               <div>
                 <p className="text-sm font-medium text-slate-300">{plan.name}</p>
                 <div className="flex items-end gap-1 mt-1">
-                  <span className="text-4xl font-semibold text-white">${price}</span>
+                  <span className="text-3xl font-semibold text-white">₹{price}</span>
                   {price > 0 && <span className="text-slate-500 text-sm mb-1.5">/ mo</span>}
                 </div>
                 <p className="text-xs text-slate-500 mt-0.5">{price === 0 ? 'forever' : annual ? 'billed annually' : 'billed monthly'}</p>
@@ -96,7 +96,7 @@ const Pricing = () => {
 
               <div className="flex items-center gap-1.5 bg-slate-800/60 rounded-lg px-3 py-2 w-fit border border-slate-700/50">
                 <Box size={13} className="text-slate-500" />
-                <span className="text-xs font-medium text-slate-300">{plan.tokens} tokens / mo</span>
+                <span className="text-xs font-medium text-slate-300">{plan.tokens} tokens / month</span>
               </div>
 
               <div className="h-px bg-slate-800" />
@@ -118,7 +118,7 @@ const Pricing = () => {
                 className={`mt-auto w-full text-center rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-150
                   ${plan.featured
                     ? 'bg-violet-600 hover:bg-violet-500 text-white'
-                    : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
+                    : plan.name !== "Premium" ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700' : "bg-slate-800 hover:bg-green-500/20 text-slate-200 border border-green-700"
                   }`}
               >
                 {plan.cta}

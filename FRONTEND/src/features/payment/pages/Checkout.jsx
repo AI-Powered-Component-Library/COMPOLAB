@@ -1,17 +1,19 @@
 import { useEffect } from 'react'
 import { ShieldCheck, RefreshCw, Clock, CreditCard, Rocket } from 'lucide-react'
 import usePayment from '../hook/usePayment'
-import { useSelector } from "react-redux"
+import { useSearchParams } from "react-router-dom";
+
 
 const Checkout = () => {
 
-  const loggedInUser = useSelector(state => state.auth.user)
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const { handleCheckoutDetail, planDetail, handlePayment } = usePayment()
 
   useEffect(() => {
-    handleCheckoutDetail("basic")
-  }, [])
+    const plan = searchParams.get("plan")
+    handleCheckoutDetail(plan)
+  }, [searchParams.get("plan")])
 
 
   return (planDetail &&
@@ -25,8 +27,8 @@ const Checkout = () => {
             <span className="inline-flex items-center gap-1.5 bg-violet-950 text-violet-400 border border-violet-800 rounded-lg px-2.5 py-1 text-xs font-medium">
               <Rocket size={13} /> {planDetail.name} plan
             </span>
-            <p className="mt-4 text-4xl font-semibold text-slate-100 leading-none">
-              <sup className="text-xl align-super">₹</sup>{planDetail.price}
+            <p className="mt-4 text-3xl font-semibold text-slate-100 leading-none">
+              ₹{planDetail.price}
             </p>
             <p className="mt-1 text-xs text-slate-500">per month · billed today</p>
           </div>
@@ -78,7 +80,7 @@ const Checkout = () => {
 
           <div className="mt-auto flex flex-col gap-2">
             <button
-              onClick={() => handlePayment(loggedInUser)}
+              onClick={()=>handlePayment(searchParams.get("plan"))}
               className="w-full cursor-pointer flex items-center justify-center gap-2 bg-blue-950 hover:bg-blue-900 text-blue-400 font-medium text-sm py-3 rounded-xl transition-colors duration-150"
             >
               <CreditCard size={16} />

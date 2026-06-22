@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux'
 import generateService from '../service/generate.service'
-import { setChunking, setCode, setCodeChunks, setGeneratedRes, setWebBuilder } from '../../code/component.slice'
+import { setChunking, setCode, setGeneratedRes, setWebBuilder } from '../../code/component.slice'
+import {toast} from "react-toastify"
 
 
 const extractCode = (jsonStr) => {
@@ -54,6 +55,9 @@ const useGenerate = () => {
         if (parsedCode) {
           dispatch(setCode(parsedCode))
         }
+      }, onError: (error) => {
+        console.log("error ", error)
+        toast.error(error.message)
       }
     })
 
@@ -63,22 +67,6 @@ const useGenerate = () => {
 
   }
 
-  // const handleGenerate = () => {
-
-
-  //   // let props = code.split("props")
-  //   // let count = 0;
-  //   // let id = setInterval(() => {
-  //   //   if (split[count] === undefined) {
-  //   //     clearInterval(id)
-  //   //     dispatch(setChunking())
-  //   //     return
-  //   //   }
-  //   //   console.log(props)
-  //   //   dispatch(setCodeChunks(split[count++] + "\n"))
-  //   // }, 100);
-
-  // }
 
   const handleWebBuilder = () => {
     dispatch(setWebBuilder())

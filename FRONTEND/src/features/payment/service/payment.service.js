@@ -1,31 +1,26 @@
 import { api } from "../../../utils/axios.utils"
 
-const handler = async (response) => {
 
-    console.log(response);
+const handler = async (response, plan, onSuccess) => {
 
-    try {
-        await api.post('/payments/verify', {
-            razorpayOrderId: response.razorpay_order_id,
-            razorpayPaymentId: response.razorpay_payment_id,
-            razorpaySignature: response.razorpay_signature
-        })
-        alert("Payment Successful!");
-    } catch (error) {
-        console.error("Payment verification failed:", error);
-        alert("Payment verification failed. Please try again.");
-        return;
-    }
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = response;
+
+    let verify = await api.post('/payment/verify', {
+        razorpayOrderId: razorpay_order_id,
+        razorpayPaymentId: razorpay_payment_id,
+        razorpaySignature: razorpay_signature,
+        plan
+    })
+
+    onSuccess(verify.data.data)
+
 }
 
 const paymentService = {
 
-    paymentService: async (subscriber) => {
+    paymentService: async (subscriber, plan, onSuccess) => {
 
-        const { fullName: name, email } = subscriber;
-
-        const response = await api.post('/payment/order', { plan: "medium" })
-
+        const response = await api.post('/payment/order', { plan })
         const order = response.data.data;
 
         const options = {
@@ -35,9 +30,9 @@ const paymentService = {
             name: "CompoLab",
             description: "CompoLab Test Transaction",
             order_id: order.orderId,
-            handler,
-            prefill: { name, email },
-            theme: { color: "#F37254" }
+            handler: (response) => handler(response, plan, onSuccess),
+            prefill: subscriber,
+            theme: { color: "#7700ffff" }
         };
 
         return options;

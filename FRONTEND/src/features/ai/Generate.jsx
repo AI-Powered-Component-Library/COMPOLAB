@@ -8,7 +8,6 @@ import useCompo from '../code/hooks/useCompo.js';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import useGenerate from './hook/useGenerate.js';
-import { useState } from 'react';
 
 
 const Generate = () => {
