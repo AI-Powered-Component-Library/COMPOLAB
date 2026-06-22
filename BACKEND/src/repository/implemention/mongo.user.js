@@ -29,7 +29,7 @@ class MongoUserRepository extends IUserRepository {
     }
 
     async updateUser(userId, updateObj) {
-        return await User.findByIdAndUpdate(userId, updateObj, { new: true });
+        return await User.findByIdAndUpdate(userId, updateObj, { returnDocument: 'after' });
     }
 
     async blackListToken(token) {

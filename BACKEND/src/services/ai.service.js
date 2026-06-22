@@ -1,7 +1,7 @@
 import { ChatMistralAI } from "@langchain/mistralai"
 import { createAgent } from "langchain"
 import { MISTRAL_API_KEY } from "../config/env.config.js"
-import MongoUserRepository from "../repository/implemention/mongo.user.js"
+
 
 const mediumModel = new ChatMistralAI({
   model: "mistral-medium-latest",
@@ -72,19 +72,7 @@ const agent = createAgent({
  `
 })
 
-let userRepo = new MongoUserRepository()
-
-export const ComponentGenerator = async ({ prompt, userId }) => {
-
-  let user = await userRepo.findUserById(userId)
-
-  if (!user) {
-    throw new AppError(404, "User not found");
-  }
-
-  if (user.role === "user" && user.aiCredits < 50) {
-    throw new AppError(402, "Insufficient credits");
-  }
+export const ComponentGenerator = async ({ prompt }) => {
 
   const stream = await agent.stream({
     messages: [
@@ -95,6 +83,6 @@ export const ComponentGenerator = async ({ prompt, userId }) => {
     ]
   }, { streamMode: "messages" })
 
-  return { stream, user };
+  return { stream };
 
 }
