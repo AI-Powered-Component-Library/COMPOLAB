@@ -78,7 +78,7 @@ class NpmService {
         }
 
         component.visibility = "public"
-        component.npmPackage = "compo-ui"
+        component.npmPackage = "compo-ui-lib"
 
         await component.save()
         return true

@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import componentService from "../service/component.service";
 import { setCode, setComponents, setCurrentComponent } from "../component.slice";
-import {toast} from "react-toastify"
+import { toast } from "react-toastify"
 
 const useCompo = () => {
 
@@ -15,13 +15,11 @@ const useCompo = () => {
 
     const handleGetSavedComponents = async () => {
         const res = await componentService.getSavedService()
-
-        console.log(res)
         dispatch(setComponents(res))
     }
 
 
-    const handleNpmPublish = async (cid)=>{
+    const handleNpmPublish = async (cid) => {
         const res = await componentService.npmPublishService(cid)
         toast.success(res.message)
     }
@@ -69,7 +67,7 @@ const useCompo = () => {
     }
 
 
-    return { handleGetComponents,handleNpmPublish, handleGetSavedComponents, handleCreateComponent,handleDownloadCode, handleGetCompoById, handleUpdateComponent, handleDeleteComponent, handleSetCode };
+    return { handleGetComponents, handleNpmPublish, handleGetSavedComponents, handleCreateComponent, handleDownloadCode, handleGetCompoById, handleUpdateComponent, handleDeleteComponent, handleSetCode };
 };
 
 export default useCompo;
