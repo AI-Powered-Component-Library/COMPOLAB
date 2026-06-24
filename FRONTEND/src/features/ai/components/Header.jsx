@@ -4,6 +4,7 @@ import { LiaNpm } from "react-icons/lia";
 import { FaReact } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom'
 import useCompo from '../../code/hooks/useCompo';
+import { useState } from 'react';
 
 const Header = ({ props }) => {
 
@@ -14,6 +15,7 @@ const Header = ({ props }) => {
     const Component = useSelector(state => state.component.currentComponent)
     const isChunking = useSelector(state => state.component.chunking)
     const AiGeneratedRes = useSelector(state => state.component.generatedRes)
+    const [npm, setNpm] = useState(false)
 
     return (
         <div className="flex items-center justify-between w-full px-6 py-4 bg-[#0b0c14] border-b border-white/10">
@@ -39,7 +41,7 @@ const Header = ({ props }) => {
                 )}
 
                 {/* Code / Preview */}
-              {code &&  <div className="inline-flex  items-center gap-0.5 rounded-full border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-700 dark:bg-neutral-800 shadow-sm">
+                {code && <div className="inline-flex  items-center gap-0.5 rounded-full border border-neutral-200 bg-neutral-100 p-1 dark:border-neutral-700 dark:bg-neutral-800 shadow-sm">
                     <button onClick={() => setIsCodePreview(false)} className={`flex cursor-pointer items-center gap-1.5 rounded-full px-2 py-1.5 text-xs font-medium transition-colors ${!isCodePreview ? 'bg-purple-700 text-purple-50' : 'text-neutral-500 hover:text-neutral-700'}`}>
                         <Code2Icon size={15} /> Code
                     </button>
@@ -53,7 +55,12 @@ const Header = ({ props }) => {
                 {/* Publish */}
                 {loggedInUser.role === "admin" && Component?.visibility == "private" && (
                     <div onClick={() => {
+                        setNpm(true)
+                        if (npm) {
+                            return
+                        }
                         handleNpmPublish(cid)
+                        setNpm(false)
                     }} className="flex items-center gap-3 px-3 py-1.5 rounded-lg border text-white border-pink-400/50 hover:bg-red-500/10 transition cursor-pointer">
                         <LiaNpm size={24} className="text-pink-500" />
                         <p className="font-bold text-xs">Publish To NPM</p>

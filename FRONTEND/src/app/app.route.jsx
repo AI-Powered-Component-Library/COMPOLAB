@@ -8,9 +8,7 @@ import Pricing from "../features/payment/pages/Pricing"
 import Checkout from "../features/payment/pages/Checkout"
 import ProtectedRoute from "../features/auth/pages/ProtectedRoute"
 import PublicRoute from "../features/auth/pages/PublicRoute"
-import CreateComponent from "../features/code/pages/Create"
 import ComponentList from "../features/code/pages/ComponentList"
-import EditComponent from "../features/code/pages/EditComponent"
 import Google from "../features/auth/pages/Google"
 import Profile from "../features/auth/pages/Profile"
 
@@ -68,10 +66,6 @@ export const router = createBrowserRouter([
                     {
                         path: "/c/list",
                         element: <ComponentList />
-                    },
-                    {
-                        path: "/c/:cid/edit",
-                        element: <EditComponent />
                     },
                 ]
             },

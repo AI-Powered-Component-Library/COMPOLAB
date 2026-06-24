@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import componentService from "../service/component.service";
 import { setCode, setComponents, setCurrentComponent } from "../component.slice";
+import {toast} from "react-toastify"
 
 const useCompo = () => {
 
@@ -22,7 +23,7 @@ const useCompo = () => {
 
     const handleNpmPublish = async (cid)=>{
         const res = await componentService.npmPublishService(cid)
-        console.log(res)
+        toast.success(res.message)
     }
 
 

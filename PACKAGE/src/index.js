@@ -1,5 +1,6 @@
-
-export { Button } from "./components/Button/Button.jsx"
-
 export {  CodeCard } from "./components/CodeCard/CodeCard.jsx"
 export {AnimatedButton } from "./components/AnimatedButton/AnimatedButton.jsx" 
+export {ProductCard } from "./components/ProductCard/ProductCard.jsx" 
+export {ToggleSwitch } from "./components/ToggleSwitch/ToggleSwitch.jsx" 
+export {Navbar } from "./components/Navbar/Navbar.jsx" 
+export {PostCard } from "./components/PostCard/PostCard.jsx" 

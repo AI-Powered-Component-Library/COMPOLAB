@@ -18,12 +18,13 @@ const Profile = () => {
     }, [])
 
     return (
-        <div className='bg-black h-screen'>
+        <div className='bg-black h-screen '>
             <Navbar />
-            <h1 className="text-2xl  font-bold text-white">My Components</h1>
 
-            <div className="mt-8">
-                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className=" h-10/13  w-10/13   mx-auto">
+
+                <h1 className="text-xl mb-6 mt-4 font-bold text-white">Saved Components</h1>
+                <div className="scrollbar-none overflow-y-scroll mx-auto h-full w-full grid gap-5  grid-cols-1">
                     {components.map((comp) => (<ComponentCard key={comp._id} component={comp} onView={(id) => navigate(`/c/${id}`)} onEdit={(id) => navigate(`/c/${id}/edit`)} onDelete={(id) => setConfirmId(id)} />))}
                 </div>
             </div>

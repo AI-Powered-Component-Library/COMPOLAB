@@ -3,6 +3,7 @@ import ComponentCard from '../components/ComponentCard'
 import { useNavigate } from 'react-router-dom'
 import useCompo from '../hooks/useCompo'
 import { useEffect } from 'react'
+import Navbar from '../../auth/components/Navbar'
 
 
 const ComponentList = () => {
@@ -16,17 +17,13 @@ const ComponentList = () => {
   console.log(components)
 
   return (components &&
-    <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100">
-      <section className="mx-auto max-w-5xl">
+    <main className="h-full bg-slate-950 text-slate-100">
+      <Navbar />
 
-        {/* Grid */}
-        <div className="mt-8">
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {components.map((comp) => (<ComponentCard key={comp._id} component={comp} onView={(id) => navigate(`/c/${id}`)} onEdit={(id) => navigate(`/c/${id}/edit`)} onDelete={(id) => setConfirmId(id)} />))}
-          </div>
-
-        </div>
-      </section>
+      <Sidebar/>
+      <div className=" scrollbar-none w-10/13 mx-auto overflow-auto h-[calc(100vh-5rem)] grid gap-5 py-4 grid-cols-1">
+        {components.map((comp) => (<ComponentCard key={comp._id} component={comp} onView={(id) => navigate(`/c/${id}`)} />))}
+      </div>
 
     </main>
   )

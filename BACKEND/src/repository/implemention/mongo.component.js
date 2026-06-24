@@ -13,7 +13,8 @@ class MongoComponent extends IComponentRepository {
     }
 
     async findComponents(owner) {
-        return await Component.find({ owner })
+        if (owner) return await Component.find({ owner })
+        return await Component.find({}).select("-visibility")
     }
 
     async findComponentById(id) {
