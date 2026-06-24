@@ -1,30 +1,29 @@
 import { useSelector } from 'react-redux'
-import ComponentCard from '../components/ComponentCard'
-import { useNavigate } from 'react-router-dom'
 import useCompo from '../hooks/useCompo'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Navbar from '../../auth/components/Navbar'
+import Sidebar from '../components/Sidebar'
+import ComponentGuide from '../components/ComponentGuide'
 
 
 const ComponentList = () => {
 
   const components = useSelector((state) => state.component.components)
-  const navigate = useNavigate()
   const { handleGetComponents } = useCompo()
+  const [selected, setSelected] = useState(null)
+
 
   useEffect(() => { handleGetComponents() }, [])
 
-  console.log(components)
 
   return (components &&
-    <main className="h-full bg-slate-950 text-slate-100">
+    <main className="h-full w-full bg-slate-950 text-slate-100">
       <Navbar />
 
-      <Sidebar/>
-      <div className=" scrollbar-none w-10/13 mx-auto overflow-auto h-[calc(100vh-5rem)] grid gap-5 py-4 grid-cols-1">
-        {components.map((comp) => (<ComponentCard key={comp._id} component={comp} onView={(id) => navigate(`/c/${id}`)} />))}
+      <div className="flex h-10/12 w-full">
+        <Sidebar setSelected={setSelected} components={components} />
+        <ComponentGuide component={selected || components[0]} />
       </div>
-
     </main>
   )
 }

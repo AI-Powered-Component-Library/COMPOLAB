@@ -4,6 +4,8 @@ import { ChevronRight, Folder, FolderOpen, File, Earth, Zap } from 'lucide-react
 import useGenerate from '../hook/useGenerate';
 import { EarthIcon, Code2 } from 'lucide-react'
 import { Link } from 'react-router-dom';
+import useCompo from '../../code/hooks/useCompo';
+import { useSelector } from 'react-redux';
 
 const FILE_ICONS = {
     jsx: <FaReact size={16} className="text-sky-500" />,
@@ -19,6 +21,8 @@ function getIcon(name) {
 
 const Sidebar = ({ props }) => {
 
+    const { handleGetSavedComponents , handleSetCode } = useCompo()
+    const Components = useSelector(state=>state.component.components)
     const { handleWebBuilder } = useGenerate()
     const { setSearchParams, webBuilder } = props
 
@@ -77,6 +81,9 @@ const Sidebar = ({ props }) => {
     ]);
 
     useEffect(() => {
+
+        handleGetSavedComponents()
+
         const handler = (e) => {
             if (menuRef.current && !menuRef.current.contains(e.target)) {
                 setCtxTarget(null);
@@ -85,6 +92,18 @@ const Sidebar = ({ props }) => {
         document.addEventListener('mousedown', handler);
         return () => document.removeEventListener('mousedown', handler);
     }, []);
+    
+
+    useEffect(()=>{
+        let newArr = Components.map(c=>{
+            return {
+                id : c._id,
+                name : `${c.name}.jsx`,
+                path : `src/${c.name}.jsx`
+            }
+        })
+        setFiles(newArr)
+    },[Components])
 
     useEffect(() => {
         if (renaming && inputRef.current) inputRef.current.focus();
@@ -141,7 +160,7 @@ const Sidebar = ({ props }) => {
                 </div>
 
 
-                {open && (<div> {files.map(file => (<div onClick={() => { setSelected(file.name); setRenaming(false); }} onContextMenu={e => { setSelected(file.name); openCtx(e, file.name); }} key={file.path} className={`relative flex items-center gap-1.5 pl-10 py-1 rounded-[7px] cursor-pointer group ${selected === file.name ? 'bg-[#1a1530] text-violet-300' : 'text-[#7070a0] hover:bg-[#18181f] hover:text-[#a0a0c0]'}`}>
+                {open && (<div> {files.map(file => (<div onClick={() => { handleSetCode(Components.find(f => f._id === file.id).code); setSelected(file.name); setRenaming(false); }} onContextMenu={e => { setSelected(file.name); openCtx(e, file.name); }} key={file.path} className={`relative flex items-center gap-1.5 pl-10 py-1 rounded-[7px] cursor-pointer group ${selected === file.name ? 'bg-[#1a1530] text-violet-300' : 'text-[#7070a0] hover:bg-[#18181f] hover:text-[#a0a0c0]'}`}>
                     {getIcon(file.name)}
                     {renaming && selected === file.name ? (<input ref={inputRef} type="text" onClick={e => e.stopPropagation()} value={renameVal} onChange={e => setRenameVal(e.target.value)}
                         onKeyDown={e => {
@@ -193,9 +212,9 @@ const Sidebar = ({ props }) => {
                         onClick={() => {
                             handleWebBuilder()
                             if (webBuilder) {
-                                setSearchParams({},{replace : true})
+                                setSearchParams({}, { replace: true })
                             } else {
-                                setSearchParams({ web: "true" },{replace : true})
+                                setSearchParams({ web: "true" }, { replace: true })
                             }
                         }}>
                         <span className={`flex items-center justify-center h-4 w-4 rounded-full bg-white shadow-md transition-all duration-300 ease-out ${webBuilder ? "translate-x-5" : "translate-x-0.5"}`}>

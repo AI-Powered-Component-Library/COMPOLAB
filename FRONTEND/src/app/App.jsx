@@ -14,7 +14,7 @@ const App = () => {
 
 
   return (
-  <div>
+  <div className='h-screen w-full'>
     <ToastContainer/>
     <Outlet />
     </div>
