@@ -9,19 +9,16 @@ const tagColors = [
 const themeIcon = { light: '☀️', dark: '🌙', system: '💻' }
 
 const ComponentCard = ({ component, onView, onEdit, onDelete, deleting }) => {
-  const { _id, componentName, theme = 'light', tags = [], isPublic } = component
+  const { _id, name, props , isPublic } = component
 
   return (
     <article className="group flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg transition-all duration-200 hover:border-blue-500/30 hover:bg-white/8 hover:shadow-blue-500/10">
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="truncate text-base font-semibold text-white">{componentName}</h3>
+          <h3 className="truncate text-base font-semibold text-white">{name}</h3>
           <div className="mt-1.5 flex flex-wrap items-center gap-2">
-            {/* Theme badge */}
-            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs text-slate-400">
-              {themeIcon[theme]} {theme}
-            </span>
+
             {/* Public / Private */}
             <span
               className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${
@@ -36,10 +33,10 @@ const ComponentCard = ({ component, onView, onEdit, onDelete, deleting }) => {
         </div>
       </div>
 
-      {/* Tags */}
-      {tags.length > 0 && (
+      {/* props */}
+      {props.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
-          {tags.map((tag, i) => (
+          {props.map((tag, i) => (
             <span
               key={tag}
               className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${tagColors[i % tagColors.length]}`}

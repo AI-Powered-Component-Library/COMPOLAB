@@ -2,8 +2,11 @@ import axios from "axios"
 import { store } from "../store/store"
 import { setAccessToken, setUser } from "../features/auth/auth.slice"
 
+export let baseURL = import.meta.env.VITE_BASE_URL || "https://compolab.onrender.com/api/v1";
+
+
 export const api = axios.create({
-    baseURL: "https://compolab.onrender.com/api/v1",
+    baseURL,
     withCredentials: true,
     headers: {
         "Content-Type": "application/json"

@@ -1,16 +1,20 @@
 import { getUserService, googleAuthService, loginService, logoutService, refreshTokenService, registerService } from '../services/auth.service'
 import { useDispatch } from "react-redux"
 import { setAccessToken, setUser } from '../auth.slice'
+import {useNavigate} from "react-router-dom"
+
 
 const useAuth = () => {
 
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
 
   const handleGoogleAuth = async (response) => {
     const token = await googleAuthService(response.credential);
     dispatch(setAccessToken(token));
+    navigate("/")
   };
 
 
@@ -21,6 +25,7 @@ const useAuth = () => {
     let token = res.data.data.accessToken
 
     dispatch(setAccessToken(token))
+    navigate("/")
   }
 
   const handleLogin = async (data) => {
@@ -30,7 +35,7 @@ const useAuth = () => {
     let token = res.data.data.accessToken
 
     dispatch(setAccessToken(token))
-    handleGetUser()
+    navigate("/")
   }
 
   const handleGetUser = async () => {

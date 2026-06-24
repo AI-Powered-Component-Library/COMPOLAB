@@ -19,19 +19,6 @@ const ComponentList = () => {
     <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-100">
       <section className="mx-auto max-w-5xl">
 
-        {/* Page header */}
-        <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-
-          <button
-            onClick={() => navigate('/c/create')}
-            className="rounded-xl bg-blue-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:bg-blue-400"
-          >
-            Generate
-          </button>
-
-        </header>
-
-
         {/* Grid */}
         <div className="mt-8">
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

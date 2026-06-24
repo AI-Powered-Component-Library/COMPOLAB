@@ -1,9 +1,10 @@
+import { baseURL } from "../../../utils/axios.utils";
 
 const componentService = {
 
-    generateService: async ({ prompt, token, getChunks,onError }) => {
+    generateService: async ({ prompt, token, getChunks, onError }) => {
 
-        const response = await fetch("https://compolab.onrender.com/api/v1/component/generate", {
+        const response = await fetch(baseURL + "/component/generate", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
