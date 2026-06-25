@@ -96,7 +96,7 @@ const Preview = ({ code }) => {
     code={processed}
     scope={{ React, useState, useEffect, useRef, useCallback }}
     noInline={noInline}>
-    <div className="bg-black flex justify-center items-center p-4 rounded-lg border border-cyan-900 h-full">
+    <div className="bg-black flex justify-center items-center p-4 rounded-lg border border-cyan-950/90 h-full">
       <LivePreview />
       <LiveError className="text-red-500 mt-2 text-sm bg-red-50/50 p-2 rounded font-mono" />
     </div>

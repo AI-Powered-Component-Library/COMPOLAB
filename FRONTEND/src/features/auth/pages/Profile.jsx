@@ -43,8 +43,10 @@ const Profile = () => {
                         <div
                             key={comp._id}
                             onClick={() => navigate(`/c/${comp._id}`)}
-                            className="cursor-pointer overflow-hidden rounded-xl w-fit border bg-white"
-                        >
+                            className="cursor-pointer overflow-hidden rounded-xl border relative bg-white">
+                            <div className='flex  text-white absolute z-10 w-full  justify-between'>
+                                {comp.visibility === "public" && <button className='text-green-500 text-white px-2 py-1 rounded-md'>✅</button>} {comp.visibility === "private" && <button className='text-red-500 text-white px-2 py-1 rounded-md'>❌</button>}
+                            </div>
                             <Preview code={comp.code} />
                         </div>
                     ))}

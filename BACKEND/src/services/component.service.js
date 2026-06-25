@@ -30,8 +30,8 @@ class ComponentService {
     }
 
 
-    async getAllComponents(owner) {
-        const components = await MongoComponent.findComponents(owner);
+    async getAllComponents(owner,select) {
+        const components = await MongoComponent.findComponents(owner,select);
         return components;
     }
 

@@ -23,14 +23,14 @@ const Navbar = () => {
 
                 <div className="flex items-center gap-4">
 
-                    <div id="right" className='flex items-center justify-end flex-1 min-w-[180px]'>
+                    {user.role === "user" && <div id="right" className='flex items-center justify-end flex-1 min-w-[180px]'>
                         <Link
                             to="/pricing"
                             className='relative inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-r from-cyan-500/10 to-cyan-500/10 hover:from-cyan-500/20 hover:to-cyan-500/20 border border-cyan-500/25 hover:border-cyan-500/40 rounded-full text-cyan-200 text-sm font-semibold no-underline cursor-pointer transition-all duration-300 shadow-md hover:shadow-cyan-500/10 hover:-translate-y-0.5 active:translate-y-0 group'>
                             <Sparkles size={16} className={" group-hover:rotate-12 transition-transform duration-300 " + (user.role === "admin" ? "text-yellow-600" : "text-cyan-400")} />
                             <span>Token : {user.aiCredits}</span>
                         </Link>
-                    </div>
+                    </div>}
 
                     <button onClick={()=>navigate("/generate")} className="bg-cyan-500/10 cursor-pointer hover:bg-cyan-500/30 text-yellow-400 border border-cyan-500/40 px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2 text-sm" >
                         <Sparkles className="w-4 h-4 text-yellow-600" />

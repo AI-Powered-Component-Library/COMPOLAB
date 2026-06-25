@@ -72,12 +72,12 @@ const LeftChat = ({ onNewChat, tokenCount = '999k', props }) => {
       {/* Header */}
       <div className="px-4 pt-4 pb-3 border-b border-[#1e1e2a] space-y-3">
 
-        <div id="right" className='flex items-center justify-end flex-1 min-w-[180px]'>
+    {loggedInUser.role === "user" &&    <div id="right" className='flex items-center justify-end flex-1 min-w-[180px]'>
           <Link to="/pricing" className='relative text-sm inline-flex items-center gap-2.5 px-6 py-2 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 hover:from-cyan-500/20 hover:to-blue-500/20 border border-cyan-500/25 hover:border-cyan-500/40 rounded-full text-cyan-200  font-semibold no-underline cursor-pointer transition-all duration-300 shadow-md hover:shadow-cyan-500/10 hover:-translate-y-0.5 active:translate-y-0 group'> 
             <Sparkles size={16} className="text-cyan-400 group-hover:rotate-12 transition-transform duration-300" />
             <span>Token: {loggedInUser.aiCredits}</span>
           </Link>
-        </div>
+        </div>}
 
         <button
           onClick={handleNewChat}

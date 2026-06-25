@@ -10,7 +10,7 @@ const Hero = () => {
     const [copied, setCopied] = useState(false);
 
     const copyCommand = () => {
-        navigator.clipboard.writeText('npm install compolib');
+        navigator.clipboard.writeText('npm install compo-ui-lib');
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
@@ -53,7 +53,7 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-linear-to-r from-cyan-500/5 to-transparent opacity-0 group-hover/code:opacity-100 transition-opacity duration-500"></div>
                 <div className="flex items-center justify-between relative z-10">
                     <code className="text-cyan-300 text-sm sm:text-base font-mono flex-1 select-all tracking-wide">
-                        $  npm install compolib
+                        $  npm install compo-ui-lib
                     </code>
                     <button
                         onClick={copyCommand}
