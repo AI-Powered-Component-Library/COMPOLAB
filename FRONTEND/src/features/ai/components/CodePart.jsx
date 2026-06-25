@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Editor from '@monaco-editor/react'
 import { Code2Icon, Copy, Cross, Download, Eye, File, Save, Share2, UploadCloudIcon, X } from 'lucide-react'
 import Preview from '../../code/pages/Preview'
@@ -28,6 +28,13 @@ const CodePart = ({ cid }) => {
       await handleGenerate({ prompt: input, token })
     }
   }
+
+  useEffect(() => {
+  if (!cid) {
+    handleSetCode("")
+  }
+  }, [cid])
+  
 
   return (
     <div className=' codepart  flex flex-col border-l border-slate-800'>

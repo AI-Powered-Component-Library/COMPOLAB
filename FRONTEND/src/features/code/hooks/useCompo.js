@@ -18,6 +18,11 @@ const useCompo = () => {
         dispatch(setComponents(res))
     }
 
+    const handleGetMyProjects = async () => {
+        const res = await componentService.getMyProjects()
+        dispatch(setComponents(res))
+    }
+
 
     const handleNpmPublish = async (cid) => {
         const res = await componentService.npmPublishService(cid)
@@ -42,7 +47,7 @@ const useCompo = () => {
     const handleUpdateComponent = async (id, payload) => {
 
         const res = await componentService.updateService(id, payload)
-        console.log(res)
+        toast.success(res.message)
     }
 
 
@@ -67,7 +72,7 @@ const useCompo = () => {
     }
 
 
-    return { handleGetComponents, handleNpmPublish, handleGetSavedComponents, handleCreateComponent, handleDownloadCode, handleGetCompoById, handleUpdateComponent, handleDeleteComponent, handleSetCode };
+    return { handleGetComponents, handleNpmPublish, handleGetMyProjects, handleGetSavedComponents, handleCreateComponent, handleDownloadCode, handleGetCompoById, handleUpdateComponent, handleDeleteComponent, handleSetCode };
 };
 
 export default useCompo;

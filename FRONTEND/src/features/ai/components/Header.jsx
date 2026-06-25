@@ -10,7 +10,7 @@ const Header = ({ props }) => {
 
     const { code, cid, isCodePreview, setIsCodePreview, handleDownloadCode } = props
     const navigate = useNavigate()
-    const { handleCreateComponent, handleNpmPublish } = useCompo()
+    const { handleCreateComponent, handleNpmPublish , handleUpdateComponent } = useCompo()
     const loggedInUser = useSelector(state => state.auth.user)
     const Component = useSelector(state => state.component.currentComponent)
     const isChunking = useSelector(state => state.component.chunking)
@@ -23,7 +23,7 @@ const Header = ({ props }) => {
 
             <div className="flex flex-1 items-center gap-4">
 
-                {Component && (
+                {cid && Component && (
                     <div className="flex items-center gap-2 px-3 py-2 rounded-2xl border border-cyan-500/20 bg-cyan-500/10 max-w-xs">
                         <FaReact size={18} className="text-cyan-400 shrink-0" />
 
@@ -115,13 +115,19 @@ const Header = ({ props }) => {
 
                 <div className="h-10 w-px bg-white/10" />
 
-                {!cid && code && !isChunking && (
-                    <div onClick={() => handleCreateComponent(AiGeneratedRes)} className="flex items-center gap-3 px-4 py-1.5 rounded-md bg-green-400/50 border border-white/15 text-white hover:border-green-500/40 hover:bg-green-500/5 transition cursor-pointer">
+                {code !== Component?.code && !isChunking && (
+                    <div onClick={() => {
+                        if (AiGeneratedRes) {
+                            handleCreateComponent(AiGeneratedRes)
+                        } else {
+                            handleUpdateComponent(Component._id, { code })
+                        }
+                    }} className="flex items-center gap-3 px-4 py-1.5 rounded-md bg-green-400/50 border border-white/15 text-white hover:border-green-500/40 hover:bg-green-500/5 transition cursor-pointer">
                         <Save size={18} /> <p className="font-medium">Save</p>
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     )
 }
 

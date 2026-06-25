@@ -61,7 +61,7 @@ class ComponentController {
 
     updateComponent = asyncHandler(async (req, res) => {
         const component = await componentService.updateComponent(req.params.id, req.body);
-        return res.success(200, "Component updated successfully", component);
+        return res.success(200, "Component updated successfully");
     })
 
 }

@@ -26,7 +26,7 @@ class MongoComponent extends IComponentRepository {
     }
 
     async updateComponent(id, componentData) {
-        return await Component.findByIdAndUpdate(id, componentData)
+        return await Component.findByIdAndUpdate(id, componentData, {new : true}).select("name code")
     }
 
 }
