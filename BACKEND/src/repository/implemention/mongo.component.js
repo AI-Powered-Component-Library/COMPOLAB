@@ -14,7 +14,7 @@ class MongoComponent extends IComponentRepository {
 
     async findComponents(owner) {
         if (owner) return await Component.find({ owner })
-        return await Component.find({ visibility: "public" }).select("-visibility")
+        return await Component.find({ visibility: "public" }).select("name")
     }
 
     async findComponentById(id) {

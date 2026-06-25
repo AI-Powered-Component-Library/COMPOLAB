@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 
 // ── Copy Button ──────────────────────────────────────────────
@@ -46,7 +47,16 @@ function SectionLabel({ children }) {
 }
 
 // ── Main ─────────────────────────────────────────────────────
-export default function ComponentGuide({ component }) {
+export default function ComponentGuide({ handleGetCompoById,compId }) {
+  
+  const component = useSelector(state => state.component.currentComponent)
+
+  useEffect(() => {
+    if(compId){
+      handleGetCompoById(compId)
+    }
+  }, [compId])
+
 
   return (component &&
     <div className="overflow-auto scrollbar-none w-1/2 mx-auto bg-slate-950 text-slate-200 font-mono">
@@ -54,12 +64,6 @@ export default function ComponentGuide({ component }) {
       <h1 className="text-3xl font-semibold tracking-tight text-white mb-2">
         {component.name}
       </h1>
-
-      {/* Installation */}
-      <section className="mb-9">
-        <SectionLabel>Installation</SectionLabel>
-        <CodeBlock language="bash">{`npm install ${component.npmPackage}`}</CodeBlock>
-      </section>
 
       {/* Import */}
       <section className="mb-9">

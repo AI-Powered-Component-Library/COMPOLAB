@@ -4,6 +4,16 @@ import { useNavigate } from 'react-router-dom'
 import useCompo from '../../code/hooks/useCompo'
 import { useEffect } from 'react'
 import Navbar from '../components/Navbar'
+import Preview from '../../code/pages/Preview'
+import Masonry from "react-masonry-css";
+
+const breakpointColumnsObj = {
+    default: 3,
+    1280: 2,
+    768: 2,
+    640: 1,
+};
+
 
 
 const Profile = () => {
@@ -24,9 +34,21 @@ const Profile = () => {
             <div className=" h-10/13  w-10/13   mx-auto">
 
                 <h1 className="text-xl mb-6 mt-4 font-bold text-white">Saved Components</h1>
-                <div className="scrollbar-none overflow-y-scroll mx-auto h-full w-full grid gap-5  grid-cols-1">
-                    {components.map((comp) => (<ComponentCard key={comp._id} component={comp} onView={(id) => navigate(`/c/${id}`)} onEdit={(id) => navigate(`/c/${id}/edit`)} onDelete={(id) => setConfirmId(id)} />))}
-                </div>
+                <Masonry
+                    breakpointCols={breakpointColumnsObj}
+                    className="flex scrollbar-none overflow-y-auto gap-4"
+                    columnClassName="space-y-2"
+                >
+                    {components.map((comp) => (
+                        <div
+                            key={comp._id}
+                            onClick={() => navigate(`/c/${comp._id}`)}
+                            className="cursor-pointer overflow-hidden rounded-xl w-fit border bg-white"
+                        >
+                            <Preview code={comp.code} />
+                        </div>
+                    ))}
+                </Masonry>
             </div>
         </div>
     )
