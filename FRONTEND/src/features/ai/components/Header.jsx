@@ -28,7 +28,7 @@ const Header = ({ props }) => {
                         <FaReact size={18} className="text-cyan-400 shrink-0" />
 
                         <h1 className="text-sm font-medium text-cyan-300 truncate">
-                            {Component?.componentName}
+                            {Component?.name}
                         </h1>
 
                         <button

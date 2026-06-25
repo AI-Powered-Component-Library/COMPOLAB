@@ -73,31 +73,20 @@ const LeftChat = ({ onNewChat, tokenCount = '999k', props }) => {
       <div className="px-4 pt-4 pb-3 border-b border-[#1e1e2a] space-y-3">
 
         <div id="right" className='flex items-center justify-end flex-1 min-w-[180px]'>
-          <Link to="/pricing" className='relative text-sm inline-flex items-center gap-2.5 px-6 py-2 bg-gradient-to-r from-purple-500/10 to-indigo-500/10 hover:from-purple-500/20 hover:to-indigo-500/20 border border-purple-500/25 hover:border-purple-500/40 rounded-full text-purple-200  font-semibold no-underline cursor-pointer transition-all duration-300 shadow-md hover:shadow-purple-500/10 hover:-translate-y-0.5 active:translate-y-0 group'>
-            <Sparkles size={16} className="text-purple-400 group-hover:rotate-12 transition-transform duration-300" />
+          <Link to="/pricing" className='relative text-sm inline-flex items-center gap-2.5 px-6 py-2 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 hover:from-cyan-500/20 hover:to-blue-500/20 border border-cyan-500/25 hover:border-cyan-500/40 rounded-full text-cyan-200  font-semibold no-underline cursor-pointer transition-all duration-300 shadow-md hover:shadow-cyan-500/10 hover:-translate-y-0.5 active:translate-y-0 group'> 
+            <Sparkles size={16} className="text-cyan-400 group-hover:rotate-12 transition-transform duration-300" />
             <span>Token: {loggedInUser.aiCredits}</span>
           </Link>
         </div>
 
         <button
           onClick={handleNewChat}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-violet-700/50 cursor-pointer hover:bg-violet-600 active:scale-[0.98] text-white rounded-xl text-sm font-medium transition-all duration-150"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-cyan-500/10 cursor-pointer hover:bg-cyan-500/20 active:scale-[0.98] text-cyan-400 rounded-xl text-sm font-medium transition-all duration-150"
         >
           <Plus size={15} />
           New Chat
         </button>
 
-        {/* Search */}
-        {/* <div className="relative">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#3d3d55] pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Search chats…"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="w-full bg-[#18181f] border border-[#252530] rounded-lg pl-8 pr-3 py-2  text-[#9090b8] placeholder-[#3d3d55] outline-none focus:border-violet-700 transition-colors"
-          />
-        </div> */}
       </div>
 
       {/* Chat list */}

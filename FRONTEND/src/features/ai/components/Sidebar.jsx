@@ -3,7 +3,7 @@ import { FaReact, FaJs, FaCss3 } from "react-icons/fa";
 import { ChevronRight, Folder, FolderOpen, File, Earth, Zap } from 'lucide-react';
 import useGenerate from '../hook/useGenerate';
 import { EarthIcon, Code2 } from 'lucide-react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useCompo from '../../code/hooks/useCompo';
 import { useSelector } from 'react-redux';
 
@@ -22,6 +22,7 @@ function getIcon(name) {
 const Sidebar = ({ props }) => {
 
     const { handleGetSavedComponents , handleSetCode } = useCompo()
+    const navigate = useNavigate()
     const Components = useSelector(state=>state.component.components)
     const { handleWebBuilder } = useGenerate()
     const { setSearchParams, webBuilder } = props
@@ -147,7 +148,7 @@ const Sidebar = ({ props }) => {
                 <div className="w-8 h-8 bg-cyan-400 rounded-full flex items-center justify-center">
                     <Zap className="w-5 h-5 text-slate-900" />
                 </div>
-                <span className="text-xl font-bold tracking-tight text-white">VirtualUI</span>
+                <span className="text-xl font-bold tracking-tight text-white">CompoLab</span>
             </Link>
 
 
@@ -160,7 +161,7 @@ const Sidebar = ({ props }) => {
                 </div>
 
 
-                {open && (<div> {files.map(file => (<div onClick={() => { handleSetCode(Components.find(f => f._id === file.id).code); setSelected(file.name); setRenaming(false); }} onContextMenu={e => { setSelected(file.name); openCtx(e, file.name); }} key={file.path} className={`relative flex items-center gap-1.5 pl-10 py-1 rounded-[7px] cursor-pointer group ${selected === file.name ? 'bg-[#1a1530] text-violet-300' : 'text-[#7070a0] hover:bg-[#18181f] hover:text-[#a0a0c0]'}`}>
+                {open && (<div> {files.map(file => (<div onClick={() => { navigate(`/c/${file.id}`); }} onContextMenu={e => { setSelected(file.name); openCtx(e, file.name); }} key={file.path} className={`relative flex items-center gap-1.5 pl-10 py-1 rounded-[7px] cursor-pointer group ${selected === file.name ? 'bg-[#1a1530] text-violet-300' : 'text-[#7070a0] hover:bg-[#18181f] hover:text-[#a0a0c0]'}`}>
                     {getIcon(file.name)}
                     {renaming && selected === file.name ? (<input ref={inputRef} type="text" onClick={e => e.stopPropagation()} value={renameVal} onChange={e => setRenameVal(e.target.value)}
                         onKeyDown={e => {
