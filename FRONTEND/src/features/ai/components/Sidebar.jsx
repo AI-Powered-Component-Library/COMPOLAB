@@ -3,9 +3,10 @@ import { FaReact, FaJs, FaCss3 } from "react-icons/fa";
 import { ChevronRight, Folder, FolderOpen, File, Earth, Zap } from 'lucide-react';
 import useGenerate from '../hook/useGenerate';
 import { EarthIcon, Code2 } from 'lucide-react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useCompo from '../../code/hooks/useCompo';
 import { useSelector } from 'react-redux';
+import { Plus } from 'lucide-react'
 
 const FILE_ICONS = {
     jsx: <FaReact size={16} className="text-sky-500" />,
@@ -21,8 +22,9 @@ function getIcon(name) {
 
 const Sidebar = ({ props }) => {
 
-    const { handleGetSavedComponents , handleSetCode } = useCompo()
-    const Components = useSelector(state=>state.component.components)
+    const { handleGetMyProjects, handleUpdateComponent } = useCompo()
+    const navigate = useNavigate()
+    const Components = useSelector(state => state.component.components)
     const { handleWebBuilder } = useGenerate()
     const { setSearchParams, webBuilder } = props
 
@@ -33,6 +35,10 @@ const Sidebar = ({ props }) => {
     const [ctxTarget, setCtxTarget] = useState(null);
     const menuRef = useRef(null);
     const inputRef = useRef(null);
+    let [editedObj, setEditedObj] = useState({
+        _id: '',
+        name: ''
+    })
 
     const [width, setWidth] = useState(() => {
         const saved = localStorage.getItem('sidebarWidth');
@@ -73,16 +79,11 @@ const Sidebar = ({ props }) => {
         document.addEventListener('mouseup', stopDrag);
     };
 
-    const [files, setFiles] = useState([
-        { name: 'App.jsx', path: 'src/App.jsx' },
-        { name: 'Sidebar.jsx', path: 'src/Sidebar.jsx' },
-        { name: 'styles.css', path: 'src/styles.css' },
-        { name: 'index.js', path: 'src/index.js' },
-    ]);
+    const [files, setFiles] = useState([]);
 
     useEffect(() => {
 
-        handleGetSavedComponents()
+        handleGetMyProjects()
 
         const handler = (e) => {
             if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -92,28 +93,32 @@ const Sidebar = ({ props }) => {
         document.addEventListener('mousedown', handler);
         return () => document.removeEventListener('mousedown', handler);
     }, []);
-    
 
-    useEffect(()=>{
-        let newArr = Components.map(c=>{
+
+    useEffect(() => {
+        let newArr = Components.map(c => {
             return {
-                id : c._id,
-                name : `${c.name}.jsx`,
-                path : `src/${c.name}.jsx`
+                id: c._id,
+                name: `${c.name}`,
+                path: `${c.name}.jsx`
             }
         })
         setFiles(newArr)
-    },[Components])
+    }, [Components])
 
     useEffect(() => {
         if (renaming && inputRef.current) inputRef.current.focus();
     }, [renaming]);
 
-    const openCtx = (e, name) => {
+    const openCtx = (e, file) => {
         e.preventDefault();
         e.stopPropagation();
-        setCtxTarget(name);
-        setCtxTarget(name);
+        setCtxTarget(file.path);
+
+        setEditedObj({
+            id: file.id,
+            name: renameVal.trim()
+        })
     };
 
     const startRename = () => {
@@ -124,11 +129,10 @@ const Sidebar = ({ props }) => {
 
     const confirmRename = () => {
         if (!renameVal.trim()) return;
-        setFiles(prev =>
-            prev.map(f => f.name === selected ? { ...f, name: renameVal.trim() } : f)
-        );
+        setFiles(prev => prev.map(f => f.name === selected ? { ...f, name: renameVal.trim() } : f));
         setSelected(renameVal.trim());
         setRenaming(false);
+        handleUpdateComponent(editedObj.id, { name: renameVal.split(".")[0].trim() });
     };
 
     const deleteFile = () => {
@@ -147,31 +151,35 @@ const Sidebar = ({ props }) => {
                 <div className="w-8 h-8 bg-cyan-400 rounded-full flex items-center justify-center">
                     <Zap className="w-5 h-5 text-slate-900" />
                 </div>
-                <span className="text-xl font-bold tracking-tight text-white">VirtualUI</span>
+                <span className="text-xl font-bold tracking-tight text-white">CompoLab</span>
             </Link>
 
+            <div className='w-full px-4 py-2'>
+                <button onClick={() => navigate("/generate")} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-cyan-500/10 cursor-pointer hover:bg-cyan-500/20 active:scale-[0.98] text-cyan-400 rounded-md text-sm font-medium transition-all duration-150">
+                    <Plus size={15} /> Generate New
+                </button>
+            </div>
 
             <div className="flex-1 overflow-y-auto py-2">
-
                 <div onClick={() => setOpen(o => !o)} className="flex items-center gap-1.5 px-3 py-1.5 mx-1 rounded-[7px] cursor-pointer hover:bg-[#1e1535]">
                     <ChevronRight size={17} className={`text-amber-500 transition-transform duration-150 ${open ? 'rotate-90' : ''}`} />
                     {open ? <FolderOpen size={17} className="text-amber-500" /> : <Folder size={17} className="text-amber-500" />}
-                    <span className="text-base text-purple-200 font-medium">my-project</span>
+                    <span className="text-base text-purple-200 font-medium">my-project </span>
                 </div>
 
 
-                {open && (<div> {files.map(file => (<div onClick={() => { handleSetCode(Components.find(f => f._id === file.id).code); setSelected(file.name); setRenaming(false); }} onContextMenu={e => { setSelected(file.name); openCtx(e, file.name); }} key={file.path} className={`relative flex items-center gap-1.5 pl-10 py-1 rounded-[7px] cursor-pointer group ${selected === file.name ? 'bg-[#1a1530] text-violet-300' : 'text-[#7070a0] hover:bg-[#18181f] hover:text-[#a0a0c0]'}`}>
-                    {getIcon(file.name)}
-                    {renaming && selected === file.name ? (<input ref={inputRef} type="text" onClick={e => e.stopPropagation()} value={renameVal} onChange={e => setRenameVal(e.target.value)}
+                {open && (<div> {files.map(file => (<div onClick={() => { navigate(`/c/${file.id}`); }} onContextMenu={e => { setSelected(file.path); openCtx(e, file); }} key={file.path} className={`relative flex items-center gap-1.5 pl-10 py-1 rounded-[7px] cursor-pointer group ${selected === file.path ? 'bg-[#1a1530] text-violet-300' : 'text-[#7070a0] hover:bg-[#18181f] hover:text-[#a0a0c0]'}`}>
+                    {getIcon(file.path)}
+                    {renaming && selected === file.path ? (<input ref={inputRef} type="text" onClick={e => e.stopPropagation()} value={renameVal} onChange={e => setRenameVal(e.target.value)}
                         onKeyDown={e => {
                             if (e.key === 'Enter') confirmRename();
                             if (e.key === 'Escape') setRenaming(false);
                         }}
                         onBlur={confirmRename} className="bg-[#0d0d12] border border-violet-600 rounded-[5px] px-1.5 py-0 text-violet-300 outline-none w-28 font-sans" />
-                    ) : (<span className=" truncate">{file.name}</span>)}
+                    ) : (<span className=" truncate">{file.path}</span>)}
 
 
-                    {ctxTarget === file.name && (
+                    {ctxTarget === file.path && (
                         <div ref={menuRef} onClick={e => e.stopPropagation()} className="absolute left-6 top-7 z-50 w-44 bg-[#1a1a24] border border-[#2a2a38] rounded-xl py-1.5 shadow-2xl">
                             <button onClick={startRename} className="w-full flex items-center gap-2 px-3 py-2 text-xs text-[#9090b8] hover:bg-[#22222f] hover:text-violet-300 transition-colors">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>

@@ -12,9 +12,9 @@ class MongoComponent extends IComponentRepository {
         return await Component.findOne(data)
     }
 
-    async findComponents(owner) {
-        if (owner) return await Component.find({ owner })
-        return await Component.find({}).select("-visibility")
+    async findComponents(owner,select) {
+        if (owner) return await Component.find({ owner }).select(select)
+        return await Component.find({ visibility: "public" }).select("name")
     }
 
     async findComponentById(id) {
@@ -26,7 +26,7 @@ class MongoComponent extends IComponentRepository {
     }
 
     async updateComponent(id, componentData) {
-        return await Component.findByIdAndUpdate(id, componentData)
+        return await Component.findByIdAndUpdate(id, componentData, {new : true}).select("name code")
     }
 
 }

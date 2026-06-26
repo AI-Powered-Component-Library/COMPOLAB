@@ -17,6 +17,11 @@ const componentService = {
     return data.data
   },
 
+  getMyProjects: async () => {
+    const { data } = await api.get("/component/my-projects")
+    return data.data
+  },
+
 
   npmPublishService: async (cid) => {
     const { data } = await api.post("/component/npm/" + cid)
@@ -30,8 +35,8 @@ const componentService = {
   },
 
   updateService: async (id, payload) => {
-    const { data } = await api.put(`${"/component"}/${id}`, payload)
-    return data.data
+    const { data } = await api.patch(`${"/component"}/${id}`, payload)
+    return data
   },
 
 

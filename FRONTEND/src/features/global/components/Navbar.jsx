@@ -11,8 +11,8 @@ const Navbar = () => {
 
     return (
         <nav className="relative z-10 flex items-center justify-between px-6 sm:px-8 py-6">
-            
-           <Link to="/" className="flex items-center gap-2 cursor-pointer">
+
+            <Link to="/" className="flex items-center gap-2 cursor-pointer">
                 <div className="w-8 h-8 bg-cyan-400 rounded-full flex items-center justify-center">
                     <Zap className="w-5 h-5 text-slate-900" />
                 </div>
@@ -25,16 +25,14 @@ const Navbar = () => {
                 {user ? (
                     <div className="flex items-center gap-4">
 
-                        <div id="right" className='flex items-center justify-end flex-1 min-w-[180px]'>
-                        <Link
+                        {user.role === "user" && <Link
                             to="/pricing"
                             className='relative inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-r from-blue-500/10 to-blue-500/10 hover:from-cyan-500/20 hover:to-cyan-500/20 border border-cyan-500/25 hover:border-cyan-500/40 rounded-full text-cyan-200 text-sm font-semibold no-underline cursor-pointer transition-all duration-300 shadow-md hover:shadow-cyan-500/10 hover:-translate-y-0.5 active:translate-y-0 group'>
                             <Sparkles size={16} className={" group-hover:rotate-12 transition-transform duration-300 " + (user.role === "admin" ? "text-yellow-600" : "text-cyan-400")} />
                             <span>Token : {user.aiCredits}</span>
-                        </Link>
-                    </div>
+                        </Link>}
 
-                        <div onClick={() => navigate("/profile")} className={`flex items-center gap-3 cursor-pointer rounded-md border border-slate-700 px-4 py-1 transition-all duration-200 hover:scale-105 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 ${user.role === "admin" ? "bg-gradient-to-r from-pink-600/30 to-purple-600/30" : "bg-slate-800/80 hover:bg-slate-700/80"}`}> <div className="w-7 h-7 rounded-full bg-cyan-400 flex items-center justify-center text-slate-950 font-bold text-sm shadow-md">
+                        <div onClick={() => navigate("/profile")} className={`flex items-center gap-3 cursor-pointer rounded-md border border-slate-700 px-4 py-1.5 transition-all duration-200 hover:scale-105 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 ${user.role === "admin" ? "bg-gradient-to-r from-cyan-600/30 to-purple-600/30" : "bg-slate-800/80 hover:bg-slate-700/80"}`}> <div className={"w-6 h-6 rounded-full bg-cyan-400 flex items-center justify-center font-bold text-sm shadow-md " + (user.role === "admin" ? "text-yellow-600" : "text-pink-400")}>
                             {user?.fullName ? (
                                 user.fullName[0].toUpperCase()
                             ) : (

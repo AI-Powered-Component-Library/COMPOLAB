@@ -7,7 +7,7 @@ const componentSlice = createSlice({
         currentComponent: null,
         components: [],
         chunking: false,
-        generatedRes : {},
+        generatedRes: null,
         webBuilder: false
     },
     reducers: {
@@ -26,11 +26,11 @@ const componentSlice = createSlice({
         setWebBuilder: (state) => {
             state.webBuilder = !state.webBuilder
         },
-        setGeneratedRes : (state,{payload})=>{
+        setGeneratedRes: (state, { payload }) => {
             state.generatedRes = payload
         }
     }
 })
 
-export const { setCode, setComponents, setCurrentComponent, setWebBuilder,setChunking,setGeneratedRes } = componentSlice.actions
+export const { setCode, setComponents, setCurrentComponent, setWebBuilder, setChunking, setGeneratedRes } = componentSlice.actions
 export default componentSlice.reducer

@@ -2,9 +2,28 @@ import { Schema, model } from "mongoose";
 
 const componentSchema = new Schema({
 
-    name: String,
-    code: String,
-    props: [String],
+    prompt: {
+        type: String,
+        trim: true
+    },
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true,
+        // index: true
+    },
+    code: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    props: [{
+        type: String,
+        trim: true,
+        default: "",
+        required: true
+    }],
     owner: {
         type: Schema.Types.ObjectId,
         ref: "User",
@@ -15,7 +34,10 @@ const componentSchema = new Schema({
         enum: ["private", "public"],
         default: "private"
     },
-    npmPackage: String
+    npmPackage: {
+        type: String,
+        trim: true,
+    }
 
 }, { timestamps: true })
 

@@ -12,7 +12,7 @@ const ComponentCard = ({ component, onView, onDelete, deleting }) => {
   const { _id, name, props, visibility } = component
 
   return (
-    <article onClick={() => onView(_id)} className="group flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg transition-all duration-200 hover:border-blue-500/30 hover:bg-white/8 hover:shadow-blue-500/10">
+    <article onClick={() => onView(_id)} className="group flex flex-col h-fit gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg transition-all duration-200 hover:border-blue-500/30 hover:bg-white/8 hover:shadow-blue-500/10">
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
