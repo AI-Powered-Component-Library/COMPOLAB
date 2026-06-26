@@ -31,10 +31,10 @@ const Generate = () => {
 
 
     return (
-        <div style={{gridTemplateColumns : "auto 2fr 20vw"}} className="h-screen grid overflow-hidden w-full  bg-black text-white">
+        <div style={{gridTemplateColumns : "auto 2fr"}} className="h-screen grid overflow-hidden w-full  bg-black text-white">
             <Sidebar props={{ setSearchParams, webBuilder }} />
             <CodePart cid={cid} />
-            <LeftChat props={{loggedInUser}} />
+            {/* <LeftChat props={{loggedInUser}} /> */}
         </div>
     );
 };

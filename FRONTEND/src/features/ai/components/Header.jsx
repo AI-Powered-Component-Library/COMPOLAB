@@ -2,15 +2,17 @@ import { useSelector } from 'react-redux'
 import { Code2Icon, Copy, Download, Eye, Save, Share2, X } from 'lucide-react'
 import { LiaNpm } from "react-icons/lia";
 import { FaReact } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom'
 import useCompo from '../../code/hooks/useCompo';
-import { useState } from 'react';
+import { useState } from 'react'
+import { Link, useNavigate } from "react-router-dom"
+import { Sparkles } from 'lucide-react'
+
 
 const Header = ({ props }) => {
 
     const { code, cid, isCodePreview, setIsCodePreview, handleDownloadCode } = props
     const navigate = useNavigate()
-    const { handleCreateComponent, handleNpmPublish , handleUpdateComponent } = useCompo()
+    const { handleCreateComponent, handleNpmPublish, handleUpdateComponent } = useCompo()
     const loggedInUser = useSelector(state => state.auth.user)
     const Component = useSelector(state => state.component.currentComponent)
     const isChunking = useSelector(state => state.component.chunking)
@@ -19,7 +21,6 @@ const Header = ({ props }) => {
 
     return (
         <div className="flex items-center justify-between w-full px-6 py-4 bg-[#0b0c14] border-b border-white/10">
-
 
             <div className="flex flex-1 items-center gap-4">
 
@@ -32,7 +33,7 @@ const Header = ({ props }) => {
                         </h1>
 
                         <button
-                            onClick={() => navigate("/c/list")}
+                            onClick={() => navigate("/generate")}
                             className="p-1 rounded-full hover:bg-red-500/20 text-slate-400 hover:text-red-400 transition"
                         >
                             <X size={14} />
@@ -115,17 +116,30 @@ const Header = ({ props }) => {
 
                 <div className="h-10 w-px bg-white/10" />
 
-                {code !== Component?.code && !isChunking && (
-                    <div onClick={() => {
+                {code && code !== Component?.code && !isChunking && (
+                    <div onClick={async () => {
                         if (AiGeneratedRes) {
-                            handleCreateComponent(AiGeneratedRes)
+                            const newCompo = await handleCreateComponent({ ...AiGeneratedRes, code })
+                            if (newCompo?._id) {
+                                navigate(`/c/${newCompo._id}`)
+                            }
                         } else {
                             handleUpdateComponent(Component._id, { code })
                         }
-                    }} className="flex items-center gap-3 px-4 py-1.5 rounded-md bg-green-400/50 border border-white/15 text-white hover:border-green-500/40 hover:bg-green-500/5 transition cursor-pointer">
+                    }} className="flex select-none items-center gap-3 px-4 py-1 rounded-md bg-green-400/50 border border-white/15 text-white hover:border-green-500/40 hover:bg-green-500/5 transition cursor-pointer">
                         <Save size={18} /> <p className="font-medium">Save</p>
                     </div>
                 )}
+
+
+
+                {loggedInUser.role === "user" && <div id="right" className='flex items-center justify-end border-l border-white/15 pl-4'>
+                    <Link to="/pricing" className='relative text-sm inline-flex items-center gap-2.5 px-4 py-1.5 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 hover:from-cyan-500/20 hover:to-blue-500/20 border border-cyan-500/25 hover:border-cyan-500/40 rounded-full text-cyan-200  font-semibold no-underline cursor-pointer transition-all duration-300 shadow-md hover:shadow-cyan-500/10 hover:-translate-y-0.5 active:translate-y-0 group'>
+                        <Sparkles size={16} className="text-cyan-400 group-hover:rotate-12 transition-transform duration-300" />
+                        <span>Token: {loggedInUser.aiCredits}</span>
+                    </Link>
+                </div>}
+
             </div>
         </div >
     )

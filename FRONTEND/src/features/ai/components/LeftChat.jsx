@@ -1,7 +1,3 @@
-import { useState } from 'react'
-import { Trash2, Plus, Clock } from 'lucide-react'
-import { Link, useNavigate } from "react-router-dom"
-import { Sparkles } from 'lucide-react'
 
 const INITIAL_CHATS = [
   { id: 1, title: 'Create a Button Component', date: 'Today', tag: 'JSX' },
@@ -25,8 +21,7 @@ const grouped = (chats) =>
 
 const LeftChat = ({ onNewChat, tokenCount = '999k', props }) => {
 
-  const { loggedInUser } = props
-  const navigate = useNavigate()
+
 
   const [chats, setChats] = useState(INITIAL_CHATS)
   const [active, setActive] = useState(1)
@@ -47,25 +42,7 @@ const LeftChat = ({ onNewChat, tokenCount = '999k', props }) => {
   return (
     <div className=" bg-[#0f0f14] border-r border-[#1e1e2a] flex flex-col select-none">
 
-      {/* Header */}
-      <div className="px-4 pt-4 pb-3 border-b border-[#1e1e2a] space-y-3">
 
-        {loggedInUser.role === "user" && <div id="right" className='flex items-center justify-end flex-1 min-w-[180px]'>
-          <Link to="/pricing" className='relative text-sm inline-flex items-center gap-2.5 px-6 py-2 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 hover:from-cyan-500/20 hover:to-blue-500/20 border border-cyan-500/25 hover:border-cyan-500/40 rounded-full text-cyan-200  font-semibold no-underline cursor-pointer transition-all duration-300 shadow-md hover:shadow-cyan-500/10 hover:-translate-y-0.5 active:translate-y-0 group'>
-            <Sparkles size={16} className="text-cyan-400 group-hover:rotate-12 transition-transform duration-300" />
-            <span>Token: {loggedInUser.aiCredits}</span>
-          </Link>
-        </div>}
-
-        <button
-          onClick={() => navigate("/generate")}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-cyan-500/10 cursor-pointer hover:bg-cyan-500/20 active:scale-[0.98] text-cyan-400 rounded-xl text-sm font-medium transition-all duration-150"
-        >
-          <Plus size={15} />
-          Generate New
-        </button>
-
-      </div>
 
       {/* Chat list */}
       <div className="flex-1 overflow-y-auto py-3 px-2 space-y-4">

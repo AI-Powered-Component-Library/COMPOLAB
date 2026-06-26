@@ -32,7 +32,7 @@ const Navbar = () => {
                             <span>Token : {user.aiCredits}</span>
                         </Link>}
 
-                        <div onClick={() => navigate("/profile")} className={`flex items-center gap-3 cursor-pointer rounded-md border border-slate-700 px-4 py-1 transition-all duration-200 hover:scale-105 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 ${user.role === "admin" ? "bg-gradient-to-r from-pink-600/30 to-purple-600/30" : "bg-slate-800/80 hover:bg-slate-700/80"}`}> <div className="w-7 h-7 rounded-full bg-cyan-400 flex items-center justify-center text-slate-950 font-bold text-sm shadow-md">
+                        <div onClick={() => navigate("/profile")} className={`flex items-center gap-3 cursor-pointer rounded-md border border-slate-700 px-4 py-1.5 transition-all duration-200 hover:scale-105 hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/20 ${user.role === "admin" ? "bg-gradient-to-r from-cyan-600/30 to-purple-600/30" : "bg-slate-800/80 hover:bg-slate-700/80"}`}> <div className={"w-6 h-6 rounded-full bg-cyan-400 flex items-center justify-center font-bold text-sm shadow-md " + (user.role === "admin" ? "text-yellow-600" : "text-pink-400")}>
                             {user?.fullName ? (
                                 user.fullName[0].toUpperCase()
                             ) : (

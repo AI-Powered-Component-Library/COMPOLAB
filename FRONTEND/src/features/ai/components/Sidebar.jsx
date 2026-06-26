@@ -6,6 +6,7 @@ import { EarthIcon, Code2 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom';
 import useCompo from '../../code/hooks/useCompo';
 import { useSelector } from 'react-redux';
+import { Plus } from 'lucide-react'
 
 const FILE_ICONS = {
     jsx: <FaReact size={16} className="text-sky-500" />,
@@ -153,9 +154,13 @@ const Sidebar = ({ props }) => {
                 <span className="text-xl font-bold tracking-tight text-white">CompoLab</span>
             </Link>
 
+            <div className='w-full px-4 py-2'>
+                <button onClick={() => navigate("/generate")} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-cyan-500/10 cursor-pointer hover:bg-cyan-500/20 active:scale-[0.98] text-cyan-400 rounded-md text-sm font-medium transition-all duration-150">
+                    <Plus size={15} /> Generate New
+                </button>
+            </div>
 
             <div className="flex-1 overflow-y-auto py-2">
-
                 <div onClick={() => setOpen(o => !o)} className="flex items-center gap-1.5 px-3 py-1.5 mx-1 rounded-[7px] cursor-pointer hover:bg-[#1e1535]">
                     <ChevronRight size={17} className={`text-amber-500 transition-transform duration-150 ${open ? 'rotate-90' : ''}`} />
                     {open ? <FolderOpen size={17} className="text-amber-500" /> : <Folder size={17} className="text-amber-500" />}
